@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDown, ArrowUpRight, Check, ClipboardCopy } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { useAuthFlow } from "@/components/auth/auth-flow-provider";
@@ -118,10 +119,10 @@ export function LoginLanding() {
               </button>
             )}
             {signedIn && !needsSetup && (
-              <a href="/pool" className={cn(button.base, button.primary)}>
+              <Link href="/pool" className={cn(button.base, button.primary)}>
                 Browse pools
                 <ArrowUpRight className="h-4 w-4" />
-              </a>
+              </Link>
             )}
             <a
               href="#how-it-works"

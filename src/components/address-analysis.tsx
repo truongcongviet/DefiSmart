@@ -337,7 +337,9 @@ function tierBadgeClass(tier: WalletScoreResponse["tier"]) {
   return "border-rose-500/40 bg-rose-500/10 text-rose-300";
 }
 
-function confidenceBadgeClass(level: WalletScoreResponse["confidence"]["level"]) {
+function confidenceBadgeClass(
+  level: WalletScoreResponse["confidence"]["level"],
+) {
   if (level === "HIGH") {
     return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
   }
@@ -521,10 +523,7 @@ function countTokenWarnings(token: MeteoraPoolToken | undefined) {
   return token.warnings.length;
 }
 
-function pickPeriodMetric(
-  value: unknown,
-  period: "ALL" | "7D" | "1M" | "3M",
-) {
+function pickPeriodMetric(value: unknown, period: "ALL" | "7D" | "1M" | "3M") {
   if (typeof value === "number" || typeof value === "string") {
     return asNumber(value);
   }
@@ -623,13 +622,7 @@ function buildConicGradient(buckets: TimeBucketStat[], total: number) {
   return `conic-gradient(${segments.join(", ")})`;
 }
 
-function TokenIcon({
-  symbol,
-  logoUrl,
-}: {
-  symbol: string;
-  logoUrl?: string;
-}) {
+function TokenIcon({ symbol, logoUrl }: { symbol: string; logoUrl?: string }) {
   const [isBroken, setIsBroken] = useState(false);
   const showImage = Boolean(logoUrl && !isBroken);
 
@@ -657,8 +650,12 @@ function TokenIcon({
 const inputClassName =
   "h-11 w-full rounded-lg border border-zinc-800 bg-[#080b12] px-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:border-emerald-500";
 
-export function AddressAnalysis() {
-  const [address, setAddress] = useState("");
+export function AddressAnalysis({
+  initialOwner = "",
+}: {
+  initialOwner?: string;
+}) {
+  const [address, setAddress] = useState(initialOwner);
   const [analyzedOwner, setAnalyzedOwner] = useState("");
   const [activeOption, setActiveOption] =
     useState<AnalysisOptionKey>("execution_quality");
@@ -757,7 +754,9 @@ export function AddressAnalysis() {
           ErrorPayload;
 
         if (!response.ok) {
-          throw new Error(payload.message || "Failed to calculate wallet score.");
+          throw new Error(
+            payload.message || "Failed to calculate wallet score.",
+          );
         }
 
         if (!isCanceled) {
@@ -852,8 +851,9 @@ export function AddressAnalysis() {
       `/api/lpagent/trade-time-distribution?owner=${encodeURIComponent(analyzedOwner)}&minAbsPnlNative=${MIN_VISIBLE_PNL_SOL}`,
     )
       .then(async (response) => {
-        const payload = (await response.json()) as TradeTimeDistributionResponse &
-          ErrorPayload;
+        const payload =
+          (await response.json()) as TradeTimeDistributionResponse &
+            ErrorPayload;
 
         if (!response.ok) {
           throw new Error(
@@ -883,11 +883,7 @@ export function AddressAnalysis() {
     return () => {
       isCanceled = true;
     };
-  }, [
-    analyzedOwner,
-    timeDistribution?.owner,
-    isTimeDistributionLoading,
-  ]);
+  }, [analyzedOwner, timeDistribution?.owner, isTimeDistributionLoading]);
 
   useEffect(() => {
     if (!analyzedOwner || !isMeteoraPoolsLoading) {
@@ -1240,7 +1236,9 @@ export function AddressAnalysis() {
     const requiresTradeTime = option === "trade_time";
 
     if (requiresTradeTime) {
-      return Boolean(timeDistribution && timeDistribution.owner === analyzedOwner);
+      return Boolean(
+        timeDistribution && timeDistribution.owner === analyzedOwner,
+      );
     }
 
     if (requiresCore && requiresMeteora) {
@@ -1274,10 +1272,8 @@ export function AddressAnalysis() {
     );
   }
 
-  async function handleAnalyze(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!trimmedAddress) {
+  function startAnalysis(owner: string) {
+    if (!owner) {
       setErrorMessage("Vui lòng nhập wallet address.");
       setResult(null);
       setWalletScore(null);
@@ -1285,7 +1281,7 @@ export function AddressAnalysis() {
       return;
     }
 
-    if (!WALLET_REGEX.test(trimmedAddress)) {
+    if (!WALLET_REGEX.test(owner)) {
       setErrorMessage("Wallet không đúng định dạng Solana.");
       setResult(null);
       setWalletScore(null);
@@ -1297,7 +1293,7 @@ export function AddressAnalysis() {
     setWalletScoreError("");
     setMeteoraPoolsError("");
     setTimeDistributionError("");
-    setAnalyzedOwner(trimmedAddress);
+    setAnalyzedOwner(owner);
     setResult(null);
     setWalletScore(null);
     setTimeDistribution(null);
@@ -1308,6 +1304,22 @@ export function AddressAnalysis() {
       METEORA_OPTIONS.includes(activeOption) && !meteoraPools,
     );
   }
+
+  async function handleAnalyze(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    startAnalysis(trimmedAddress);
+  }
+
+  // Deep link: /analysis?owner=<wallet> runs the analysis on first render.
+  const [autoRunOwner, setAutoRunOwner] = useState(initialOwner.trim());
+  useEffect(() => {
+    if (!autoRunOwner) {
+      return;
+    }
+    setAutoRunOwner("");
+    startAnalysis(autoRunOwner);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRunOwner]);
 
   async function handleCopy(value: string) {
     try {
@@ -1405,12 +1417,15 @@ export function AddressAnalysis() {
                         : "Unknown"}
                   </p>
                   <p className="mt-2 text-sm text-zinc-300">
-                    Avg hold: {formatHours(result.insights.strategy.averageHoldHours)}
+                    Avg hold:{" "}
+                    {formatHours(result.insights.strategy.averageHoldHours)}
                     {" | "}
-                    Median: {formatHours(result.insights.strategy.medianHoldHours)}
+                    Median:{" "}
+                    {formatHours(result.insights.strategy.medianHoldHours)}
                   </p>
                   <p className="mt-1 text-xs text-zinc-400">
-                    Ngưỡng Scalp/Swing: {result.insights.strategy.thresholdHours}h
+                    Ngưỡng Scalp/Swing:{" "}
+                    {result.insights.strategy.thresholdHours}h
                   </p>
                   <p className="mt-1 text-xs text-zinc-400">
                     Scalp: {result.insights.strategy.scalpPositions} | Swing:{" "}
@@ -1422,22 +1437,30 @@ export function AddressAnalysis() {
                 <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
                   <p className="text-xs text-zinc-500">Token Mix</p>
                   <p className="mt-2 text-lg font-semibold text-zinc-100">
-                    {tokenCategoryLabel(result.insights.tokenMix.dominantCategory)}
+                    {tokenCategoryLabel(
+                      result.insights.tokenMix.dominantCategory,
+                    )}
                   </p>
                   <p className="mt-2 text-sm text-zinc-300">
                     Stable exposure:{" "}
-                    {formatPercent(result.insights.tokenMix.stableExposureRatio)}
+                    {formatPercent(
+                      result.insights.tokenMix.stableExposureRatio,
+                    )}
                   </p>
                   <p className="mt-1 text-sm text-zinc-300">
                     Speculative exposure:{" "}
-                    {formatPercent(result.insights.tokenMix.speculativeExposureRatio)}
+                    {formatPercent(
+                      result.insights.tokenMix.speculativeExposureRatio,
+                    )}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2 text-xs">
                     <span className="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300">
-                      Stable/Stable: {result.insights.tokenMix.counts.stable_stable}
+                      Stable/Stable:{" "}
+                      {result.insights.tokenMix.counts.stable_stable}
                     </span>
                     <span className="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300">
-                      Stable/Major: {result.insights.tokenMix.counts.stable_major}
+                      Stable/Major:{" "}
+                      {result.insights.tokenMix.counts.stable_major}
                     </span>
                     <span className="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300">
                       Stable/Alt: {result.insights.tokenMix.counts.stable_alt}
@@ -1446,7 +1469,8 @@ export function AddressAnalysis() {
                       Major/Major: {result.insights.tokenMix.counts.major_major}
                     </span>
                     <span className="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300">
-                      Alt/Spec: {result.insights.tokenMix.counts.alt_speculative}
+                      Alt/Spec:{" "}
+                      {result.insights.tokenMix.counts.alt_speculative}
                     </span>
                   </div>
                 </article>
@@ -1509,7 +1533,9 @@ export function AddressAnalysis() {
                 <p
                   className={cn(
                     "mt-2 text-base font-semibold",
-                    regimeTotals.pnl7d >= 0 ? "text-emerald-400" : "text-rose-400",
+                    regimeTotals.pnl7d >= 0
+                      ? "text-emerald-400"
+                      : "text-rose-400",
                   )}
                 >
                   {formatSol(regimeTotals.pnl7d)}
@@ -1520,7 +1546,9 @@ export function AddressAnalysis() {
                 <p
                   className={cn(
                     "mt-2 text-base font-semibold",
-                    regimeTotals.pnl1m >= 0 ? "text-emerald-400" : "text-rose-400",
+                    regimeTotals.pnl1m >= 0
+                      ? "text-emerald-400"
+                      : "text-rose-400",
                   )}
                 >
                   {formatSol(regimeTotals.pnl1m)}
@@ -1531,7 +1559,9 @@ export function AddressAnalysis() {
                 <p
                   className={cn(
                     "mt-2 text-base font-semibold",
-                    regimeTotals.pnl3m >= 0 ? "text-emerald-400" : "text-rose-400",
+                    regimeTotals.pnl3m >= 0
+                      ? "text-emerald-400"
+                      : "text-rose-400",
                   )}
                 >
                   {formatSol(regimeTotals.pnl3m)}
@@ -1601,7 +1631,10 @@ export function AddressAnalysis() {
                   ))}
                   {overviewRows.length === 0 && (
                     <tr>
-                      <td className="px-3 py-8 text-center text-zinc-500" colSpan={7}>
+                      <td
+                        className="px-3 py-8 text-center text-zinc-500"
+                        colSpan={7}
+                      >
                         Chưa có dữ liệu overview theo protocol.
                       </td>
                     </tr>
@@ -1689,8 +1722,9 @@ export function AddressAnalysis() {
             <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-4">
               <p className="text-xs text-zinc-500 uppercase">Simulation Note</p>
               <p className="mt-2 text-sm text-zinc-300">
-                Mô phỏng này lấy trung bình từ {formatNumber(copySimulation.closedTrades, 0)}
-                {" "}lệnh đã đóng, chưa tính trượt giá, độ trễ vào lệnh và giới hạn vốn.
+                Mô phỏng này lấy trung bình từ{" "}
+                {formatNumber(copySimulation.closedTrades, 0)} lệnh đã đóng,
+                chưa tính trượt giá, độ trễ vào lệnh và giới hạn vốn.
               </p>
               <p className="mt-2 text-sm text-zinc-300">
                 Stability score: {formatPercent(copySimulation.stabilityScore)}
@@ -1703,7 +1737,9 @@ export function AddressAnalysis() {
                     : "border-rose-500/40 bg-rose-500/10 text-rose-300",
                 )}
               >
-                {result.insights?.signal.isSmart ? "✓ Có thể theo dõi copy" : "✕ Chưa phù hợp để copy"}
+                {result.insights?.signal.isSmart
+                  ? "✓ Có thể theo dõi copy"
+                  : "✕ Chưa phù hợp để copy"}
               </p>
             </section>
           </>
@@ -1787,15 +1823,22 @@ export function AddressAnalysis() {
                     >
                       <p className="inline-flex items-center gap-2 text-sm font-medium text-zinc-100">
                         <span
-                          className={cn("h-2.5 w-2.5 rounded-full", bucket.dotClass)}
+                          className={cn(
+                            "h-2.5 w-2.5 rounded-full",
+                            bucket.dotClass,
+                          )}
                         />
                         {bucket.label}
                       </p>
-                      <p className="mt-1 text-xs text-zinc-400">{bucket.range}</p>
+                      <p className="mt-1 text-xs text-zinc-400">
+                        {bucket.range}
+                      </p>
                       <p className="mt-2 text-sm text-zinc-200">
                         {formatNumber(bucket.count, 0)} lệnh
                       </p>
-                      <p className="text-xs text-zinc-400">{formatPercent(ratio)}</p>
+                      <p className="text-xs text-zinc-400">
+                        {formatPercent(ratio)}
+                      </p>
                     </article>
                   );
                 })}
@@ -1851,7 +1894,10 @@ export function AddressAnalysis() {
                     <td className="px-3 py-3 font-medium text-zinc-100">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center -space-x-1">
-                          <TokenIcon symbol={event.token0Symbol} logoUrl={event.logo0} />
+                          <TokenIcon
+                            symbol={event.token0Symbol}
+                            logoUrl={event.logo0}
+                          />
                           {(event.token1Symbol || event.logo1) && (
                             <TokenIcon
                               symbol={event.token1Symbol}
@@ -1891,15 +1937,23 @@ export function AddressAnalysis() {
                 ))}
                 {!result && (
                   <tr>
-                    <td className="px-3 py-8 text-center text-zinc-500" colSpan={9}>
-                      Chưa có dữ liệu. Nhập một wallet address để bắt đầu phân tích.
+                    <td
+                      className="px-3 py-8 text-center text-zinc-500"
+                      colSpan={9}
+                    >
+                      Chưa có dữ liệu. Nhập một wallet address để bắt đầu phân
+                      tích.
                     </td>
                   </tr>
                 )}
                 {result && filteredTimeline.length === 0 && (
                   <tr>
-                    <td className="px-3 py-8 text-center text-zinc-500" colSpan={9}>
-                      Không có lệnh nào có |PnL| &gt;= {MIN_VISIBLE_PNL_SOL} SOL.
+                    <td
+                      className="px-3 py-8 text-center text-zinc-500"
+                      colSpan={9}
+                    >
+                      Không có lệnh nào có |PnL| &gt;= {MIN_VISIBLE_PNL_SOL}{" "}
+                      SOL.
                     </td>
                   </tr>
                 )}
@@ -1941,7 +1995,9 @@ export function AddressAnalysis() {
               </thead>
               <tbody className="divide-y divide-zinc-800/80">
                 {poolOpportunityRows.map((row, index) => (
-                  <tr key={`${row.pool.pool_address || row.pool.name || "pool"}-${index}`}>
+                  <tr
+                    key={`${row.pool.pool_address || row.pool.name || "pool"}-${index}`}
+                  >
                     <td className="px-3 py-3 text-zinc-400">{index + 1}</td>
                     <td className="px-3 py-3 text-zinc-100">
                       <div className="flex items-center gap-2">
@@ -1959,7 +2015,9 @@ export function AddressAnalysis() {
                       </div>
                     </td>
                     <td className="px-3 py-3 font-mono text-xs text-zinc-400">
-                      {row.pool.pool_address ? shorten(row.pool.pool_address, 8, 8) : "-"}
+                      {row.pool.pool_address
+                        ? shorten(row.pool.pool_address, 8, 8)
+                        : "-"}
                     </td>
                     <td className="px-3 py-3 text-right text-zinc-200">
                       {formatNumber(asNumber(row.pool.volume), 2)}
@@ -1977,7 +2035,10 @@ export function AddressAnalysis() {
                 ))}
                 {poolOpportunityRows.length === 0 && (
                   <tr>
-                    <td className="px-3 py-8 text-center text-zinc-500" colSpan={7}>
+                    <td
+                      className="px-3 py-8 text-center text-zinc-500"
+                      colSpan={7}
+                    >
                       Không có pool phù hợp.
                     </td>
                   </tr>
@@ -2016,9 +2077,13 @@ export function AddressAnalysis() {
                   key={`${row.pool.pool_address || row.pool.name || "crowd"}-${index}`}
                   className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4"
                 >
-                  <p className="text-sm font-semibold text-zinc-100">{getPoolPairLabel(row.pool)}</p>
+                  <p className="text-sm font-semibold text-zinc-100">
+                    {getPoolPairLabel(row.pool)}
+                  </p>
                   <p className="mt-1 text-xs text-zinc-400">
-                    {row.pool.pool_address ? shorten(row.pool.pool_address, 8, 8) : "-"}
+                    {row.pool.pool_address
+                      ? shorten(row.pool.pool_address, 8, 8)
+                      : "-"}
                   </p>
                   <div className="mt-3 h-2 rounded-full bg-zinc-800">
                     <div
@@ -2030,7 +2095,9 @@ export function AddressAnalysis() {
                     <p className="text-zinc-400">
                       Unique LPs
                       <br />
-                      <span className="text-zinc-100">{formatNumber(row.uniqueLps, 0)}</span>
+                      <span className="text-zinc-100">
+                        {formatNumber(row.uniqueLps, 0)}
+                      </span>
                     </p>
                     <p className="text-zinc-400">
                       Active Pos
@@ -2056,7 +2123,10 @@ export function AddressAnalysis() {
 
       case "risk_radar": {
         if (isMeteoraPoolsLoading && !meteoraPools) {
-          return buildStateCard("Risk Radar", "Đang tải dữ liệu rủi ro pool...");
+          return buildStateCard(
+            "Risk Radar",
+            "Đang tải dữ liệu rủi ro pool...",
+          );
         }
 
         if (!meteoraPools) {
@@ -2069,16 +2139,19 @@ export function AddressAnalysis() {
 
         return (
           <>
-            {result?.insights?.warnings && result.insights.warnings.length > 0 && (
-              <section className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200">
-                <p className="text-xs font-medium tracking-wide uppercase">Wallet Warnings</p>
-                <div className="mt-2 space-y-1">
-                  {result.insights.warnings.map((warning, index) => (
-                    <p key={`risk-wallet-warning-${index}`}>{warning}</p>
-                  ))}
-                </div>
-              </section>
-            )}
+            {result?.insights?.warnings &&
+              result.insights.warnings.length > 0 && (
+                <section className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200">
+                  <p className="text-xs font-medium tracking-wide uppercase">
+                    Wallet Warnings
+                  </p>
+                  <div className="mt-2 space-y-1">
+                    {result.insights.warnings.map((warning, index) => (
+                      <p key={`risk-wallet-warning-${index}`}>{warning}</p>
+                    ))}
+                  </div>
+                </section>
+              )}
 
             <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
               <table className="min-w-[940px] divide-y divide-zinc-800 text-sm">
@@ -2093,8 +2166,12 @@ export function AddressAnalysis() {
                 </thead>
                 <tbody className="divide-y divide-zinc-800/80">
                   {riskRows.map((row, index) => (
-                    <tr key={`${row.pool.pool_address || row.pool.name || "risk"}-${index}`}>
-                      <td className="px-3 py-3 text-zinc-100">{getPoolPairLabel(row.pool)}</td>
+                    <tr
+                      key={`${row.pool.pool_address || row.pool.name || "risk"}-${index}`}
+                    >
+                      <td className="px-3 py-3 text-zinc-100">
+                        {getPoolPairLabel(row.pool)}
+                      </td>
                       <td
                         className={cn(
                           "px-3 py-3 text-right font-medium",
@@ -2114,13 +2191,18 @@ export function AddressAnalysis() {
                         {row.ownershipPct.toFixed(2)}%
                       </td>
                       <td className="px-3 py-3 text-zinc-300">
-                        {row.reasons.length > 0 ? row.reasons.join(" | ") : "Ổn"}
+                        {row.reasons.length > 0
+                          ? row.reasons.join(" | ")
+                          : "Ổn"}
                       </td>
                     </tr>
                   ))}
                   {riskRows.length === 0 && (
                     <tr>
-                      <td className="px-3 py-8 text-center text-zinc-500" colSpan={5}>
+                      <td
+                        className="px-3 py-8 text-center text-zinc-500"
+                        colSpan={5}
+                      >
                         Không có dữ liệu risk.
                       </td>
                     </tr>
@@ -2161,7 +2243,8 @@ export function AddressAnalysis() {
               <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
                 <p className="text-xs text-zinc-500">Matched Pairs</p>
                 <p className="mt-2 text-xl font-semibold text-zinc-100">
-                  {walletPoolFitData.matchedPairs}/{walletPoolFitData.totalPairs}
+                  {walletPoolFitData.matchedPairs}/
+                  {walletPoolFitData.totalPairs}
                 </p>
               </article>
               <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
@@ -2204,20 +2287,26 @@ export function AddressAnalysis() {
                 <tbody className="divide-y divide-zinc-800/80">
                   {walletPoolFitData.rows.map((row) => (
                     <tr key={row.pair}>
-                      <td className="px-3 py-3 font-medium text-zinc-100">{row.pair}</td>
+                      <td className="px-3 py-3 font-medium text-zinc-100">
+                        {row.pair}
+                      </td>
                       <td className="px-3 py-3 text-right text-zinc-300">
                         {formatNumber(row.count, 0)}
                       </td>
                       <td
                         className={cn(
                           "px-3 py-3 text-right",
-                          row.matchCount > 0 ? "text-emerald-400" : "text-rose-400",
+                          row.matchCount > 0
+                            ? "text-emerald-400"
+                            : "text-rose-400",
                         )}
                       >
                         {formatNumber(row.matchCount, 0)}
                       </td>
                       <td className="px-3 py-3 text-zinc-200">
-                        {row.bestPool ? getPoolPairLabel(row.bestPool) : "No match"}
+                        {row.bestPool
+                          ? getPoolPairLabel(row.bestPool)
+                          : "No match"}
                       </td>
                       <td className="px-3 py-3 text-right text-zinc-300">
                         {row.bestScore.toFixed(2)}
@@ -2226,7 +2315,10 @@ export function AddressAnalysis() {
                   ))}
                   {walletPoolFitData.rows.length === 0 && (
                     <tr>
-                      <td className="px-3 py-8 text-center text-zinc-500" colSpan={5}>
+                      <td
+                        className="px-3 py-8 text-center text-zinc-500"
+                        colSpan={5}
+                      >
                         Ví chưa có top pair để so khớp.
                       </td>
                     </tr>
@@ -2253,11 +2345,14 @@ export function AddressAnalysis() {
           Phân tích lịch sử Add LP theo address
         </h1>
         <p className="mt-2 text-sm text-zinc-400">
-          Chọn 1 option ở sidebar để chỉ chạy đúng phân tích đó, tránh chạy toàn bộ
-          một lượt.
+          Chọn 1 option ở sidebar để chỉ chạy đúng phân tích đó, tránh chạy toàn
+          bộ một lượt.
         </p>
 
-        <form className="mt-4 flex flex-col gap-3 sm:flex-row" onSubmit={handleAnalyze}>
+        <form
+          className="mt-4 flex flex-col gap-3 sm:flex-row"
+          onSubmit={handleAnalyze}
+        >
           <div className="flex-1">
             <input
               value={address}
@@ -2305,16 +2400,19 @@ export function AddressAnalysis() {
           </p>
         )}
 
-        {result && Array.isArray(result.warnings) && result.warnings.length > 0 && (
-          <div className="mt-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
-            {result.warnings.map((warning, index) => (
-              <p key={`${warning.source}-${index}`}>
-                [{warning.source}]
-                {warning.status ? ` (${warning.status})` : ""}: {warning.message}
-              </p>
-            ))}
-          </div>
-        )}
+        {result &&
+          Array.isArray(result.warnings) &&
+          result.warnings.length > 0 && (
+            <div className="mt-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-300">
+              {result.warnings.map((warning, index) => (
+                <p key={`${warning.source}-${index}`}>
+                  [{warning.source}]
+                  {warning.status ? ` (${warning.status})` : ""}:{" "}
+                  {warning.message}
+                </p>
+              ))}
+            </div>
+          )}
 
         {analyzedOwner && (
           <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
@@ -2388,7 +2486,9 @@ export function AddressAnalysis() {
                         )}
                       />
                     </div>
-                    <p className="mt-1 text-xs text-zinc-400">{option.description}</p>
+                    <p className="mt-1 text-xs text-zinc-400">
+                      {option.description}
+                    </p>
                   </button>
                 );
               })}
@@ -2399,7 +2499,9 @@ export function AddressAnalysis() {
             <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs text-zinc-500 uppercase">WalletScore v1</p>
+                  <p className="text-xs text-zinc-500 uppercase">
+                    WalletScore v1
+                  </p>
                   <h2 className="mt-1 text-lg font-semibold text-zinc-100">
                     Score & Confidence
                   </h2>
@@ -2475,7 +2577,11 @@ export function AddressAnalysis() {
                     <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
                       <p className="text-xs text-zinc-500">Risk + Pool Score</p>
                       <p className="mt-1 text-base font-semibold text-zinc-100">
-                        {(walletScore.breakdown.risk + walletScore.breakdown.poolSelection).toFixed(2)} / 45
+                        {(
+                          walletScore.breakdown.risk +
+                          walletScore.breakdown.poolSelection
+                        ).toFixed(2)}{" "}
+                        / 45
                       </p>
                     </article>
                   </div>
@@ -2487,32 +2593,38 @@ export function AddressAnalysis() {
                         Value: {formatPercent(walletScore.confidence.value)}
                       </p>
                       <div className="mt-2 space-y-1 text-xs text-zinc-300">
-                        {walletScore.confidence.reasons.slice(0, 3).map((reason, index) => (
-                          <p key={`score-confidence-${index}`}>{reason}</p>
-                        ))}
+                        {walletScore.confidence.reasons
+                          .slice(0, 3)
+                          .map((reason, index) => (
+                            <p key={`score-confidence-${index}`}>{reason}</p>
+                          ))}
                       </div>
                     </article>
 
                     <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
                       <p className="text-xs text-zinc-500">Score Reasons</p>
                       <div className="mt-2 space-y-1 text-xs text-zinc-300">
-                        {walletScore.reasons.slice(0, 4).map((reason, index) => (
-                          <p key={`score-reason-${index}`}>{reason}</p>
-                        ))}
+                        {walletScore.reasons
+                          .slice(0, 4)
+                          .map((reason, index) => (
+                            <p key={`score-reason-${index}`}>{reason}</p>
+                          ))}
                       </div>
                     </article>
                   </div>
 
-                  {Array.isArray(walletScore.warnings) && walletScore.warnings.length > 0 && (
-                    <div className="mt-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
-                      {walletScore.warnings.map((warning, index) => (
-                        <p key={`wallet-score-warning-${index}`}>
-                          [{warning.source}]
-                          {warning.status ? ` (${warning.status})` : ""}: {warning.message}
-                        </p>
-                      ))}
-                    </div>
-                  )}
+                  {Array.isArray(walletScore.warnings) &&
+                    walletScore.warnings.length > 0 && (
+                      <div className="mt-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+                        {walletScore.warnings.map((warning, index) => (
+                          <p key={`wallet-score-warning-${index}`}>
+                            [{warning.source}]
+                            {warning.status ? ` (${warning.status})` : ""}:{" "}
+                            {warning.message}
+                          </p>
+                        ))}
+                      </div>
+                    )}
                 </>
               )}
             </section>

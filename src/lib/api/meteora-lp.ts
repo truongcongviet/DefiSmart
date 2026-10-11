@@ -153,7 +153,7 @@ async function mapWithConcurrency<T, R>(
 // DLMM
 // ---------------------------------------------------------------------------
 
-interface DlmmPoolMeta {
+export interface DlmmPoolMeta {
   poolAddress: string;
   tokenX: LpTokenInfo;
   tokenY: LpTokenInfo;
@@ -232,7 +232,7 @@ function readUsdSol(value: unknown): { usd: number; sol: number } {
   };
 }
 
-function readDlmmPosition(
+export function readDlmmPosition(
   owner: string,
   pool: DlmmPoolMeta,
   raw: Record<string, unknown>,
@@ -282,7 +282,7 @@ function readDlmmPosition(
   };
 }
 
-async function fetchDlmmPoolPositions(
+export async function fetchDlmmPoolPositions(
   owner: string,
   pool: DlmmPoolMeta,
 ): Promise<LpPosition[]> {
@@ -415,7 +415,7 @@ function readDammToken(value: unknown): LpTokenInfo {
   );
 }
 
-function readDammPosition(
+export function readDammPosition(
   owner: string,
   raw: Record<string, unknown>,
   isClosed: boolean,
@@ -478,9 +478,10 @@ function readDammPosition(
   };
 }
 
-async function fetchDammPositions(
+export async function fetchDammPositions(
   owner: string,
   kind: "open_positions" | "closed_positions",
+  pool?: string,
 ): Promise<{ positions: LpPosition[]; solPrice: number | null }> {
   const positions: LpPosition[] = [];
   let cursor: string | null = null;
@@ -490,6 +491,9 @@ async function fetchDammPositions(
     const params: Record<string, string | number> = { limit: PAGE_SIZE };
     if (cursor) {
       params.next_cursor = cursor;
+    }
+    if (pool) {
+      params.pool = pool;
     }
     const response = await dammClient.get<unknown>(
       `/wallets/${owner}/${kind}`,
@@ -524,6 +528,90 @@ async function fetchDammPositions(
   }
 
   return { positions, solPrice };
+}
+
+// ---------------------------------------------------------------------------
+// Pool metadata
+// ---------------------------------------------------------------------------
+
+export interface PoolMeta {
+  address: string;
+  protocol: LpProtocol;
+  name: string;
+  tokenX: LpTokenInfo;
+  tokenY: LpTokenInfo;
+  tvl: number;
+  volume24h: number;
+  fees24h: number;
+  currentPrice: number | null;
+  createdAtMs: number | null;
+}
+
+function readPoolMeta(
+  raw: Record<string, unknown>,
+  protocol: LpProtocol,
+): PoolMeta | null {
+  const address = pickString(raw.address);
+  if (!address) {
+    return null;
+  }
+  const tokenX = readDammToken(raw.token_x);
+  const tokenY = readDammToken(raw.token_y);
+  const volume = isRecord(raw.volume) ? raw.volume : {};
+  const fees = isRecord(raw.fees) ? raw.fees : {};
+  return {
+    address,
+    protocol,
+    name: pickString(raw.name) || `${tokenX.symbol}-${tokenY.symbol}`,
+    tokenX,
+    tokenY,
+    tvl: toNumber(raw.tvl),
+    volume24h: toNumber(volume["24h"] ?? volume.h24 ?? volume["1d"]),
+    fees24h: toNumber(fees["24h"] ?? fees.h24 ?? fees["1d"]),
+    currentPrice: toNumber(raw.current_price) || null,
+    createdAtMs: toMs(raw.created_at),
+  };
+}
+
+/** Pool metadata from the Meteora Data API; tries DLMM first, then DAMM v2. */
+export async function fetchPoolMeta(
+  address: string,
+  preferred?: LpProtocol,
+): Promise<PoolMeta | null> {
+  const order: LpProtocol[] =
+    preferred === "meteora_damm_v2"
+      ? ["meteora_damm_v2", "meteora_dlmm"]
+      : ["meteora_dlmm", "meteora_damm_v2"];
+
+  for (const protocol of order) {
+    try {
+      const client = protocol === "meteora_dlmm" ? dlmmClient : dammClient;
+      const response = await client.get<unknown>(`/pools/${address}`);
+      if (isRecord(response.data)) {
+        const meta = readPoolMeta(response.data, protocol);
+        if (meta) {
+          return meta;
+        }
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  return null;
+}
+
+export function poolMetaToDlmmMeta(meta: PoolMeta): DlmmPoolMeta {
+  return {
+    poolAddress: meta.address,
+    tokenX: meta.tokenX,
+    tokenY: meta.tokenY,
+    lastClosedAtMs: null,
+    hasOpen: true,
+  };
 }
 
 // ---------------------------------------------------------------------------

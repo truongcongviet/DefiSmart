@@ -1,5 +1,11 @@
 import { AddressAnalysis } from "@/components/address-analysis";
 
-export default function AnalysisPage() {
-  return <AddressAnalysis />;
+export default async function AnalysisPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ owner?: string }>;
+}) {
+  const { owner } = await searchParams;
+
+  return <AddressAnalysis initialOwner={owner ?? ""} />;
 }

@@ -1,6 +1,8 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
+import Link from "next/link";
+
 interface TokenMetadata {
   symbol?: string;
 }
@@ -76,7 +78,8 @@ export default async function PoolPage() {
         </h1>
         <p className="mt-2 text-sm text-zinc-400">
           Bộ lọc đang dùng: `top`, timeframe `2h`, page size `50`, lọc quality
-          token + liquidity/volume tối thiểu.
+          token + liquidity/volume tối thiểu. Bấm vào một pool để xem các ví
+          đang cung cấp thanh khoản và lời lỗ của từng ví trong pool đó.
         </p>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -116,16 +119,39 @@ export default async function PoolPage() {
           </thead>
           <tbody className="divide-y divide-zinc-800/80">
             {pools.map((pool, index) => (
-              <tr key={`${pool.pool_address || pool.name || "pool"}-${index}`}>
+              <tr
+                key={`${pool.pool_address || pool.name || "pool"}-${index}`}
+                className="transition-colors hover:bg-zinc-900/40"
+              >
                 <td className="px-3 py-3 text-zinc-400">{index + 1}</td>
                 <td className="px-3 py-3 font-medium text-zinc-100">
-                  {pool.name || "-"}
+                  {pool.pool_address ? (
+                    <Link
+                      href={`/pool/${pool.pool_address}?protocol=${pool.pool_type || "dlmm"}`}
+                      className="text-emerald-400 underline-offset-4 hover:underline"
+                    >
+                      {pool.name || "-"}
+                    </Link>
+                  ) : (
+                    pool.name || "-"
+                  )}
                 </td>
                 <td className="px-3 py-3 text-zinc-300">
-                  {(pool.token_x?.symbol || "?") + "/" + (pool.token_y?.symbol || "?")}
+                  {(pool.token_x?.symbol || "?") +
+                    "/" +
+                    (pool.token_y?.symbol || "?")}
                 </td>
                 <td className="px-3 py-3 font-mono text-xs text-zinc-400">
-                  {pool.pool_address || "-"}
+                  {pool.pool_address ? (
+                    <Link
+                      href={`/pool/${pool.pool_address}?protocol=${pool.pool_type || "dlmm"}`}
+                      className="hover:text-zinc-200"
+                    >
+                      {pool.pool_address}
+                    </Link>
+                  ) : (
+                    "-"
+                  )}
                 </td>
                 <td className="px-3 py-3 text-right text-zinc-200">
                   {formatNum(pool.volume)}
@@ -141,7 +167,8 @@ export default async function PoolPage() {
             {pools.length === 0 && (
               <tr>
                 <td className="px-3 py-8 text-center text-zinc-500" colSpan={7}>
-                  Chưa có dữ liệu pool. Kiểm tra file `data/met_pools_2h_top.json`.
+                  Chưa có dữ liệu pool. Kiểm tra file
+                  `data/met_pools_2h_top.json`.
                 </td>
               </tr>
             )}

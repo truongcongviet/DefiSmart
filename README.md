@@ -18,6 +18,9 @@ cho tầng phân tích).
 - Bộ lọc và sort cho danh sách LP wallets
 - Danh sách Smart LP đọc từ seed snapshot `data/lp_smart_wallets_from_openapi.json`
 - Phân tích ví theo địa chỉ: score, phân loại, timeline, phân bố giờ giao dịch
+- Chi tiết pool (`/pool/[address]`): danh sách ví đang cung cấp thanh khoản trong
+  pool, lấy từ on-chain qua Solana RPC, kèm tiền nạp, fee, PnL của từng ví trong
+  pool đó tính từ Meteora Data API
 - Hỗ trợ phân tích wallet thủ công qua `POST /api/wallets/classify`
 
 ## Cấu hình
@@ -29,6 +32,11 @@ NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
 NEXT_PUBLIC_PRIVY_CLIENT_ID=optional_privy_client_id
 # Số pool DLMM tối đa quét cho một ví (mặc định 80). Ví càng nhiều pool càng tốn request.
 LP_DATA_MAX_POOLS=80
+# Solana RPC dùng để liệt kê vị thế của một pool. Mặc định là RPC công khai
+# https://api.mainnet-beta.solana.com; đặt RPC riêng (Helius, Triton...) nếu bị rate-limit.
+SOLANA_RPC_URL=
+# Số ví tối đa phân tích cho một pool (mặc định 120)
+POOL_LPERS_MAX_WALLETS=120
 # Tùy chọn cho copy-trade dashboard, xem docs/TRADER_DATA_SOURCES.md
 FOMO_API_KEY=
 ```
@@ -39,6 +47,9 @@ Giới hạn của nguồn on-chain:
 - Ví có nhiều hơn `LP_DATA_MAX_POOLS` pool DLMM sẽ được quét theo pool mới đóng
   gần nhất, kết quả có cảnh báo trong `meta.warnings` của overview.
 - Lịch sử sự kiện (add/remove/claim) chỉ có cho DLMM. Số dư token không có.
+- Trang chi tiết pool chỉ liệt kê được ví **đang còn vị thế mở** (account vị thế
+  đã đóng không còn trên chain). PnL của mỗi ví trong pool thì tính cả các vị
+  thế đã đóng của ví đó.
 
 Trong Privy Dashboard, bật hai phương thức đăng nhập `Wallet` và `Email`, bật
 embedded wallet cho cả Solana và Ethereum, và thêm domain local/production của
@@ -116,6 +127,11 @@ Response gồm:
 - `results`: danh sách wallet đã phân tích
 - `errors`: wallet lỗi (nếu có)
 - `successCount`, `failureCount`
+
+`GET /api/pools/[address]/lpers?protocol=dlmm|damm_v2`
+
+Trả về metadata pool, tổng hợp và danh sách ví đang trong pool kèm PnL. Thêm
+`refresh=1` để bỏ qua cache 3 phút.
 
 `GET /api/lpagent/smart-lp`
 
