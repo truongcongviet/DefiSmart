@@ -2,7 +2,7 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 import { isValidWalletAddress } from "@/lib/analysis/classifier";
-import { fetchLpHistoricalPositions } from "@/lib/api/lpagent";
+import { fetchLpHistoricalPositions } from "@/lib/api/lp-data";
 import { getNested, isRecord, toNumber } from "@/lib/utils";
 
 interface DistributionBucket {
@@ -21,7 +21,8 @@ interface HistoricalPage {
 
 const DEFAULT_PAGE_SIZE = 10;
 const MAX_PAGE_SCAN = 450;
-const PAGE_DELAY_MS = 120;
+// Pages are served from the in-memory Meteora snapshot, so no upstream pacing is needed.
+const PAGE_DELAY_MS = 0;
 const DEFAULT_MIN_ABS_PNL_NATIVE = 0;
 
 function normalizeNumberParam(

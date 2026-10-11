@@ -1360,7 +1360,7 @@ export function AddressAnalysis() {
         if (isCoreLoading && !result) {
           return buildStateCard(
             "Execution Quality",
-            "Đang tải dữ liệu ví từ LPAgent...",
+            "Đang tải dữ liệu ví on-chain từ Meteora...",
           );
         }
 

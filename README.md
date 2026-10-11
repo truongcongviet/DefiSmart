@@ -1,30 +1,44 @@
 # LP Smart Wallet Radar
 
-Dashboard Next.js để theo dõi và phân loại ví LP thông minh bằng dữ liệu kết hợp:
+Dashboard Next.js để theo dõi và phân loại ví LP thông minh. Toàn bộ dữ liệu
+vị thế được tính trực tiếp từ on-chain qua Meteora Data API (miễn phí, không
+cần API key):
 
-- LP Agent API (`smart-lp` + `open-api`)
-- Meteora public APIs (DLMM + DAMM v2)
+- DLMM: `https://dlmm.datapi.meteora.ag` (portfolio, PnL từng vị thế, lịch sử sự kiện)
+- DAMM v2: `https://damm-v2.datapi.meteora.ag` (vị thế đang mở và đã đóng của ví)
+
+Tầng dữ liệu nằm ở `src/lib/api/meteora-lp.ts` (fetch + chuẩn hóa, cache 2 phút
+theo ví) và `src/lib/api/lp-data.ts` (tổng hợp overview, historical, revenue, logs
+cho tầng phân tích).
 
 ## Tính năng chính
 
 - Header điều hướng: `SmartLP`, `Pool`, `Analysis`, ...
 - Màn hình Smart LP dạng bảng/card theo mẫu dashboard
 - Bộ lọc và sort cho danh sách LP wallets
-- API proxy server-side tới `https://api.lpagent.io/api/v1/smart-lp`
+- Danh sách Smart LP đọc từ seed snapshot `data/lp_smart_wallets_from_openapi.json`
+- Phân tích ví theo địa chỉ: score, phân loại, timeline, phân bố giờ giao dịch
 - Hỗ trợ phân tích wallet thủ công qua `POST /api/wallets/classify`
 
 ## Cấu hình
 
-Tạo file `.env`:
+Tạo file `.env` (mọi biến đều tùy chọn; phân tích LP không cần API key):
 
 ```bash
-API_KEY_LPSMART=your_lpagent_key_or_token
-LPAGENT_BEARER_TOKEN=optional_bearer_token_for_smart_lp
-LPAGENT_TURNSTILE_TOKEN=optional_turnstile_token
-LPAGENT_CHAIN=SOL
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
 NEXT_PUBLIC_PRIVY_CLIENT_ID=optional_privy_client_id
+# Số pool DLMM tối đa quét cho một ví (mặc định 80). Ví càng nhiều pool càng tốn request.
+LP_DATA_MAX_POOLS=80
+# Tùy chọn cho copy-trade dashboard, xem docs/TRADER_DATA_SOURCES.md
+FOMO_API_KEY=
 ```
+
+Giới hạn của nguồn on-chain:
+
+- Chỉ phủ Meteora DLMM và DAMM v2. Vị thế trên protocol khác không được tính.
+- Ví có nhiều hơn `LP_DATA_MAX_POOLS` pool DLMM sẽ được quét theo pool mới đóng
+  gần nhất, kết quả có cảnh báo trong `meta.warnings` của overview.
+- Lịch sử sự kiện (add/remove/claim) chỉ có cho DLMM. Số dư token không có.
 
 Trong Privy Dashboard, bật hai phương thức đăng nhập `Wallet` và `Email`, bật
 embedded wallet cho cả Solana và Ethereum, và thêm domain local/production của
@@ -104,6 +118,10 @@ Response gồm:
 - `successCount`, `failureCount`
 
 `GET /api/lpagent/smart-lp`
+
+Đọc từ seed snapshot cục bộ, hỗ trợ `page`, `pageSize`, `orderBy`, `minTotalLp`,
+`minWinRateNative`, `minTotalPnlNative`. Tham số `lastActivity` được chấp nhận
+nhưng bỏ qua vì snapshot là dữ liệu tĩnh.
 
 Ví dụ query:
 

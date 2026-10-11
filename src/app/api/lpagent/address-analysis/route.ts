@@ -8,7 +8,7 @@ import {
   fetchLpOverview,
   fetchLpRevenue,
   fetchTokenBalances,
-} from "@/lib/api/lpagent";
+} from "@/lib/api/lp-data";
 import { isValidWalletAddress } from "@/lib/analysis/classifier";
 import { asArray, getNested, isRecord, toNumber } from "@/lib/utils";
 
@@ -1376,7 +1376,7 @@ export async function GET(request: Request) {
       const status = error.response?.status || 500;
       const defaultMessage =
         status === 429
-          ? "LPAgent API đang rate-limit (429). Hãy thử lại sau vài giây hoặc giảm maxPages/includeLogs."
+          ? "Meteora Data API đang rate-limit (429). Hãy thử lại sau vài giây hoặc giảm maxPages/includeLogs."
           : error.message;
 
       return NextResponse.json(

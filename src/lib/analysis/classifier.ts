@@ -3,12 +3,8 @@ import {
   fetchLpOpeningPositions,
   fetchLpOverview,
   fetchLpRevenue,
-} from "@/lib/api/lpagent";
-import {
-  fetchDammV2ClosedPositions,
-  fetchDammV2OpenPositions,
-  fetchDlmmOpenPortfolio,
-} from "@/lib/api/meteora";
+  getWalletLpSourceStatus,
+} from "@/lib/api/lp-data";
 import {
   asArray,
   avg,
@@ -425,36 +421,34 @@ export async function classifyWallet(
     lpOpeningResult,
     lpHistoricalResult,
     lpRevenueResult,
-    dlmmOpenResult,
-    dammOpenResult,
-    dammClosedResult,
+    lpSourceResult,
   ] = await Promise.allSettled([
     fetchLpOverview(normalizedWallet),
     fetchLpOpeningPositions(normalizedWallet),
     fetchLpHistoricalPositions(normalizedWallet),
     fetchLpRevenue(normalizedWallet),
-    fetchDlmmOpenPortfolio(normalizedWallet),
-    fetchDammV2OpenPositions(normalizedWallet),
-    fetchDammV2ClosedPositions(normalizedWallet),
+    getWalletLpSourceStatus(normalizedWallet),
   ]);
+
+  const lpSources =
+    lpSourceResult.status === "fulfilled"
+      ? lpSourceResult.value
+      : { dlmm: false, dammOpen: false, dammClosed: false };
 
   const sourceStatus: SourceStatus = {
     lpOverview: lpOverviewResult.status === "fulfilled",
     lpOpening: lpOpeningResult.status === "fulfilled",
     lpHistorical: lpHistoricalResult.status === "fulfilled",
     lpRevenue: lpRevenueResult.status === "fulfilled",
-    meteoraDlmm: dlmmOpenResult.status === "fulfilled",
-    meteoraDammOpen: dammOpenResult.status === "fulfilled",
-    meteoraDammClosed: dammClosedResult.status === "fulfilled",
+    meteoraDlmm: lpSources.dlmm,
+    meteoraDammOpen: lpSources.dammOpen,
+    meteoraDammClosed: lpSources.dammClosed,
   };
 
   const lpOverviewRaw = extractPayload(lpOverviewResult);
   const lpOpeningRaw = extractPayload(lpOpeningResult);
   const lpHistoricalRaw = extractPayload(lpHistoricalResult);
   const lpRevenueRaw = extractPayload(lpRevenueResult);
-  const dlmmOpenRaw = extractPayload(dlmmOpenResult);
-  const dammOpenRaw = extractPayload(dammOpenResult);
-  const dammClosedRaw = extractPayload(dammClosedResult);
 
   const overview = aggregateOverview(lpOverviewRaw);
   const lpOpeningItems = asArray<Record<string, unknown>>(
@@ -476,15 +470,11 @@ export async function classifyWallet(
   const revenueItems = asArray<Record<string, unknown>>(
     getNested(lpRevenueRaw, ["data"]),
   );
-  const dlmmPools = asArray<Record<string, unknown>>(
-    getNested(dlmmOpenRaw, ["pools"]),
-  );
-  const dammOpenItems = asArray<Record<string, unknown>>(
-    getNested(dammOpenRaw, ["data"]),
-  );
-  const dammClosedItems = asArray<Record<string, unknown>>(
-    getNested(dammClosedRaw, ["data"]),
-  );
+  // Meteora DLMM / DAMM v2 positions already arrive through the LP data
+  // layer above, so there is nothing extra to merge here.
+  const dlmmPools: Record<string, unknown>[] = [];
+  const dammOpenItems: Record<string, unknown>[] = [];
+  const dammClosedItems: Record<string, unknown>[] = [];
 
   const allPoolAddresses = uniqueNonEmpty([
     ...lpOpeningItems.map(extractPoolAddress),
@@ -509,10 +499,7 @@ export async function classifyWallet(
     (sum, pool) => sum + Math.max(1, toNumber(pool.openPositionCount ?? 0)),
     0,
   );
-  const dammOpenCount = Math.max(
-    toNumber(getNested(dammOpenRaw, ["total_positions"])),
-    dammOpenItems.length,
-  );
+  const dammOpenCount = dammOpenItems.length;
 
   const openPositions = lpOpenCount + dlmmOpenCount + dammOpenCount;
 

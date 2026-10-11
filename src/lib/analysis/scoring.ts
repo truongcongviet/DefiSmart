@@ -4,7 +4,7 @@ import {
   fetchLpHistoricalPositions,
   fetchLpOpeningPositions,
   fetchLpOverview,
-} from "@/lib/api/lpagent";
+} from "@/lib/api/lp-data";
 import { asArray, clamp, getNested, isRecord, safeRatio, toNumber } from "@/lib/utils";
 
 const MAX_RETRIES = 2;
@@ -942,7 +942,7 @@ export async function calculateWalletScore(
   const confidenceReasons: string[] = [];
   confidenceReasons.push(
     sourceStatus.overview
-      ? "Có dữ liệu overview tổng hợp từ LPAgent."
+      ? "Có dữ liệu overview tổng hợp từ on-chain Meteora."
       : "Thiếu overview, một số chỉ số tổng chỉ là ước tính từ sample.",
   );
   confidenceReasons.push(
