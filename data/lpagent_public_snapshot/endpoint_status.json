@@ -1,0 +1,17 @@
+{
+  "pool_id": "8EZqMc266xTtnS3uxstp8DdNU95fWKQ7mYyAZULSc6We",
+  "owner": "AZzDexKgVSfJKYnaroN8DGdELCco5YxFCvKkxcsPmHvK",
+  "files": {
+    "pools_discover": true,
+    "pool_info": ,
+    "pool_onchain_stats": true,
+    "pool_positions": true,
+    "pool_top_lpers": true,
+    "lp_opening": true,
+    "lp_historical": true,
+    "lp_overview": false,
+    "lp_logs": false,
+    "lp_revenue": false,
+    "token_balance": false
+  }
+}

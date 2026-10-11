@@ -1,0 +1,106 @@
+{
+  "discover_sample": {
+    "pool": "8EZqMc266xTtnS3uxstp8DdNU95fWKQ7mYyAZULSc6We",
+    "protocol": "meteora_damm_v2",
+    "token0_symbol": "SOL",
+    "token1_symbol": "HORSE",
+    "vol_24h": 83073101.04442266,
+    "tvl": 51186.8275892042,
+    "fee": 0.25,
+    "mcap": 236359.8105569663
+  },
+  "pool_info_sample": {
+    "type": "meteora",
+    "poolDb": {
+      "pool": "HTvjzsfX3yU6BUodCjZ5vZkUrAxMDTrBs3CJaq43ashR",
+      "protocol": "meteora",
+      "feeRate": null,
+      "totalTvl": null
+    },
+    "poolStats": {
+      "id": null,
+      "pool": "HTvjzsfX3yU6BUodCjZ5vZkUrAxMDTrBs3CJaq43ashR",
+      "tvl": "634211.3277341032",
+      "fee": "0.01",
+      "protocol": "meteora",
+      "chain": "SOL",
+      "created_at": "2024-06-10T06:01:33.658Z",
+      "token0": "So11111111111111111111111111111111111111112",
+      "token1": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "vol_5m": "17849.18418433628",
+      "vol_1h": "197364.84448153575",
+      "vol_6h": "1410733.5371652606",
+      "vol_24h": "9179969.894279236",
+      "base_price": "90.10499630481864",
+      "quote_price": "0.01109816370911412",
+      "mcap": "51495818161.265205",
+      "usd_price": "90.07684246320437",
+      "fdv": "56099708271.84399",
+      "organic_score": "98.87997868298403",
+      "top_holder": "3820662",
+      "mint_freeze": true,
+      "price_5m_change": "0.043811743143834875",
+      "price_1h_change": "-0.10421737537475455",
+      "price_6h_change": "0.2405394855986882",
+      "price_24h_change": "0.7755742845507018",
+      "bin_step": 1,
+      "updated_at": "2026-03-21T08:01:15.464Z",
+      "first_pool_created_at": "2021-03-29T10:05:48.000Z",
+      "fee_tvl_ratio": "0",
+      "fee_24h": "0",
+      "x_amount": "5943101739839",
+      "y_amount": "98711972960"
+    }
+  },
+  "onchain_stats_sample": {
+    "pool": "8EZqMc266xTtnS3uxstp8DdNU95fWKQ7mYyAZULSc6We",
+    "total_open_positions": 0,
+    "unique_owners": 0,
+    "total_input_value": 0,
+    "total_input_native": 0
+  },
+  "pool_positions_sample": {
+    "owner": "AZzDexKgVSfJKYnaroN8DGdELCco5YxFCvKkxcsPmHvK",
+    "position": "DTi1a2EErvabz3vKUA2c1CaPuN5fXZBqrLRCseQ7seAP",
+    "pairName": "SOL",
+    "status": "Close",
+    "pnlNative": -1697.4837357697259,
+    "valueNative": 1894.7730339230827,
+    "ageHour": "8.255"
+  },
+  "top_lpers_sample": {
+    "owner": "AZzDexKgVSfJKYnaroN8DGdELCco5YxFCvKkxcsPmHvK",
+    "total_pnl_native": -1697.4837357697259,
+    "win_rate_native": 0,
+    "total_lp": 1,
+    "avg_age_hour": 8,
+    "last_activity": "2026-02-16 14:41:17.000"
+  },
+  "overview_sample": {
+    "owner": "AZzDexKgVSfJKYnaroN8DGdELCco5YxFCvKkxcsPmHvK",
+    "total_lp": 0,
+    "total_pool": 0,
+    "total_pnl_native": {
+      "ALL": 0,
+      "7D": 0,
+      "1M": 0,
+      "3M": 0,
+      "1Y": 0,
+      "YTD": 0
+    },
+    "win_rate_native": {
+      "ALL": 0,
+      "7D": 0,
+      "1M": 0,
+      "3M": 0,
+      "1Y": 0,
+      "YTD": 0
+    },
+    "avg_age_hour": 0,
+    "first_activity": null,
+    "last_activity": null
+  },
+  "historical_count": 1,
+  "revenue_count": 0,
+  "token_balance_count": 0
+}

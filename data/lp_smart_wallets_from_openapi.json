@@ -1,0 +1,2655 @@
+[
+  {
+    "owner": "2H7umQpg8abNks46EpdDuij9WcJ8smzJtVVm6Mm5wMxG",
+    "pools": 5,
+    "total_lp": 129,
+    "total_pnl_native": 93.81579696439842,
+    "avg_win_rate_native": 0.9394308943089431,
+    "last_activity": "2026-03-20 21:48:23.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 100.82523529015928
+  },
+  {
+    "owner": "XY2joC2DwF2HH1UAVUegiKYDPXLcgvXwTPZfxQRWn3k",
+    "pools": 5,
+    "total_lp": 153,
+    "total_pnl_native": 75.05490666333402,
+    "avg_win_rate_native": 0.8624542124542124,
+    "last_activity": "2026-03-21 07:04:02.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 96.40748810537515
+  },
+  {
+    "owner": "wYuQ3QUdE2TCYyfAXWtgdgCqyjDqPwsUy5X9Ug5eTkE",
+    "pools": 2,
+    "total_lp": 59,
+    "total_pnl_native": 257.32500655363185,
+    "avg_win_rate_native": 0.8785714285714286,
+    "last_activity": "2026-03-19 22:00:20.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 92.44489656014271
+  },
+  {
+    "owner": "Bdrs3hKcEe4PpM91risoYm5YKceQ7tsaovs4otog6HBz",
+    "pools": 3,
+    "total_lp": 667,
+    "total_pnl_native": 89.48332216054455,
+    "avg_win_rate_native": 0.9079764379764379,
+    "last_activity": "2026-03-20 23:49:24.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 91.283371099107
+  },
+  {
+    "owner": "D85LBw59pragqAe8knyScSDgxq6ikmBPRewCzmjoCyLz",
+    "pools": 2,
+    "total_lp": 93,
+    "total_pnl_native": 159.9277702538426,
+    "avg_win_rate_native": 0.8960863697705803,
+    "last_activity": "2026-03-19 13:02:38.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 90.29178845517805
+  },
+  {
+    "owner": "DMYqqXjrdRQHSekSwGRN95amvLdV3AvsmyujME8xMs9D",
+    "pools": 2,
+    "total_lp": 37,
+    "total_pnl_native": 141.9325640716536,
+    "avg_win_rate_native": 0.9375,
+    "last_activity": "2026-02-18 03:05:30.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 88.63211226337759
+  },
+  {
+    "owner": "ES6w6VXox2fMDeNvjexZvqG5QyyTGgMz4ZpBHhnuQsdo",
+    "pools": 3,
+    "total_lp": 235,
+    "total_pnl_native": 116.57605795392125,
+    "avg_win_rate_native": 0.8015873015873017,
+    "last_activity": "2026-03-01 13:58:13.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 88.6147555712537
+  },
+  {
+    "owner": "buruU8ggV3inCNi2HQL2R1eXhdRqkTC4JbNW14u5zLx",
+    "pools": 2,
+    "total_lp": 184,
+    "total_pnl_native": 123.05632740886705,
+    "avg_win_rate_native": 0.8786324786324786,
+    "last_activity": "2026-03-10 16:21:27.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 88.02115232706223
+  },
+  {
+    "owner": "HG3VJwVbDm6w6Wuww2GxTn8ZCFsiYHaMzh7YEL4hie1p",
+    "pools": 3,
+    "total_lp": 37,
+    "total_pnl_native": 34.08791561610039,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 01:00:07.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz",
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 86.57365764433351
+  },
+  {
+    "owner": "4rqLCbbgTrFKoQjCyh4mRNyQzL9MmWLV2JaNvAp4EgLa",
+    "pools": 1,
+    "total_lp": 32,
+    "total_pnl_native": 151.16315092223218,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 15:09:12.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 86.51015833926795
+  },
+  {
+    "owner": "9x9ZLN8EwTwvJCRpiEBtdHwMGHoYa69JVySr3E51yFxj",
+    "pools": 2,
+    "total_lp": 22,
+    "total_pnl_native": 83.076636067308,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-07 20:21:05.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 84.91858104743238
+  },
+  {
+    "owner": "3XcrqjikwdY5X9psQv7iG7kGTGRJyThPCix9gaW1UFbf",
+    "pools": 2,
+    "total_lp": 24,
+    "total_pnl_native": 65.87498600042967,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-28 20:32:28.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 83.92655276606584
+  },
+  {
+    "owner": "3sQHjHaYX2W2xK3cgdCvUg2VzXKuoXAwugdz9U1h2oS4",
+    "pools": 2,
+    "total_lp": 91,
+    "total_pnl_native": 50.22047801867005,
+    "avg_win_rate_native": 0.9064327485380117,
+    "last_activity": "2026-03-03 15:00:54.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 83.75584717457751
+  },
+  {
+    "owner": "CSiZG5sBsNDgLmbEH54hfLNAn3f3JXVsTqU1LzZTD3KX",
+    "pools": 3,
+    "total_lp": 44,
+    "total_pnl_native": 116.94570864000082,
+    "avg_win_rate_native": 0.7000000000000001,
+    "last_activity": "2026-03-21 03:52:21.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn",
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 83.37025879031103
+  },
+  {
+    "owner": "5y1CoiTKrifPH1vmddUUWwJvFB78uV8z1DunyJEYRYNx",
+    "pools": 3,
+    "total_lp": 49,
+    "total_pnl_native": 50.47097018738545,
+    "avg_win_rate_native": 0.7958656330749353,
+    "last_activity": "2026-03-21 06:37:33.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 83.16301526230805
+  },
+  {
+    "owner": "pghgZmihyrfFCyUvCB6HBmjRDHA4Duv8411eyv8pYCY",
+    "pools": 2,
+    "total_lp": 28,
+    "total_pnl_native": 73.91200214062515,
+    "avg_win_rate_native": 0.9333333333333333,
+    "last_activity": "2026-03-09 00:27:49.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 82.75058468531483
+  },
+  {
+    "owner": "BBRQTNHRKJgbXKcRrr7c9NNj6KAD9sc83Lw9ce9TVUfb",
+    "pools": 4,
+    "total_lp": 99,
+    "total_pnl_native": 16.461488546937,
+    "avg_win_rate_native": 0.8461538461538461,
+    "last_activity": "2026-03-21 02:21:30.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 82.65229559831566
+  },
+  {
+    "owner": "5mpXQPUT2bmJxW4VaBixsqmGygKxrtbGdgTgb8YHYQnV",
+    "pools": 1,
+    "total_lp": 30,
+    "total_pnl_native": 346.9899948321275,
+    "avg_win_rate_native": 0.7857142857142857,
+    "last_activity": "2026-03-17 12:42:56.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 82.5243471057376
+  },
+  {
+    "owner": "EpZE4K23cgjz3hw5NjJc9Nts4fEBmpRAU96ovfmCcsue",
+    "pools": 2,
+    "total_lp": 11,
+    "total_pnl_native": 78.06626183758098,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-13 09:38:25.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 82.34534786078673
+  },
+  {
+    "owner": "8gW5oJqmrDk7Ja8kpTcwba3tDFx4PuexgYg9QdCCZDiM",
+    "pools": 3,
+    "total_lp": 24,
+    "total_pnl_native": 30.05750496896254,
+    "avg_win_rate_native": 0.9696969696969697,
+    "last_activity": "2026-03-20 23:15:12.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 82.00655306297165
+  },
+  {
+    "owner": "Di6ohCBPnm3yYErdMyoAbbvAqoD2zNUHTrrrTPgxH23D",
+    "pools": 1,
+    "total_lp": 162,
+    "total_pnl_native": 53.955892709744944,
+    "avg_win_rate_native": 0.9347826086956522,
+    "last_activity": "2026-03-17 14:47:18.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 81.32030581459793
+  },
+  {
+    "owner": "DtLThNhejataAZr9BkFJfgDGqvxc3PMMrN8WLy9jtC26",
+    "pools": 2,
+    "total_lp": 39,
+    "total_pnl_native": 25.47356853041886,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 15:55:05.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 81.22584831827182
+  },
+  {
+    "owner": "FPXSpWznrC5LHKQcA6dK3Hi6uFdFp55Wg3kMiJcwYb3V",
+    "pools": 2,
+    "total_lp": 61,
+    "total_pnl_native": 16.667223706222366,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 14:41:46.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 80.88066483144918
+  },
+  {
+    "owner": "87bEQ9JEEPp3GZKKk9Y2h1uw9Lw4UUAyyrXV5wEHGNLR",
+    "pools": 3,
+    "total_lp": 78,
+    "total_pnl_native": 10.54390821196235,
+    "avg_win_rate_native": 0.9606481481481483,
+    "last_activity": "2026-03-21 05:38:59.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 80.55921556082684
+  },
+  {
+    "owner": "9ES2XL4LMFJ75PqP5QzbWuHcjyXFNrahRmDY1fFqtczH",
+    "pools": 2,
+    "total_lp": 14,
+    "total_pnl_native": 50.81282018157815,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-23 18:58:20.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 80.36889213114789
+  },
+  {
+    "owner": "6Ji2Ese8RZpghRTZJPuAzNwgha53HUddFx2JKRUCavBh",
+    "pools": 3,
+    "total_lp": 471,
+    "total_pnl_native": 23.68821943241315,
+    "avg_win_rate_native": 0.7904040404040403,
+    "last_activity": "2026-03-21 05:37:28.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 78.60602874135168
+  },
+  {
+    "owner": "Gv7ouemn1Yhf3GU8crGKQ3TGWbnzYZ1CRKXY1oQR7tv4",
+    "pools": 1,
+    "total_lp": 26,
+    "total_pnl_native": 47.91805762279953,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-28 20:22:26.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 78.41695451542654
+  },
+  {
+    "owner": "A33iZVdxbb8ZhxhRvzus2xpAnqWBmoT7a3dykLU6JDm8",
+    "pools": 2,
+    "total_lp": 39,
+    "total_pnl_native": 20.88196151003501,
+    "avg_win_rate_native": 0.9523809523809523,
+    "last_activity": "2026-03-21 05:16:55.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 78.12855229915996
+  },
+  {
+    "owner": "2BqTvkdyMMXk1aFThvRa9VcSeFG9i3iP8GAj2F6azX1y",
+    "pools": 4,
+    "total_lp": 170,
+    "total_pnl_native": 7.382546720145054,
+    "avg_win_rate_native": 0.8395191040843215,
+    "last_activity": "2026-03-21 07:20:46.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 77.57547614206332
+  },
+  {
+    "owner": "7T5hzHGwXZdmPTtVekVUy3DZ9gtQeufWrWY6SVZDacQb",
+    "pools": 1,
+    "total_lp": 107,
+    "total_pnl_native": 20.257447989910318,
+    "avg_win_rate_native": 0.9857142857142858,
+    "last_activity": "2026-03-20 00:41:21.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 77.47970659597661
+  },
+  {
+    "owner": "9rT9TH4gyPrHaRZ69cHcn8gMFVdiCioz2Yq9GDZc7zc8",
+    "pools": 2,
+    "total_lp": 53,
+    "total_pnl_native": 11.466474141497585,
+    "avg_win_rate_native": 0.9666666666666667,
+    "last_activity": "2026-03-21 00:13:50.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 77.30323158017436
+  },
+  {
+    "owner": "AqArsTRw2e3ECkzf11x1hyZM8qxovY7NtetY2KJwqen3",
+    "pools": 1,
+    "total_lp": 57,
+    "total_pnl_native": 29.12309429473445,
+    "avg_win_rate_native": 0.8823529411764706,
+    "last_activity": "2026-03-21 05:54:20.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 75.52330651388675
+  },
+  {
+    "owner": "2bFw11nmRvarLwzwsm8gEQBF523grwvqRZkTQrCmCMh4",
+    "pools": 1,
+    "total_lp": 47,
+    "total_pnl_native": 35.653264534465805,
+    "avg_win_rate_native": 0.8666666666666667,
+    "last_activity": "2026-03-17 13:56:05.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 75.50971095343948
+  },
+  {
+    "owner": "722d254xnMZ6Y8vWcpYbkYtJSg8JeGNhfyc7EKtnjt3R",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 59.7031846447315,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-19 19:39:00.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 75.336312178652
+  },
+  {
+    "owner": "ApZRqobRuDYVbK7m3rLusr3Wu5SaeaAYUWmXrDLKY8wn",
+    "pools": 2,
+    "total_lp": 26,
+    "total_pnl_native": 18.442251796685408,
+    "avg_win_rate_native": 0.9545454545454546,
+    "last_activity": "2026-03-20 19:50:53.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn",
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 74.86968413458273
+  },
+  {
+    "owner": "ASMCNGS8RQ2iCpgTeoNMqvZPE5W67AupQZQkJY2CJY35",
+    "pools": 2,
+    "total_lp": 24,
+    "total_pnl_native": 14.031481686153501,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-13 13:37:50.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 74.64782098175809
+  },
+  {
+    "owner": "AwJU7DSPTREnhU4sY4piw11JYCDkaa1LNsKo3EXFqmvB",
+    "pools": 2,
+    "total_lp": 102,
+    "total_pnl_native": 8.548260133826265,
+    "avg_win_rate_native": 0.9390243902439024,
+    "last_activity": "2026-03-21 05:23:32.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 74.43534222448449
+  },
+  {
+    "owner": "FQQZ3C3rcjC4Ln76hW5KxKjwECHnqborQESnRK29YiE4",
+    "pools": 1,
+    "total_lp": 57,
+    "total_pnl_native": 10.901457905561506,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 14:41:53.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 74.33337919856879
+  },
+  {
+    "owner": "4tAxrxqDtBma6zjAwRTYfHVJhddjx45vrBZa37oRuo4N",
+    "pools": 2,
+    "total_lp": 144,
+    "total_pnl_native": 7.439616966425147,
+    "avg_win_rate_native": 0.9565217391304348,
+    "last_activity": "2026-03-20 23:56:28.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 74.30178575229138
+  },
+  {
+    "owner": "EApBDL5hwqSFr6sURw9skBXXUc9aJCgXe8qWukiMUVMG",
+    "pools": 1,
+    "total_lp": 59,
+    "total_pnl_native": 9.999108155113607,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-16 16:07:13.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 73.8149754271694
+  },
+  {
+    "owner": "8tsAvhteDx6zQYZZuEKxxuKaxtxMfJq3ewYUK6sh3Ku9",
+    "pools": 1,
+    "total_lp": 36,
+    "total_pnl_native": 43.34436444010082,
+    "avg_win_rate_native": 0.8387096774193549,
+    "last_activity": "2026-03-15 16:55:31.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 73.36344725713748
+  },
+  {
+    "owner": "CwGsFcr4dsRSnu922Ec9cUumGjcLDHQWcGDAFJhEqtab",
+    "pools": 1,
+    "total_lp": 55,
+    "total_pnl_native": 19.47699514586367,
+    "avg_win_rate_native": 0.8857142857142857,
+    "last_activity": "2026-03-21 06:20:04.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 73.24397562671368
+  },
+  {
+    "owner": "DhXXNEfwzFoLBW6hKfzLFjcawDcgJFWYLvxxmFP3gNME",
+    "pools": 1,
+    "total_lp": 31,
+    "total_pnl_native": 69.83955616600272,
+    "avg_win_rate_native": 0.7727272727272727,
+    "last_activity": "2026-02-20 21:10:39.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 72.58629424808935
+  },
+  {
+    "owner": "7yFf1UTHjs3y6BHJBDmjB4g6kDnJomF1FeYVu2TLUhMF",
+    "pools": 2,
+    "total_lp": 35,
+    "total_pnl_native": 15.496995307468197,
+    "avg_win_rate_native": 0.8722222222222222,
+    "last_activity": "2026-03-21 04:53:39.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 72.33276581290423
+  },
+  {
+    "owner": "8RxdhdbsQ7yxLdL2QMVVAypCMUeHicRwU6VFhpEePVhT",
+    "pools": 1,
+    "total_lp": 59,
+    "total_pnl_native": 17.47106988222733,
+    "avg_win_rate_native": 0.8717948717948718,
+    "last_activity": "2026-03-16 20:54:50.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 72.03507305209195
+  },
+  {
+    "owner": "GeLxFbHDYTp82E2BAVu8zWoYsV3zXUYWurjyxvApjJzq",
+    "pools": 1,
+    "total_lp": 16,
+    "total_pnl_native": 22.326729594945004,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 01:24:44.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 71.8347075833166
+  },
+  {
+    "owner": "GY5cTisAVwVnVXWoatz8JVShMjmF84PsMvcr1SvAJb9Z",
+    "pools": 1,
+    "total_lp": 71,
+    "total_pnl_native": 9.858776644349756,
+    "avg_win_rate_native": 0.9512195121951219,
+    "last_activity": "2026-03-07 15:21:07.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 71.77895301781933
+  },
+  {
+    "owner": "6b9gSAVcg7yHy1wpERbKw2gKLwsrjw986WCxJaspRAA5",
+    "pools": 2,
+    "total_lp": 14,
+    "total_pnl_native": 11.623252648418612,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:28:27.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 71.51804578217389
+  },
+  {
+    "owner": "2RofzTbhiooFdacJjhVacN6bzdBArgRCUCDqsWYtMCyP",
+    "pools": 1,
+    "total_lp": 66,
+    "total_pnl_native": 13.624014486687017,
+    "avg_win_rate_native": 0.8809523809523809,
+    "last_activity": "2026-03-20 23:29:35.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 70.90909927818092
+  },
+  {
+    "owner": "Heuv9ZfCRdopoEXUzU7hS3UyFFwSVWwAkEV63db3TWL8",
+    "pools": 1,
+    "total_lp": 41,
+    "total_pnl_native": 12.853248029745238,
+    "avg_win_rate_native": 0.9310344827586207,
+    "last_activity": "2026-03-21 01:20:03.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 70.76295857651843
+  },
+  {
+    "owner": "2uFtGapFU1bprEGFNxPuBJWMBCQUGLuMnjQ3mdtANuog",
+    "pools": 1,
+    "total_lp": 123,
+    "total_pnl_native": 12.922702151620811,
+    "avg_win_rate_native": 0.8775510204081632,
+    "last_activity": "2026-03-20 15:30:01.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 70.45595454442059
+  },
+  {
+    "owner": "3YG5bnhLrB2CW7uVt5UXYnieKL6H3yz8KreMePGm4g44",
+    "pools": 1,
+    "total_lp": 21,
+    "total_pnl_native": 14.627296784469216,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-28 19:58:51.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 70.29733655527725
+  },
+  {
+    "owner": "4tQP92X4qLEFkVcdWifzB3rir9y4GeVDLmghhTGSjZpp",
+    "pools": 2,
+    "total_lp": 8,
+    "total_pnl_native": 10.488657313098662,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 03:49:56.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 69.70176650422701
+  },
+  {
+    "owner": "3E6HGRP9fThnJamCzzapcgYjR5P4Gg4fvsmk32SAzqp4",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 23.33027193147231,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-01-28 03:23:29.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 69.69851045101895
+  },
+  {
+    "owner": "HropENwc8rswVy6bff9aCpXmeMPk2BrBLaLqzdcPUH9F",
+    "pools": 2,
+    "total_lp": 14,
+    "total_pnl_native": 8.167959082022154,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 10:09:50.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 69.4013144278184
+  },
+  {
+    "owner": "27jMqNMeWd67L6TfZieqr6xUTYsazNy1B98ZTjSPzBLS",
+    "pools": 1,
+    "total_lp": 15,
+    "total_pnl_native": 15.242250551265183,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-01 09:44:50.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 69.34442727993982
+  },
+  {
+    "owner": "2GajnMdRy7YR86UpZw9HZGdPEsfnfxsAcmod5hB9c9cx",
+    "pools": 1,
+    "total_lp": 40,
+    "total_pnl_native": 6.453449968799708,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 20:24:38.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 69.18768920016781
+  },
+  {
+    "owner": "CGgPxVsLT2ji3dzBDGr32GwFx3zU8R3odrWd9aYBvEoU",
+    "pools": 2,
+    "total_lp": 12,
+    "total_pnl_native": 8.214866224557012,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 11:08:43.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 69.03567280239939
+  },
+  {
+    "owner": "8ryctvNwpJTuuap3wuNTfcyEx4DjSuXvhGXSDHNaU8sQ",
+    "pools": 2,
+    "total_lp": 27,
+    "total_pnl_native": 9.570483238851022,
+    "avg_win_rate_native": 0.9,
+    "last_activity": "2026-03-19 11:38:06.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 68.95210219620662
+  },
+  {
+    "owner": "9aLNzsvJGQAm8x2GweZC39MVwsw6dpVCBHCi6CsJjLtV",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 19.292482330670705,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-16 05:48:19.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 68.35829302090403
+  },
+  {
+    "owner": "DHFtJe1V8u7ESdgPF457FuRJRtQMTdb15JHrHS95zHnG",
+    "pools": 2,
+    "total_lp": 46,
+    "total_pnl_native": 3.5414465138466453,
+    "avg_win_rate_native": 0.9285714285714286,
+    "last_activity": "2026-03-21 04:25:12.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 67.93006872334155
+  },
+  {
+    "owner": "FZd16uLgv1AGpZGGCk46WEhUAZd7MmLQMhr9qW6BdRLg",
+    "pools": 2,
+    "total_lp": 15,
+    "total_pnl_native": 11.832760514034621,
+    "avg_win_rate_native": 0.9,
+    "last_activity": "2026-03-20 15:51:29.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 67.82523199626146
+  },
+  {
+    "owner": "APKfjRbxVxjtLkAWGxP4ZqCJV1i3sUkvHtCs97s8D9VP",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 18.85041452445168,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-24 18:16:51.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 67.81920942603593
+  },
+  {
+    "owner": "8J2QPyhuYnBoCfdyrYoHiWPVXNVcCkdcjWpjBzgNc37J",
+    "pools": 1,
+    "total_lp": 68,
+    "total_pnl_native": 13.718562237692119,
+    "avg_win_rate_native": 0.8,
+    "last_activity": "2026-03-18 09:32:13.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 67.71249894181254
+  },
+  {
+    "owner": "ANfDYmcv1Cpz676m6WKrLBmUC9qXoWJNGekBpRHLirYR",
+    "pools": 1,
+    "total_lp": 21,
+    "total_pnl_native": 9.106770955416328,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 00:25:17.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 67.45410918728832
+  },
+  {
+    "owner": "kUhU2g4yn9CzwAfhqb4e7Ke5t3PUwwnFpWF4MTQFqwn",
+    "pools": 3,
+    "total_lp": 16,
+    "total_pnl_native": 4.706977851172709,
+    "avg_win_rate_native": 0.9166666666666666,
+    "last_activity": "2026-03-20 20:42:40.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 67.16094300806482
+  },
+  {
+    "owner": "HeXjvx9p8kWy5kiWL15chxWEyvuoe2yi48PTfZSoeLSu",
+    "pools": 1,
+    "total_lp": 27,
+    "total_pnl_native": 10.360961323723402,
+    "avg_win_rate_native": 0.9411764705882353,
+    "last_activity": "2026-03-02 16:46:31.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 67.07532896987921
+  },
+  {
+    "owner": "8e4ry2zcJVjXv9P3Lk5fPEcwxPYwE1PoxaLVnoVfAZ2k",
+    "pools": 1,
+    "total_lp": 708,
+    "total_pnl_native": 10.443281493327682,
+    "avg_win_rate_native": 0.8235294117647058,
+    "last_activity": "2026-03-19 19:51:51.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 67.016929584693
+  },
+  {
+    "owner": "E64Uf6fqZ3F1gTm5ybANWQ7PRjWd4WhmBorRfXhvc9f5",
+    "pools": 1,
+    "total_lp": 32,
+    "total_pnl_native": 8.378336261543634,
+    "avg_win_rate_native": 0.9375,
+    "last_activity": "2026-02-23 20:55:56.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 66.6538961478459
+  },
+  {
+    "owner": "CmZpMHxTjZs2v17uhQ7umx6PnhzTsNK39A4YDkjy27QK",
+    "pools": 1,
+    "total_lp": 42,
+    "total_pnl_native": 29.600709703341145,
+    "avg_win_rate_native": 0.6904761904761905,
+    "last_activity": "2026-03-20 06:54:37.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 66.34583764408849
+  },
+  {
+    "owner": "83jGbBFXdFxU6uCfoieVip3hcGd4q9xVpt3NSGb91Lr3",
+    "pools": 1,
+    "total_lp": 16,
+    "total_pnl_native": 8.909134170655648,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-19 20:15:25.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 66.32246237050198
+  },
+  {
+    "owner": "9Hbghd8GM553NbxngcKF9AtUUeb63d2L2ka9NBWEF41g",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 12.751750939752132,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-19 22:49:41.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 66.0740115447024
+  },
+  {
+    "owner": "2VPV4qczT8Hf7pnt1CSZ68QBvzoXxufaVUs6s1QWEmpX",
+    "pools": 2,
+    "total_lp": 5,
+    "total_pnl_native": 6.041140507092319,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 13:20:14.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 65.79155691879362
+  },
+  {
+    "owner": "BCoqcXA7yLJ4Muiu1oeNrbmZPNb5LpAuApKrujgE4mNX",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 9.866669370092652,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 23:49:03.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 65.73497407994647
+  },
+  {
+    "owner": "71dtUbJAsEBANRMGewmgyERc46PhmkxhbFiX7D7FYQ8Y",
+    "pools": 1,
+    "total_lp": 22,
+    "total_pnl_native": 12.15797724419939,
+    "avg_win_rate_native": 0.9047619047619048,
+    "last_activity": "2026-02-26 16:19:11.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 65.57838929638673
+  },
+  {
+    "owner": "8MrKs3a2hAyTGSfV91yG8MrPCGve89tZadC8NQTrQjXL",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 12.513206459556436,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-21 13:09:38.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 65.56070762011036
+  },
+  {
+    "owner": "29gFqgYZWGZVx7XZW5WbV2xtgxBtpWzz6tKh3Baoo4eD",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 12.544684085364395,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-19 21:41:53.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 65.37578198192502
+  },
+  {
+    "owner": "4WqjfvMgCbZRygDjYMgiuk2YRkNqrruiJWRx8jHkTsDQ",
+    "pools": 1,
+    "total_lp": 34,
+    "total_pnl_native": 5.527083011956595,
+    "avg_win_rate_native": 0.9565217391304348,
+    "last_activity": "2026-02-28 20:42:18.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 65.31883071775734
+  },
+  {
+    "owner": "EqRDDEF6vfEyveakhDhjK3nAZUyxRYh7yjS8HE8iqRGE",
+    "pools": 1,
+    "total_lp": 200,
+    "total_pnl_native": 7.88842201006144,
+    "avg_win_rate_native": 0.821917808219178,
+    "last_activity": "2026-03-16 05:06:57.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 65.26908902555063
+  },
+  {
+    "owner": "7KHx2Uc5qsqz652eXbu8Qtabi5KLxWJLgxFzcaBzP32i",
+    "pools": 1,
+    "total_lp": 33,
+    "total_pnl_native": 19.539212528235154,
+    "avg_win_rate_native": 0.7619047619047619,
+    "last_activity": "2026-02-18 00:32:04.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 64.91073054800735
+  },
+  {
+    "owner": "8r13Xee53iC8Da1yB1aR2Hu2W9fRLQRHVUkx8w6hFVbQ",
+    "pools": 2,
+    "total_lp": 14,
+    "total_pnl_native": 7.164733147852722,
+    "avg_win_rate_native": 0.9,
+    "last_activity": "2026-03-20 17:30:25.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 64.61502490045119
+  },
+  {
+    "owner": "F4pkfnHoibGaSG3paNVTcd3NEwhqExJVH3SCKAJVA8z4",
+    "pools": 1,
+    "total_lp": 32,
+    "total_pnl_native": 3.869247769886549,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-01-27 14:37:22.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 64.51836068065296
+  },
+  {
+    "owner": "96hdcndTARFNUxrJMX4Mna3jkoewajysGu9rHxp6Ud2C",
+    "pools": 2,
+    "total_lp": 18,
+    "total_pnl_native": 9.898776592644865,
+    "avg_win_rate_native": 0.8285714285714285,
+    "last_activity": "2026-03-21 05:04:34.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 64.49732418088006
+  },
+  {
+    "owner": "BXWFG3aAyvEXToFFuk8XanQh52qck5Ukfbi7aYt5j3K1",
+    "pools": 2,
+    "total_lp": 23,
+    "total_pnl_native": 36.241219913034506,
+    "avg_win_rate_native": 0.6071428571428572,
+    "last_activity": "2026-03-21 00:01:22.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd",
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 64.42689714172033
+  },
+  {
+    "owner": "8KcV6iC9LkoHddLWLzUtPcnL7ASpW3UBGdi79e1QPx9n",
+    "pools": 2,
+    "total_lp": 17,
+    "total_pnl_native": 46.059596430362504,
+    "avg_win_rate_native": 0.5961538461538461,
+    "last_activity": "2026-03-21 06:13:37.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq",
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 64.22577064133164
+  },
+  {
+    "owner": "3nDVs4NV3yZCvwMifCxetTScfx2KS57eDPjTk5xLp62u",
+    "pools": 1,
+    "total_lp": 35,
+    "total_pnl_native": 9.535439381282561,
+    "avg_win_rate_native": 0.8333333333333334,
+    "last_activity": "2026-03-20 09:49:03.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 63.86342524661522
+  },
+  {
+    "owner": "FXKQ3cQnrQr3KfxhrZgRVWE96zVNCC7uMfDdaByZDPNB",
+    "pools": 1,
+    "total_lp": 35,
+    "total_pnl_native": 4.815095463765157,
+    "avg_win_rate_native": 0.9333333333333333,
+    "last_activity": "2026-02-04 09:47:53.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 63.76386856161745
+  },
+  {
+    "owner": "DbAkrLW23aMuJ4HUy44w6Uw1iKDNKFLQshqDaQ4eU2n2",
+    "pools": 1,
+    "total_lp": 26,
+    "total_pnl_native": 45.33419888500524,
+    "avg_win_rate_native": 0.64,
+    "last_activity": "2026-03-07 17:28:55.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 63.68437013962355
+  },
+  {
+    "owner": "Am1t6rL2nvM3TDHzvf7ER1hLaLTEUBS6SVSNjpCMAEA4",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 52.01903697904474,
+    "avg_win_rate_native": 0.7142857142857143,
+    "last_activity": "2026-02-28 23:53:50.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 63.681087055442106
+  },
+  {
+    "owner": "5ZPczDuywV5GFwG6KnHjbj2eap9BBQZeyUUDwaFhRRmn",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 16.920225586432988,
+    "avg_win_rate_native": 0.875,
+    "last_activity": "2026-03-21 01:31:09.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 63.571058119724206
+  },
+  {
+    "owner": "6zPUBgp7aNLSuWtpyZ6uE7Huf3y2VjQtZy2usRfbWq9v",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 76.18924842330443,
+    "avg_win_rate_native": 0.6666666666666666,
+    "last_activity": "2026-02-28 22:01:21.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 63.46598880224955
+  },
+  {
+    "owner": "7abkUonMpPjE4zVj1GdPvVHjatzHkMZbthFymMUxincw",
+    "pools": 1,
+    "total_lp": 45,
+    "total_pnl_native": 2.8217223972936005,
+    "avg_win_rate_native": 0.9523809523809523,
+    "last_activity": "2026-03-16 20:56:33.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 63.31932296133286
+  },
+  {
+    "owner": "ACLDRXeDHyEu92TCn5bRYNk834DHiP2GsF9ifwTYALCU",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 7.011888069952612,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 07:34:04.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 63.28564202573606
+  },
+  {
+    "owner": "CGXaYzkLYV8Sz9QQtQvC6sdmn17bFxh6pEAMj6qsY61V",
+    "pools": 2,
+    "total_lp": 12,
+    "total_pnl_native": 2.594619416239107,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 05:58:20.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 62.120639072720046
+  },
+  {
+    "owner": "DicCKYqkhbfJYYMaEH82H5kpJ7nUu7vp4VLefZnTRfsU",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 6.335871692204183,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:36:54.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 62.07736442224795
+  },
+  {
+    "owner": "FznCkBfFNYmRwyscJ48YS5W87VH3pJthdrdXxmroS841",
+    "pools": 1,
+    "total_lp": 27,
+    "total_pnl_native": 2.7880366476884646,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 23:25:51.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 61.552025825641316
+  },
+  {
+    "owner": "Dbez2s1XJdy9KCayCvtWvz5KDjMFFMYN2SDs3aTpn1SC",
+    "pools": 2,
+    "total_lp": 6,
+    "total_pnl_native": 2.8119844092032125,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 19:27:46.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu",
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 61.40334257731781
+  },
+  {
+    "owner": "5RnAoBnphiMMhijWgKHuRRdexgttytVJ798o6fPEJeeE",
+    "pools": 1,
+    "total_lp": 45,
+    "total_pnl_native": 1.4874499541761494,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 13:35:29.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 61.38237928172204
+  },
+  {
+    "owner": "7xRo6Tpga15qmFiwv3BwS2GVrLAjejpLy2U5CMaK1cmJ",
+    "pools": 1,
+    "total_lp": 15,
+    "total_pnl_native": 3.9782308531242605,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-18 15:43:19.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 61.28502326724533
+  },
+  {
+    "owner": "EhucehvZwrQiY6LWMqPAfupE6vt3nRDzCQNXJk1EtM6C",
+    "pools": 1,
+    "total_lp": 13,
+    "total_pnl_native": 4.213523649748506,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:45:49.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 61.22979561439428
+  },
+  {
+    "owner": "6r2tyFsUE9AQ6JMxF9NBvujZ7fciV6FJX7FAd3vNb1fn",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 4.706530581197487,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 03:14:16.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 60.89370617781407
+  },
+  {
+    "owner": "1NvGnGkHwpiEdmE8vtwHvXooEq2q7DM5sr9w6Z53MBn",
+    "pools": 1,
+    "total_lp": 18,
+    "total_pnl_native": 8.01185059765664,
+    "avg_win_rate_native": 0.8666666666666667,
+    "last_activity": "2026-03-18 18:42:18.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 60.7521972885133
+  },
+  {
+    "owner": "BZFmJP7511xPqWbd77DRjTUpoQgCjgfvPXkeAdssRvCH",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 4.126913891514808,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-14 02:31:42.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 60.505179315308126
+  },
+  {
+    "owner": "35mD3SvNZUDR1HipfrPTM5Bctk6bCygD3iCm65QbfzEK",
+    "pools": 1,
+    "total_lp": 28,
+    "total_pnl_native": 2.247125442530342,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:56:33.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 60.457910909897265
+  },
+  {
+    "owner": "E2UGfiEy8eiRkrvKAMeikm4SmP4JNfCpBoK1tjY3xQNA",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 16.594897167755335,
+    "avg_win_rate_native": 0.8,
+    "last_activity": "2026-01-27 18:57:39.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 60.254571491436586
+  },
+  {
+    "owner": "CE8q8PXB6wHPWRdUKH8RgPVQJaP3F41zXk5jKSu1EiFB",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 4.117519374997991,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-14 02:14:40.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 59.89150533149978
+  },
+  {
+    "owner": "A2QdoKbyVTB4Cj51xSYR2n3pgeb9AThSjQKRczYE6gyg",
+    "pools": 1,
+    "total_lp": 12,
+    "total_pnl_native": 3.461525711284331,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 00:13:46.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 59.8502566933715
+  },
+  {
+    "owner": "FZrKVbXKJzX4DvUs5ThcWaNSkYRzenUWuWMUgtZjYuJE",
+    "pools": 1,
+    "total_lp": 11,
+    "total_pnl_native": 3.3951679513158726,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-17 04:23:13.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 59.534119379899096
+  },
+  {
+    "owner": "4MGLdfi4AbKWd54ymgFWZbsXaMyTTN1J8PQ5EEM1xhUG",
+    "pools": 1,
+    "total_lp": 13,
+    "total_pnl_native": 3.157133610717393,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 07:10:09.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 59.49798718439235
+  },
+  {
+    "owner": "9EugXaYiUUBwTnjG1uxntqjYBWqp78ZRE3N77pPGvQor",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 96.21272644001516,
+    "avg_win_rate_native": 0.5,
+    "last_activity": "2026-02-22 19:10:07.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 59.399369842388985
+  },
+  {
+    "owner": "FZ6Zx7u5PXak4MVB3VtuKxA62aXc4fPnTzRF1FrN95UC",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 4.044481117901965,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-16 11:07:28.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 59.38411958927093
+  },
+  {
+    "owner": "7rG7FSpXKYRcZRDaf4DkDMuwy3xViJZmL9aLaE2hMdLJ",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 4.5995201180966765,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-13 07:42:19.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 59.35571185540131
+  },
+  {
+    "owner": "5nZVAuxrdBze1QXf6RLNPhXfwEfAiVLyvvVgHHBJ7Yn6",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 3.311482014939804,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:59:34.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 59.184374967018634
+  },
+  {
+    "owner": "9H3avixsV3nCqogRcggQ468aBrBtfiQ6PGAuDoce2LQT",
+    "pools": 1,
+    "total_lp": 28,
+    "total_pnl_native": 7.769920969791659,
+    "avg_win_rate_native": 0.7777777777777778,
+    "last_activity": "2026-03-20 11:26:02.000",
+    "sample_pools": [
+      "AaCGocTxrRjqqRPsncCAYBGZJPS2faqsJzdpDizFufss"
+    ],
+    "smart_score": 59.01267106989018
+  },
+  {
+    "owner": "5ahhM1bMajNEap8tC81mBQWuE83D4cwwwnMLSzHQiMNM",
+    "pools": 1,
+    "total_lp": 38,
+    "total_pnl_native": 1.2250192704118161,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-19 18:43:24.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 58.81773944892829
+  },
+  {
+    "owner": "EtEAj4twkW95tDU7uZm46UTargqdquvpRF7dXvLSGn9H",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 3.2451533930934335,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 03:32:25.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 58.66297571782641
+  },
+  {
+    "owner": "8uwu84aNQ3UECQUKvcD4fmgeq6vcjtsPqfLfbkfrwrn5",
+    "pools": 1,
+    "total_lp": 13,
+    "total_pnl_native": 2.558156085085626,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:35:42.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 58.23572031821384
+  },
+  {
+    "owner": "FdtDX9f9GWH9cUWgzKW62q4WryPXsEFTPHC6ebSDcLJu",
+    "pools": 1,
+    "total_lp": 27,
+    "total_pnl_native": 1.5490725107169112,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-18 07:59:47.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 58.025938229885874
+  },
+  {
+    "owner": "9vEJeiZZuFQCn6tQ7weZHqZnjnQM8UK5ghgYNVsoaMZf",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 3.658776803660966,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-01-28 05:52:34.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 57.98277330942266
+  },
+  {
+    "owner": "7Vj7LStNZMpxtgPGPsv4rzUTuxeiQtJws4p8giBXixkb",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 2.8829722654440246,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:39:01.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 57.95293079146021
+  },
+  {
+    "owner": "AuT92NT9PWmRdNdK6GPbQk8n5vBXfpB4tUP9e9Kj3bLu",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 3.6194242662372957,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-19 17:10:20.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 57.91788982427919
+  },
+  {
+    "owner": "75S33pXmMQUP1AnKVGZwLDY7obvPbyF2iGjZ8uDvmmud",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 3.6066441928946684,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 15:50:05.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 57.896666521333486
+  },
+  {
+    "owner": "6BiqsghtZmMCWBxDkSk9yLMhvYxFCccP2i1SBbcpmkrN",
+    "pools": 1,
+    "total_lp": 12,
+    "total_pnl_native": 2.3016857032070455,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:35:48.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 57.40185061353393
+  },
+  {
+    "owner": "CFdaiCbCLPxVBNUzfgZ1UCAHQXNpoi4tizzwqiwbY3Xc",
+    "pools": 1,
+    "total_lp": 12,
+    "total_pnl_native": 4.059282884479089,
+    "avg_win_rate_native": 0.9,
+    "last_activity": "2026-03-20 04:10:50.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 56.80603797144506
+  },
+  {
+    "owner": "EkH1QBbk5JL4nznPL3GqeuLDUyho1bW4dnJ7S3fAMMEh",
+    "pools": 1,
+    "total_lp": 27,
+    "total_pnl_native": 1.2632630036504149,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 05:17:34.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 56.80218835365733
+  },
+  {
+    "owner": "F8UfBL9tz8NdUaW4mDwRuPGMMsdKdjYfnhuhBrdHYDN1",
+    "pools": 1,
+    "total_lp": 11,
+    "total_pnl_native": 3.895723268574338,
+    "avg_win_rate_native": 0.9090909090909091,
+    "last_activity": "2026-01-27 14:38:19.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 56.722912485421496
+  },
+  {
+    "owner": "2TnNgGC8R7BsupMn3AoqX3cDGdmnqGEPyvHn7vEW8USx",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 41.12148172626361,
+    "avg_win_rate_native": 0.5714285714285714,
+    "last_activity": "2026-02-14 23:45:19.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 56.55632678532312
+  },
+  {
+    "owner": "9vzPvaLuLqK7QLbHy1B4dQ8ZxGoPWSMQNNUKKQwUwdKo",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 9.236837074365972,
+    "avg_win_rate_native": 0.7777777777777778,
+    "last_activity": "2026-03-19 05:26:03.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 56.45030822561388
+  },
+  {
+    "owner": "EuzUKtPs4qkuJC9gNNirXtpbSDN6mN5GjiG4b4ZmiNGw",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 2.6470512575083394,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-14 03:45:20.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 56.24067772461235
+  },
+  {
+    "owner": "3VLSSLKz5DstmbMB2VCfRUsV5M7USAFuZ3Q8qUuRSxwc",
+    "pools": 1,
+    "total_lp": 6,
+    "total_pnl_native": 2.2642090156342505,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 22:09:38.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 56.10335286483679
+  },
+  {
+    "owner": "3EUaL2r92AJc4F9ukmaHpxTMoZLD5JETuifAGAmURxX6",
+    "pools": 1,
+    "total_lp": 23,
+    "total_pnl_native": 1.267888703485708,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-15 21:10:14.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 56.02411847331888
+  },
+  {
+    "owner": "F4bpJWF9Uqo9B2RSEDTvTZY6WWHpFwzSjzmZzpFNiC67",
+    "pools": 1,
+    "total_lp": 13,
+    "total_pnl_native": 1.7308337735792465,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 07:21:32.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 55.89161945472924
+  },
+  {
+    "owner": "HSrtH2tNNBZ1GXsHRsHbVZVmZQhPwgtM8r5pXFhqjvbx",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 2.4739037115577656,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 01:53:41.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 55.83478411839882
+  },
+  {
+    "owner": "BMhiWMvvV77MwmL8XhFgW3vLaUcQLMB7MQ7C2Va4Mw5m",
+    "pools": 2,
+    "total_lp": 33,
+    "total_pnl_native": 5.040012458160534,
+    "avg_win_rate_native": 0.6323529411764706,
+    "last_activity": "2026-03-21 06:38:21.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn",
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 55.59856897068365
+  },
+  {
+    "owner": "DXVE9bCSkhV4XRj81ivUpYWhhNscuyZYvYK7uLXjChW4",
+    "pools": 2,
+    "total_lp": 5,
+    "total_pnl_native": 1.1022930593634976,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:36:57.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ",
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 55.58435565677908
+  },
+  {
+    "owner": "DqYrydoQopqSzVQEVhHjtL1GB2UKyCNdLRTo6WqcJFgW",
+    "pools": 1,
+    "total_lp": 19,
+    "total_pnl_native": 12.125833935229275,
+    "avg_win_rate_native": 0.6666666666666666,
+    "last_activity": "2026-03-16 12:36:28.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 55.43869594239672
+  },
+  {
+    "owner": "JARYktBUiEPQMy456u9MhVGH5Jec2ydSiq1AiAarwYvw",
+    "pools": 1,
+    "total_lp": 32,
+    "total_pnl_native": 0.8206236955648469,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 03:00:49.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 55.21385625906384
+  },
+  {
+    "owner": "sAnSFTLFcz9MUr9WWQ8YX27D5BzLdBXnF2ssYHTo75D",
+    "pools": 1,
+    "total_lp": 6,
+    "total_pnl_native": 1.9008976755003824,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 04:14:30.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 55.05395741232568
+  },
+  {
+    "owner": "D8ty7eKByTYkqPdWyUkjQ16ZwyUpkAPaGV9QYFP2qAde",
+    "pools": 1,
+    "total_lp": 14,
+    "total_pnl_native": 21.85361038658843,
+    "avg_win_rate_native": 0.5833333333333334,
+    "last_activity": "2026-01-27 16:10:33.000",
+    "sample_pools": [
+      "HqvTca1hY9sRwLsTnBYnfdLJ1vbhsJyKtToD9xxrRTPb"
+    ],
+    "smart_score": 54.63953019118888
+  },
+  {
+    "owner": "4qKy4xDsxhyWAGdBxsWv8zaGqQnbWLxz2dguQwpQSftF",
+    "pools": 1,
+    "total_lp": 12,
+    "total_pnl_native": 1.4443724751385438,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 04:53:47.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 54.606049723879586
+  },
+  {
+    "owner": "FrBa3eo9wTXTYiDi5kMpY8dvmLqC6xQzAdgByqkEDq3H",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 8.66608021132932,
+    "avg_win_rate_native": 0.75,
+    "last_activity": "2026-03-01 08:30:10.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 54.55649947484153
+  },
+  {
+    "owner": "RxoWN9k3ig4yfKHxKVykdj4Yb5fk24sW4nNEXwZXD2H",
+    "pools": 1,
+    "total_lp": 19,
+    "total_pnl_native": 1.1252805934895997,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:06:12.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 54.50819452595485
+  },
+  {
+    "owner": "3871SGCdYVD4uQTKExPxgaJQr87a3HZEvhjgbBkhyBbX",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 15.123032694597246,
+    "avg_win_rate_native": 0.6666666666666666,
+    "last_activity": "2026-03-17 05:15:14.000",
+    "sample_pools": [
+      "HNPsPeDXAPN5keviUiJjzpGfATPNZb5PKpxtg1ex6kLp"
+    ],
+    "smart_score": 54.36398022073708
+  },
+  {
+    "owner": "ASHCiGhxpwkXAUjkiiqqezSUwt7xS6Agz6q1mGXUmqDj",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 1.5314757590335049,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 09:02:20.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 53.5573909134862
+  },
+  {
+    "owner": "AVBKhhJJgVr8AHHBYccp4VTsrNFTdnsZXkdc8pMde15T",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 4.898025982999994,
+    "avg_win_rate_native": 0.8,
+    "last_activity": "2026-03-14 02:31:46.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 53.53299358000518
+  },
+  {
+    "owner": "HTUGcEw92ikQaezTX3UNToN2GkEyCCxXUbcd1HRJiKUU",
+    "pools": 1,
+    "total_lp": 16,
+    "total_pnl_native": 2.0372030497277436,
+    "avg_win_rate_native": 0.9,
+    "last_activity": "2026-03-21 05:47:39.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 53.46946687827903
+  },
+  {
+    "owner": "DDJqNcuzZhYggUd3yMP6F8qL1PiYkQSQc5ZWZ65tv7sg",
+    "pools": 1,
+    "total_lp": 9,
+    "total_pnl_native": 1.2913384151441072,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:40:02.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 53.33407526977779
+  },
+  {
+    "owner": "65jywN1THJZfPU3GN2D5z6j87wubrjhLt9zBpxXmL3d3",
+    "pools": 1,
+    "total_lp": 11,
+    "total_pnl_native": 1.1475449395587787,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:33:21.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 53.0257489511994
+  },
+  {
+    "owner": "jikaXZ4fJrtnk1j1vkWK3PKYV3XPS77qnKJPwQfSwuR",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 1.5994949539734566,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:18:33.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 53.01812755390006
+  },
+  {
+    "owner": "8njej3ouWwKoYEaPXTv9NWFFiFybgkfjaKeJdgcqbatr",
+    "pools": 1,
+    "total_lp": 17,
+    "total_pnl_native": 3.262308886852086,
+    "avg_win_rate_native": 0.8125,
+    "last_activity": "2026-03-21 02:02:20.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 52.994611153142124
+  },
+  {
+    "owner": "3TXwWEwRUAHitwn8agS7pttqRvY6qrftn13ZuEceMfFM",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 1.4372226927128988,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 03:14:39.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 52.97627539397703
+  },
+  {
+    "owner": "Bvc91PNZMEm2UzuCgfybjKH76goMnRo2jn2ohZEWyXbG",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 1.4255526324818533,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 01:55:38.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 52.527357304853034
+  },
+  {
+    "owner": "9NuWyQ2Uxvw5AGpcUSYknYPAhQAYMncuvNzKb5DXimFX",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 35.70443219822485,
+    "avg_win_rate_native": 0.5,
+    "last_activity": "2026-02-19 16:47:40.000",
+    "sample_pools": [
+      "CU9G7NV93eoqcS9iXWfZPtkNvB4nV4ZmdaN9LpFtPLwz"
+    ],
+    "smart_score": 52.2516489937415
+  },
+  {
+    "owner": "wQETjfSTZrpLnSseZPJ7QHCbHjyRSg9z57ozw2Gkmvm",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 1.3256634903271736,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-15 21:55:27.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 52.09147848913662
+  },
+  {
+    "owner": "98n8gXV7WyMFTSe3VrMnNAT9gsBvcF9iH8BzkNh5JoxS",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 1.2751806270388855,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:35:18.000",
+    "sample_pools": [
+      "62MZLNx9d6Gajmd3bJqczMG5xSa47Y7KpieZ91TxMjsq"
+    ],
+    "smart_score": 52.05852702105309
+  },
+  {
+    "owner": "6mZzJA86hY9rHXYkWQXHyh9bgQNipsFfJJRyE2FRHxC7",
+    "pools": 1,
+    "total_lp": 7,
+    "total_pnl_native": 7.350165162799158,
+    "avg_win_rate_native": 0.7142857142857143,
+    "last_activity": "2026-03-20 18:17:44.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 51.93976527603703
+  },
+  {
+    "owner": "ApkVGjDbrNQYZBYqgDp56gPMkSFALBcWtjG2VwfRXnv",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 1.315910311211459,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-15 22:42:30.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 51.847172068034524
+  },
+  {
+    "owner": "FtJH2tKZEj13CPogi7uNU2BPSkgAPMabBmb8CTr6c4X1",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 1.1831726066656891,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-15 06:41:03.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 51.60919688144707
+  },
+  {
+    "owner": "Bz34iJQodZF3NDXumZrJWuQwhnrLzkTM3gHVftZsCH2j",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 1.2573966233234728,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 18:32:46.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 51.574260469118926
+  },
+  {
+    "owner": "9qcUdXPbGHXEX1PSVZUnNgXUDLUSmoBa2LDPDrA9DqYB",
+    "pools": 1,
+    "total_lp": 34,
+    "total_pnl_native": 1.5672921146080303,
+    "avg_win_rate_native": 0.8,
+    "last_activity": "2026-03-17 12:41:38.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 51.49609617482119
+  },
+  {
+    "owner": "U9VnKJqyb7jrYpX3B4FcwAitwHAzs3YwTd9kRKW99Vu",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 1.2057922580099003,
+    "avg_win_rate_native": 1,
+    "last_activity": "2025-08-11 08:16:22.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 51.32282095856298
+  },
+  {
+    "owner": "DUR7g7QqhQDEuWP48aScZq5Wo9ze3XT9sJZWx3GTEps8",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.917120619758875,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:09:47.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 49.88090233190268
+  },
+  {
+    "owner": "FARMfffa4gaZTGtpxV6CECf28mJGyRSEHPnqFSgWi3Cj",
+    "pools": 1,
+    "total_lp": 14,
+    "total_pnl_native": 1.6267291434346483,
+    "avg_win_rate_native": 0.8333333333333334,
+    "last_activity": "2026-03-21 07:00:26.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 49.05276136318465
+  },
+  {
+    "owner": "Ci6PJwxDpGGKXyV4G9kExwBedpaJrjhe7ydwpTT6iZph",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.7330850557826123,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 02:31:19.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 48.53703872445148
+  },
+  {
+    "owner": "b4HGRFt9xu5DodXAt1KddQygQCRyPrHGnQ57okugYL5",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.73080723711848,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:39:49.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 48.318366690886
+  },
+  {
+    "owner": "7Xuzx3gHcwMDvKjk61xpHRdtmE44XzTCRTPdk1DY24oR",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 0.5761273664457685,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:32:52.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 48.29144087742902
+  },
+  {
+    "owner": "2baaSErghR1y7NvqaCy1XjA4X7XptPMw3PyTA8X1TSYY",
+    "pools": 1,
+    "total_lp": 23,
+    "total_pnl_native": 10.618212051857283,
+    "avg_win_rate_native": 0.4782608695652174,
+    "last_activity": "2026-03-01 08:53:43.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 47.90585865225635
+  },
+  {
+    "owner": "3yZGFndJ5DnHrsuc3ciErZoWn9idyPpowtStYn1zZkAW",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 0.598313722454817,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:37:47.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 47.718159741360765
+  },
+  {
+    "owner": "DGdmr356TD58BYFhKzMp5tWv4zpqywYkgYHQBaUVD1Ln",
+    "pools": 1,
+    "total_lp": 6,
+    "total_pnl_native": 0.5272812235446334,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 04:28:40.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 47.35987254945988
+  },
+  {
+    "owner": "2MhZ9uwE8entCKezwVkAZHQXBnfNktiWnM38RcGB5SF9",
+    "pools": 1,
+    "total_lp": 15,
+    "total_pnl_native": 0.3856627270047146,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 07:19:38.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 47.283247665750345
+  },
+  {
+    "owner": "8SfS2XEedD595GqpNGjgYpRhSAUidThXQHznExpbDwEX",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.5701740258600058,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 04:01:37.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 47.02911806265372
+  },
+  {
+    "owner": "8Es2jAFjfFxujwDo1uQrzzVJTeTAYhQhKzYKGtGbUjPE",
+    "pools": 1,
+    "total_lp": 9,
+    "total_pnl_native": 1.3388644691520568,
+    "avg_win_rate_native": 0.8333333333333334,
+    "last_activity": "2026-03-12 17:38:57.000",
+    "sample_pools": [
+      "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ"
+    ],
+    "smart_score": 46.88426439509247
+  },
+  {
+    "owner": "4eHpPNtRUsCFx5GASgTKxnV1kFzuYThtjnX1iJNQyZEF",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 0.5203098552661443,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:37:21.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 46.880015383850996
+  },
+  {
+    "owner": "EWmKhckWAb7KAcoxRVuDYRW56hj9ZdvEwJKq53cAg2vK",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.5613540117356026,
+    "avg_win_rate_native": 1,
+    "last_activity": "2025-08-11 01:05:56.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 46.735578786893896
+  },
+  {
+    "owner": "6Kc6EV5NFTUPotn9kRTQen8QN2VbgEfoU75KEMh11PaV",
+    "pools": 1,
+    "total_lp": 8,
+    "total_pnl_native": 0.4206777042262022,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 23:56:24.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 46.40467028017396
+  },
+  {
+    "owner": "FrHF7fiYNAhoQ89b1iK3e1DiooSXz2J4Tn2CZbztvLxN",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.4543163093380116,
+    "avg_win_rate_native": 1,
+    "last_activity": "2025-08-07 23:56:56.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 45.46623035841053
+  },
+  {
+    "owner": "7B9rFuYcExZAzuyCdeTihYGCZTrF9mWJwPD3FvUFaFdy",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.4510798444357036,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 20:56:33.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 45.42333450106687
+  },
+  {
+    "owner": "7muK9eibqLcW5qCkuEFcpHDXd9zErE3xdNVe8tu5UZ6v",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.42576222142166564,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-04 17:12:10.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 45.07675447466765
+  },
+  {
+    "owner": "8vCziaDczy5eexzRD79X2s6SYJTCZVHvAWir3J3TM2Jt",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 0.3681064740767779,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:03:33.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 45.00370169441289
+  },
+  {
+    "owner": "SFdnyvfBEVHA6dcuUZcWv557qMWZJptzsTUhicU36BS",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.4066025012197301,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 07:13:41.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 45.00048464245175
+  },
+  {
+    "owner": "2dRyspZYR3bTxvtSBhnqpSB9ScSKTSfoaN1fhqQQ84vb",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 3.274753568735017,
+    "avg_win_rate_native": 0.6666666666666666,
+    "last_activity": "2026-03-21 05:08:21.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 44.38412238707645
+  },
+  {
+    "owner": "35WaYBtwzoEkQ69PXa7uzEjrZcWSoXeUqeDakUdW3rMs",
+    "pools": 1,
+    "total_lp": 40,
+    "total_pnl_native": 8.558184002096347,
+    "avg_win_rate_native": 0.3235294117647059,
+    "last_activity": "2026-03-21 07:06:48.000",
+    "sample_pools": [
+      "ABq8CGNZUhpubpgUVrD1gEmcDSkysPyXqkdTDLpQ43rz"
+    ],
+    "smart_score": 43.82250458074222
+  },
+  {
+    "owner": "9jRu8vE9zLPYzgtFcP1M37JyK458w7KJehevq4Ctqdyz",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.2970991428172658,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-04 19:23:56.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 43.11786370989928
+  },
+  {
+    "owner": "3N7HtX3ZF2kFyh5TTCj8XNuRpqctE4XmBx2hDgdZcRcp",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 0.2557989467414896,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 19:54:29.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 42.61981895587761
+  },
+  {
+    "owner": "Ddbwvcra9rstt4asTEDcDF48V3dUpnR7jq7RrSnF4xrh",
+    "pools": 1,
+    "total_lp": 10,
+    "total_pnl_native": 0.6061375559254768,
+    "avg_win_rate_native": 0.8333333333333334,
+    "last_activity": "2026-03-21 05:30:58.000",
+    "sample_pools": [
+      "7ZWsb2JwhqLtpBz8EvBZLsq8M8XaP9XdoYBBCSk9WGUJ"
+    ],
+    "smart_score": 42.329443361162646
+  },
+  {
+    "owner": "Bs1NvZLFoeaHnj2znGJCpWPXdLiNFXde882UHKcizdVi",
+    "pools": 1,
+    "total_lp": 6,
+    "total_pnl_native": 1.653095455865215,
+    "avg_win_rate_native": 0.6666666666666666,
+    "last_activity": "2026-03-20 10:09:27.000",
+    "sample_pools": [
+      "44W1QcPgR5TsvGDPFBXyqtvXmX63LNc8HnJZVSLUn4Tu"
+    ],
+    "smart_score": 40.882564051965595
+  },
+  {
+    "owner": "7r4Zy1TRU6TqbFbfjGyPgfLpzgLW6XT67NXFw3FCmGrq",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.20696600826283174,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 19:42:43.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 40.748795737050486
+  },
+  {
+    "owner": "4QGg7478qa5UdgJqogfLEoKyejqSysxPjXzLTc6yAytu",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 0.1808905818322728,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:41:10.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 40.340822295343735
+  },
+  {
+    "owner": "FtB18d6a91kaq136GeG8QEnfAfqK3oXn18ChZUZmUrZG",
+    "pools": 1,
+    "total_lp": 4,
+    "total_pnl_native": 0.16141977457618328,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:05:27.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 39.85751793044944
+  },
+  {
+    "owner": "8CFDfEteGyaZc7NjFkvcjrYrSoJCy4AUTzRohVkPcTZJ",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 4.775384308364771,
+    "avg_win_rate_native": 0.5,
+    "last_activity": "2026-01-27 15:06:08.000",
+    "sample_pools": [
+      "DZQxKSC79umfyyvJVqPM9m6FRmnkUSH1xAafWAPg3hTd"
+    ],
+    "smart_score": 39.780846724727525
+  },
+  {
+    "owner": "GxGdEH2iikdm21hd7aseTJDKe3B1UjnNzcP44aeQMBzG",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.1615802866740091,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-02-11 18:40:33.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 39.263481227561556
+  },
+  {
+    "owner": "5ozLwd8tUEhsX25nmKxkzSUBj4AfuW3QWNwVr8RenMPt",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.13325760600083214,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 01:17:31.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 38.107173178698666
+  },
+  {
+    "owner": "HdMKxqNYbo7My3JE7vsaDicU4kLM3v4BAdNx8fNr1qzt",
+    "pools": 1,
+    "total_lp": 3,
+    "total_pnl_native": 0.10875361756101798,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 05:31:04.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 37.28797793217375
+  },
+  {
+    "owner": "A7PnNvDS6nLv9L4qGSaAWQoUPKvJ6AJTgGDJKnhrfx2o",
+    "pools": 1,
+    "total_lp": 9,
+    "total_pnl_native": 6.877179635412643,
+    "avg_win_rate_native": 0.3333333333333333,
+    "last_activity": "2026-03-20 10:49:01.000",
+    "sample_pools": [
+      "7ik5kwcwjD9W22THNqU5spBA9pELjhzfPg2eGvKtNEGn"
+    ],
+    "smart_score": 36.702585120443025
+  },
+  {
+    "owner": "A7CgL2j8QhJZrupLYmCVjNjowsCxnad8KDPTHyp8YPcp",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.09781136840038229,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-01-01 21:33:30.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 36.25171319569504
+  },
+  {
+    "owner": "4BTDxEMxGBN631whshYpq6evcQ8Rcvvq4N2g1y3RN2D7",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 0.07146159172784738,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-21 06:16:47.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 35.16842908652513
+  },
+  {
+    "owner": "3MLjz9PD74tMZniMNEZxSEHvTfAVYwTYaSCDKLazhzTS",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.07824399010514682,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 23:17:27.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 35.11246046232284
+  },
+  {
+    "owner": "5r62TxWjYiYbZd1Gb5LnE7T1tyPR9w1VibkK8XvpX93r",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.06860932233889994,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 22:56:05.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 34.32403884401993
+  },
+  {
+    "owner": "7N9dP7jmRbH2GTbebH1psCBrch2D3Hh3dHW9vpg6aXrM",
+    "pools": 1,
+    "total_lp": 5,
+    "total_pnl_native": 1.7091883758044624,
+    "avg_win_rate_native": 0.5,
+    "last_activity": "2026-03-20 17:30:30.000",
+    "sample_pools": [
+      "2NeJvaqnr1bRPrmDwER538Kwash7VW3j53AVFXYseyS4"
+    ],
+    "smart_score": 34.21611174284622
+  },
+  {
+    "owner": "8u7dJtkgWxB4M9pkqUGdch7mg3ZXC6qniJcWiNKTQXHG",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.06426291079377755,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 23:17:33.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 33.93136422487718
+  },
+  {
+    "owner": "HBTTUinMKsiYWys7pnqgDf7RYT7VHYpTAwWhmkwDkJtS",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.055336848490603496,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-20 13:29:46.000",
+    "sample_pools": [
+      "8dem2dfPchbvP5HauNYWBY7sUgEg2ayUZwtL2nkQGJDB"
+    ],
+    "smart_score": 33.03410247376298
+  },
+  {
+    "owner": "H66tdc4nWHoUwyxqQitM6ZjwEGkn6EiN4TyZtV1rScv9",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.055702269947140004,
+    "avg_win_rate_native": 1,
+    "last_activity": "2025-08-08 09:15:10.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 32.87359372126721
+  },
+  {
+    "owner": "5KULMA6dh8BZhPB3x7qqy9xvSQ8SHBA7GW5rsdqMKXU",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.03231282841898141,
+    "avg_win_rate_native": 1,
+    "last_activity": "2026-03-19 21:45:34.000",
+    "sample_pools": [
+      "DFss5qhw5X8qiavZn2QtAHoZoavDL8K1zujaEcDhjUsT"
+    ],
+    "smart_score": 29.806254222430848
+  },
+  {
+    "owner": "44myW6tFSoA3XhCfGu7jzaLE4CaFDftQLDA7kEKhGeZf",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.024524408499995987,
+    "avg_win_rate_native": 1,
+    "last_activity": "2025-08-11 03:54:17.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 27.95148164758954
+  },
+  {
+    "owner": "4Tq5JbZSxfnrCau7aFLcaViTrEGexfemPBJGriTCeD5k",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": -0.000017025888162271932,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-03-19 11:47:01.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.4
+  },
+  {
+    "owner": "9QyDqXqcLmgY1JZRDzoNvak3BkE5wHmeLaRpcJn6VPup",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": -0.12109143422036489,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-02-05 16:28:01.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.4
+  },
+  {
+    "owner": "GfmjQFEjUYanXVyMsFB178pSNSZ75ERvRe7BzVS3wp7p",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.00022634694458416663,
+    "avg_win_rate_native": 0,
+    "last_activity": "2025-08-08 04:59:15.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "6kxJzfnCs3cRW4Ge8WTPoCqv5i3AH7TNveWHAikiwYPv",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.0013833751162136629,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-02-06 14:27:23.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "FscLMoxuhKm6dYsgxevFifJduxFeZvTcyomcB9J6nYxM",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.011034636725302485,
+    "avg_win_rate_native": 0,
+    "last_activity": "2025-08-23 15:49:20.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "2sVZ36iEusiGkeQxviwZBA7rCPnEdnYg7H3tjb5uAa1J",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.04238073536450648,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-02-08 04:47:51.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "EHiCVN37jkdmMR7AUz5ruJy92kkdgyYpMfoBSkjwKjq5",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.04929161946761895,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-01-31 18:38:32.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "G8ruPdmgg6cWqo7PUcnFzNsuXCyEsL6nesd2RindnYKU",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": -0.08824473996901117,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-01-02 21:32:11.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": 4.2
+  },
+  {
+    "owner": "3F5qUvVifmJWZ3jZ1mCbfFwkNVLMZ9CWcHnQqfeXY2RM",
+    "pools": 1,
+    "total_lp": 2,
+    "total_pnl_native": 0.0066876276394252435,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-03-20 14:29:28.000",
+    "sample_pools": [
+      "DFss5qhw5X8qiavZn2QtAHoZoavDL8K1zujaEcDhjUsT"
+    ],
+    "smart_score": -19.644976484037787
+  },
+  {
+    "owner": "4kxscuteRLQdNiTXA33YYsvywAPNA6DQTifswxjL5pH1",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.004570960329157967,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-03-19 19:00:12.000",
+    "sample_pools": [
+      "DFss5qhw5X8qiavZn2QtAHoZoavDL8K1zujaEcDhjUsT"
+    ],
+    "smart_score": -22.128191750883104
+  },
+  {
+    "owner": "BDfWUTnJ4SnNX6jfPgtAAnyzkANSSnwZKkxCSdvtn5iR",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.003535141465922473,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-02-04 19:33:27.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": -23.670011770714865
+  },
+  {
+    "owner": "8hBTj5YZJkpot29L8ZfVsU3etaAJQ68ZmCDJfeucC3qS",
+    "pools": 1,
+    "total_lp": 1,
+    "total_pnl_native": 0.0015200580750905197,
+    "avg_win_rate_native": 0,
+    "last_activity": "2026-02-09 23:47:36.000",
+    "sample_pools": [
+      "7NAxbnjiWQmMbAAtCntkSyGqHEvVHZTmyaUBC6347B4M"
+    ],
+    "smart_score": -28.734040425344705
+  }
+]

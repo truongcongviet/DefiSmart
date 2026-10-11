@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+/* Hallmark · genre: atmospheric · macrostructure: Workbench · theme: Midnight
+   enrichment: Tier 0 (typography + the live product frame) · nav: N5 floating pill
+   footer: Ft2 inline single line · audience: DeFi liquidity providers
+   use: sign in and provision an agent wallet · tone: technical
+   type: Geist (display 300 / body 400) + Geist Mono (labels, data, wordmark)
+   colour: cool charcoal paper, hue 250 · one accent, cyan oklch(74% 0.15 220) */
+
+@theme {
+  /* paper → ink, all tinted toward the anchor hue */
+  --color-paper: oklch(15% 0.022 250);
+  --color-paper-2: oklch(19% 0.024 250);
+  --color-paper-3: oklch(24% 0.026 250);
+  --color-paper-4: oklch(29% 0.026 250);
+  --color-rule: oklch(32% 0.024 245);
+  --color-rule-2: oklch(46% 0.02 240);
+  --color-muted: oklch(62% 0.018 240);
+  --color-neutral: oklch(74% 0.014 235);
+  --color-ink-2: oklch(86% 0.01 230);
+  --color-ink: oklch(95% 0.008 230);
+
+  /* the one accent */
+  --color-accent: oklch(74% 0.15 220);
+  --color-accent-ink: oklch(14% 0.03 230);
+  --color-focus: oklch(80% 0.16 220);
+
+  /* status, used as text and hairlines only */
+  --color-danger: oklch(74% 0.16 25);
+  --color-warn: oklch(82% 0.13 80);
+  --color-ok: oklch(78% 0.14 160);
+
+  --radius-card: 12px;
+  --radius-input: 10px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+:root {
+  color-scheme: dark;
+  --nav-height: 4.5rem;
+  --page-max: 76rem;
+  --page-gutter: clamp(1.25rem, 4vw, 3rem);
+  --measure: 60ch;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-paper);
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-feature-settings:
+    "ss01" on,
+    "cv11" on;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Two fixed blooms in the accent hue. Static, no animation. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      55% 45% at 18% -5%,
+      oklch(74% 0.15 220 / 0.13),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 38% at 92% 96%,
+      oklch(74% 0.15 220 / 0.06),
+      transparent 70%
+    );
+}
+
+::selection {
+  background: oklch(74% 0.15 220 / 0.3);
+  color: var(--color-ink);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ─── Type utilities ─────────────────────────────────────────── */
+.display {
+  font-size: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.display-s {
+  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.lede {
+  font-size: clamp(1.0625rem, 0.5vw + 0.9rem, 1.25rem);
+  line-height: 1.6;
+  color: var(--color-ink-2);
+  max-width: var(--measure);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Motion ─────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: reveal 420ms var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.modal-backdrop {
+  animation: fade-in 320ms var(--ease-out) both;
+}
+
+.modal-panel {
+  animation: modal-in 420ms var(--ease-out) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+
+  .reveal,
+  .modal-panel {
+    transform: none;
+    animation: fade-in 150ms linear forwards;
+  }
+}

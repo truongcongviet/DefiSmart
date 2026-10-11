@@ -1,0 +1,14 @@
+{
+  "pools_discover": {"status": "success", "http_code": "200", "array_count": 5},
+  "pool_info": {"status": "success", "http_code": "200", "array_count": 0},
+  "pool_info_alt": {"status": "success", "http_code": "n/a", "array_count": 0},
+  "pool_onchain_stats": {"status": "success", "http_code": "200", "array_count": 0},
+  "pool_positions": {"status": "success", "http_code": "200", "array_count": 0},
+  "pool_top_lpers": {"status": "success", "http_code": "200", "array_count": 1},
+  "lp_opening": {"status": "success", "http_code": "200", "array_count": 0},
+  "lp_historical": {"status": "success", "http_code": "200", "array_count": 0},
+  "lp_overview": {"status": "success", "http_code": "200", "array_count": 1},
+  "lp_logs": {"status": "success", "http_code": "200", "array_count": 2},
+  "lp_revenue": {"status": "success", "http_code": "200", "array_count": 0},
+  "token_balance": {"status": "success", "http_code": "200", "array_count": 0}
+}
