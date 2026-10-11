@@ -5,8 +5,9 @@ import { useState } from "react";
 
 import { useAuthFlow } from "@/components/auth/auth-flow-provider";
 import { NetworkMark } from "@/components/auth/network-mark";
+import { TokenList } from "@/components/token-mark";
 import { shortAddress } from "@/lib/auth/account";
-import { NETWORKS } from "@/lib/chains";
+import { NETWORKS, NETWORK_LIST } from "@/lib/chains";
 import { button, panel } from "@/lib/ui";
 import { cn } from "@/lib/utils";
 
@@ -132,14 +133,25 @@ export function LoginLanding() {
           </div>
 
           <p
-            className="reveal text-muted mt-10 font-mono text-xs"
+            className="reveal text-muted mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs"
             style={{ "--i": 4 } as React.CSSProperties}
           >
-            Solana · Meteora DLMM, DAMM v2
-            <span aria-hidden className="text-rule-2 mx-3">
-              /
-            </span>
-            Robinhood Chain · Uniswap V3, V4
+            {NETWORK_LIST.map((network, index) => (
+              <span key={network.id} className="inline-flex items-center gap-2">
+                {index > 0 && (
+                  <span aria-hidden className="text-rule-2 mr-1">
+                    /
+                  </span>
+                )}
+                <NetworkMark network={network.id} className="h-5 w-5" />
+                {network.label} · {network.protocols}
+                <TokenList
+                  tokens={network.fundingTokenList}
+                  markClassName="h-4 w-4"
+                  className="text-ink-2 ml-1"
+                />
+              </span>
+            ))}
           </p>
         </div>
 
@@ -250,7 +262,7 @@ function ProductFrame() {
                 <span className="inline-flex items-center gap-2">
                   <NetworkMark
                     network={network.id}
-                    className="h-6 w-8 text-[9px]"
+                    className="h-6 w-6 text-[9px]"
                   />
                   {network.label}
                 </span>
@@ -285,7 +297,17 @@ function ProductFrame() {
                 "Not created yet"
               )
             }
-            note={network ? `Fund with ${network.fundingTokens}` : undefined}
+            note={
+              network ? (
+                <span className="inline-flex items-center gap-1.5">
+                  Fund with
+                  <TokenList
+                    tokens={network.fundingTokenList}
+                    markClassName="h-4 w-4"
+                  />
+                </span>
+              ) : undefined
+            }
           />
           <FrameRow
             label="Session"
@@ -322,7 +344,7 @@ function FrameRow({
 }: {
   label: string;
   value: React.ReactNode;
-  note?: string;
+  note?: React.ReactNode;
 }) {
   return (
     <div className="grid gap-1 px-4 py-3.5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-4">

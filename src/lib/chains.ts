@@ -27,12 +27,34 @@ export type AccountNetwork = "solana" | "robinhood";
 
 export type AgentChainType = "solana" | "ethereum";
 
+/** A token the user can deposit, with a local logo under `public/logos`. */
+export interface TokenBrand {
+  symbol: string;
+  name: string;
+  logo: string;
+}
+
+export const TOKENS = {
+  SOL: { symbol: "SOL", name: "Solana", logo: "/logos/tokens/sol.png" },
+  ETH: { symbol: "ETH", name: "Ether", logo: "/logos/tokens/eth.png" },
+  USDG: {
+    symbol: "USDG",
+    name: "Global Dollar",
+    logo: "/logos/tokens/usdg.png",
+  },
+} as const satisfies Record<string, TokenBrand>;
+
 export interface NetworkInfo {
   id: AccountNetwork;
   label: string;
+  /** Square chain logo served from `public/logos/chains`. */
+  logo: string;
   chainType: AgentChainType;
   nativeToken: string;
+  /** Human sentence fragment, e.g. "ETH or USDG". */
   fundingTokens: string;
+  /** Same tokens as `fundingTokens`, with logos, for UI chips. */
+  fundingTokenList: TokenBrand[];
   protocols: string;
   recommendedDeposit: string;
   walletHint: string;
@@ -43,9 +65,11 @@ export const NETWORKS: Record<AccountNetwork, NetworkInfo> = {
   solana: {
     id: "solana",
     label: "Solana",
+    logo: "/logos/chains/solana.png",
     chainType: "solana",
     nativeToken: "SOL",
     fundingTokens: "SOL",
+    fundingTokenList: [TOKENS.SOL],
     protocols: "Meteora DLMM · DAMM v2",
     recommendedDeposit: "5 SOL",
     walletHint: "Phantom · Solflare · WalletConnect",
@@ -54,9 +78,11 @@ export const NETWORKS: Record<AccountNetwork, NetworkInfo> = {
   robinhood: {
     id: "robinhood",
     label: "Robinhood Chain",
+    logo: "/logos/chains/robinhood.svg",
     chainType: "ethereum",
     nativeToken: "ETH",
     fundingTokens: "ETH or USDG",
+    fundingTokenList: [TOKENS.ETH, TOKENS.USDG],
     protocols: "Uniswap V3 · V4",
     recommendedDeposit: "0.08 ETH",
     walletHint: "MetaMask · Rabby · WalletConnect",

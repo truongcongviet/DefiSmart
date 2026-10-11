@@ -20,6 +20,7 @@ import {
 
 import { useAuthFlow } from "@/components/auth/auth-flow-provider";
 import { NetworkMark } from "@/components/auth/network-mark";
+import { TokenList } from "@/components/token-mark";
 import { shortAddress } from "@/lib/auth/account";
 import { type AccountNetwork, NETWORK_LIST, NETWORKS } from "@/lib/chains";
 import { button, helperSlot, input } from "@/lib/ui";
@@ -490,9 +491,13 @@ function NetworkStep() {
               <span className="text-muted mt-0.5 block font-mono text-[11px]">
                 {network.protocols}
               </span>
-              <span className="text-ink-2 mt-1.5 block text-xs leading-5">
-                Fund with {network.fundingTokens}. Start with about{" "}
-                {network.recommendedDeposit}.
+              <span className="text-ink-2 mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
+                <span>Fund with</span>
+                <TokenList
+                  tokens={network.fundingTokenList}
+                  markClassName="h-4 w-4"
+                />
+                <span>· start with about {network.recommendedDeposit}.</span>
               </span>
             </span>
             <ArrowRight className="text-muted group-hover:text-accent mt-3 h-4 w-4 transition-[transform,color] duration-200 group-hover:translate-x-0.5" />
@@ -563,7 +568,7 @@ function ReadyStep() {
         <div className="bg-paper-3/60 rounded-[10px] px-3.5 py-3">
           <div className="mb-1.5 flex items-center justify-between gap-3">
             <span className="text-muted inline-flex items-center gap-2 font-mono text-[11px]">
-              <NetworkMark network={info.id} className="h-5 w-7 text-[8px]" />
+              <NetworkMark network={info.id} className="h-5 w-5 text-[8px]" />
               Agent wallet · {info.label}
             </span>
             <span className="flex items-center gap-1">
@@ -598,10 +603,15 @@ function ReadyStep() {
 
       {info && (
         <p className="text-ink-2 mt-4 text-xs leading-5">
-          Deposit {info.fundingTokens} to this address to start. Keep a reserve
-          for fees and position rent; about {info.recommendedDeposit} is a
-          sensible minimum. Export the private key or withdraw at any time from
-          the account menu.
+          Deposit{" "}
+          <TokenList
+            tokens={info.fundingTokenList}
+            markClassName="h-4 w-4"
+            className="align-middle"
+          />{" "}
+          to this address to start. Keep a reserve for fees and position rent;
+          about {info.recommendedDeposit} is a sensible minimum. Export the
+          private key or withdraw at any time from the account menu.
         </p>
       )}
 

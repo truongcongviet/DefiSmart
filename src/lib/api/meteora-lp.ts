@@ -142,9 +142,8 @@ async function mapWithConcurrency<T, R>(
     }
   }
 
-  const runners = Array.from(
-    { length: Math.min(limit, items.length) },
-    () => run(),
+  const runners = Array.from({ length: Math.min(limit, items.length) }, () =>
+    run(),
   );
   await Promise.all(runners);
   return results;
@@ -181,7 +180,11 @@ async function fetchDlmmPortfolioPools(
   owner: string,
   path: "/portfolio" | "/portfolio/open",
   maxPools: number,
-): Promise<{ pools: DlmmPoolMeta[]; totalCount: number; solPrice: number | null }> {
+): Promise<{
+  pools: DlmmPoolMeta[];
+  totalCount: number;
+  solPrice: number | null;
+}> {
   const pools: DlmmPoolMeta[] = [];
   let page = 1;
   let totalCount = 0;
@@ -209,7 +212,11 @@ async function fetchDlmmPortfolioPools(
       }
     }
 
-    if (payload.hasNext !== true || items.length === 0 || pools.length >= maxPools) {
+    if (
+      payload.hasNext !== true ||
+      items.length === 0 ||
+      pools.length >= maxPools
+    ) {
       break;
     }
     page += 1;
@@ -429,7 +436,11 @@ function readDammPosition(
   let inRange: boolean | null = null;
   const config = raw.pool_config;
   const poolPrice = toNumber(raw.pool_price);
-  if (isRecord(config) && config.concentrated_liquidity === true && poolPrice > 0) {
+  if (
+    isRecord(config) &&
+    config.concentrated_liquidity === true &&
+    poolPrice > 0
+  ) {
     const min = toNumber(config.min_price);
     const max = toNumber(config.max_price);
     inRange = poolPrice >= min && poolPrice <= max;
@@ -480,9 +491,12 @@ async function fetchDammPositions(
     if (cursor) {
       params.next_cursor = cursor;
     }
-    const response = await dammClient.get<unknown>(`/wallets/${owner}/${kind}`, {
-      params,
-    });
+    const response = await dammClient.get<unknown>(
+      `/wallets/${owner}/${kind}`,
+      {
+        params,
+      },
+    );
     const payload: Record<string, unknown> = isRecord(response.data)
       ? response.data
       : {};
@@ -540,11 +554,12 @@ function pruneCache(now: number) {
 
 async function buildSnapshot(owner: string): Promise<WalletLpSnapshot> {
   const maxPools = readMaxPools();
-  const [dlmmResult, dammOpenResult, dammClosedResult] = await Promise.allSettled([
-    fetchDlmmPositions(owner, maxPools),
-    fetchDammPositions(owner, "open_positions"),
-    fetchDammPositions(owner, "closed_positions"),
-  ]);
+  const [dlmmResult, dammOpenResult, dammClosedResult] =
+    await Promise.allSettled([
+      fetchDlmmPositions(owner, maxPools),
+      fetchDammPositions(owner, "open_positions"),
+      fetchDammPositions(owner, "closed_positions"),
+    ]);
 
   const warnings: string[] = [];
   const positions: LpPosition[] = [];
@@ -566,7 +581,9 @@ async function buildSnapshot(owner: string): Promise<WalletLpSnapshot> {
     positions.push(...dammOpenResult.value.positions);
     solPrice = solPrice ?? dammOpenResult.value.solPrice;
   } else {
-    warnings.push(`Meteora DAMM v2 open: ${describeError(dammOpenResult.reason)}`);
+    warnings.push(
+      `Meteora DAMM v2 open: ${describeError(dammOpenResult.reason)}`,
+    );
   }
 
   if (dammClosedResult.status === "fulfilled") {
@@ -582,7 +599,9 @@ async function buildSnapshot(owner: string): Promise<WalletLpSnapshot> {
     dammOpenResult.status === "rejected" &&
     dammClosedResult.status === "rejected"
   ) {
-    throw new Error(`Meteora data unavailable for ${owner}: ${warnings.join("; ")}`);
+    throw new Error(
+      `Meteora data unavailable for ${owner}: ${warnings.join("; ")}`,
+    );
   }
 
   const seen = new Set<string>();
@@ -659,7 +678,8 @@ export async function fetchDlmmPositionEvents(
     if (!isRecord(raw)) {
       return [];
     }
-    const timestampMs = toMs(raw.blockTime) ?? Date.parse(pickString(raw.createdAt));
+    const timestampMs =
+      toMs(raw.blockTime) ?? Date.parse(pickString(raw.createdAt));
     if (!Number.isFinite(timestampMs)) {
       return [];
     }

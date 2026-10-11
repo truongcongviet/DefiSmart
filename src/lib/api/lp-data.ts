@@ -223,8 +223,7 @@ function buildOverviewRow(
   const feeUsd = (subset: LpPosition[]) => sum(subset.map((i) => i.feeUsd));
   const feeNative = (subset: LpPosition[]) =>
     sum(subset.map((i) => i.feeNative));
-  const closedOnly = (subset: LpPosition[]) =>
-    subset.filter((i) => i.isClosed);
+  const closedOnly = (subset: LpPosition[]) => subset.filter((i) => i.isClosed);
   const winRate = (subset: LpPosition[], pick: (i: LpPosition) => number) => {
     const done = closedOnly(subset);
     return ratio(done.filter((i) => pick(i) > 0).length, done.length);
@@ -238,7 +237,9 @@ function buildOverviewRow(
   const totalPnlNative = pnlNative(positions);
   const totalFeeUsd = feeUsd(positions);
 
-  const ages = positions.map((item) => ageHours(item, now)).filter((v) => v > 0);
+  const ages = positions
+    .map((item) => ageHours(item, now))
+    .filter((v) => v > 0);
   const avgAgeHour = mean(ages);
   const roi = ratio(totalPnlUsd, totalInflowUsd);
   const apr = avgAgeHour > 0 ? roi * (8760 / avgAgeHour) : 0;
@@ -261,7 +262,9 @@ function buildOverviewRow(
     source: "meteora-datapi",
     total_inflow: totalInflowUsd,
     total_inflow_native: totalInflowNative,
-    avg_inflow: periodMap(positions, now, (s) => mean(s.map((i) => i.depositUsd))),
+    avg_inflow: periodMap(positions, now, (s) =>
+      mean(s.map((i) => i.depositUsd)),
+    ),
     avg_inflow_native: periodMap(positions, now, (s) =>
       mean(s.map((i) => i.depositNative)),
     ),
@@ -294,7 +297,10 @@ function buildOverviewRow(
     fee_percent_native: ratio(feeNative(positions), totalInflowNative),
     apr,
     roi,
-    roi_avg_inflow: ratio(totalPnlUsd, mean(positions.map((i) => i.depositUsd))),
+    roi_avg_inflow: ratio(
+      totalPnlUsd,
+      mean(positions.map((i) => i.depositUsd)),
+    ),
     roi_avg_inflow_native: ratio(
       totalPnlNative,
       mean(positions.map((i) => i.depositNative)),
@@ -413,8 +419,7 @@ export async function fetchLpLogs(
   }
 
   logs.sort(
-    (a, b) =>
-      Date.parse(String(b.timestamp)) - Date.parse(String(a.timestamp)),
+    (a, b) => Date.parse(String(b.timestamp)) - Date.parse(String(a.timestamp)),
   );
 
   return { status: "success", data: logs, count: logs.length };

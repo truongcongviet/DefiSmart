@@ -20,6 +20,7 @@ import { useState } from "react";
 
 import { useAuthFlow } from "@/components/auth/auth-flow-provider";
 import { NetworkMark } from "@/components/auth/network-mark";
+import { TokenList } from "@/components/token-mark";
 import { shortAddress } from "@/lib/auth/account";
 import { NETWORKS } from "@/lib/chains";
 import { button } from "@/lib/ui";
@@ -140,10 +141,7 @@ function AccountMenu() {
           "cursor-pointer list-none pr-3 pl-1.5 font-mono",
         )}
       >
-        <NetworkMark
-          network={account.network}
-          className="h-6 w-8 rounded-full text-[9px]"
-        />
+        <NetworkMark network={account.network} className="h-6 w-6 text-[9px]" />
         <span className="hidden sm:inline">
           {shortAddress(agentWallet.address)}
         </span>
@@ -179,7 +177,13 @@ function AccountMenu() {
         </div>
 
         <p className="text-muted px-3 pt-3 pb-2 text-xs leading-5">
-          Deposit {network.fundingTokens} to the agent wallet to open positions.
+          Deposit{" "}
+          <TokenList
+            tokens={network.fundingTokenList}
+            markClassName="h-4 w-4"
+            className="text-ink-2 align-middle"
+          />{" "}
+          to the agent wallet to open positions.
           {serverSession.configured && serverSession.expiresAt
             ? ` Session valid until ${new Date(serverSession.expiresAt * 1000).toLocaleString()}.`
             : " Sessions stay signed in for 7 days."}
