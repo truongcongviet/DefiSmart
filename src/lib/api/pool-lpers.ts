@@ -32,8 +32,30 @@ function readMaxWallets() {
   return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 120;
 }
 
+export interface PoolPositionRow {
+  owner: string;
+  position: string;
+  valueUsd: number;
+  valueNative: number;
+  /** Share of the pool's TVL held by this position, 0–1. */
+  shareOfPool: number;
+  feeUsd: number;
+  feeNative: number;
+  unclaimedFeeNative: number;
+  pnlUsd: number;
+  pnlNative: number;
+  pnlPercent: number;
+  pnlPercentNative: number;
+  ageHours: number;
+  minPrice: number | null;
+  maxPrice: number | null;
+  inRange: boolean | null;
+  createdAt: string | null;
+}
+
 export interface PoolLperSummary {
   owner: string;
+  avgAgeHours: number;
   positions: number;
   openPositions: number;
   closedPositions: number;
@@ -70,6 +92,8 @@ export interface PoolLpersResult {
     losers: number;
   };
   wallets: PoolLperSummary[];
+  /** Open positions found on-chain, largest first. */
+  positions: PoolPositionRow[];
   warnings: string[];
   rpc: "public" | "custom";
 }
@@ -124,8 +148,19 @@ function summarizeWallet(
   const inRange =
     rangeFlags.length === 0 ? null : rangeFlags.some((value) => value);
 
+  const now = Date.now();
+  const ages = positions
+    .filter((item) => item.createdAtMs)
+    .map(
+      (item) =>
+        ((item.closedAtMs ?? now) - (item.createdAtMs ?? now)) / 3_600_000,
+    );
+
   return {
     owner,
+    avgAgeHours: ages.length
+      ? ages.reduce((a, b) => a + b, 0) / ages.length
+      : 0,
     positions: positions.length,
     openPositions: open.length,
     closedPositions: closed.length,
@@ -189,6 +224,36 @@ async function buildPoolLpers(
 
   let solPrice: number | null = null;
   const dlmmMeta = poolMetaToDlmmMeta(pool);
+  const openRows: PoolPositionRow[] = [];
+  const now = Date.now();
+  const poolTvl = pool.tvl;
+
+  function collectOpenRows(positions: LpPosition[]) {
+    for (const item of positions) {
+      if (item.isClosed || !openAddresses.has(item.position)) {
+        continue;
+      }
+      openRows.push({
+        owner: item.owner,
+        position: item.position,
+        valueUsd: item.valueUsd,
+        valueNative: item.valueNative,
+        shareOfPool: ratio(item.valueUsd, poolTvl),
+        feeUsd: item.feeUsd,
+        feeNative: item.feeNative,
+        unclaimedFeeNative: item.unclaimedFeeNative,
+        pnlUsd: item.pnlUsd,
+        pnlNative: item.pnlNative,
+        pnlPercent: item.pnlPercent,
+        pnlPercentNative: item.pnlPercentNative,
+        ageHours: item.createdAtMs ? (now - item.createdAtMs) / 3_600_000 : 0,
+        minPrice: item.minPrice,
+        maxPrice: item.maxPrice,
+        inRange: item.inRange,
+        createdAt: toIso(item.createdAtMs),
+      });
+    }
+  }
 
   const summaries = await mapWithConcurrency(
     selected,
@@ -206,11 +271,9 @@ async function buildPoolLpers(
           solPrice = solPrice ?? open.solPrice ?? closed.solPrice;
           positions = [...open.positions, ...closed.positions];
         }
-        if (positions.length === 0) {
-          // On-chain says the wallet is in the pool but the indexer has not
-          // caught up yet; still list it so the roster is complete.
-          return summarizeWallet(owner, [], openAddresses);
-        }
+        collectOpenRows(positions);
+        // An empty list means on-chain knows the wallet but the indexer has
+        // not caught up yet; still list it so the roster is complete.
         return summarizeWallet(owner, positions, openAddresses);
       } catch (error) {
         warnings.push(
@@ -238,12 +301,15 @@ async function buildPoolLpers(
     losers: wallets.filter((item) => item.pnlUsd < 0).length,
   };
 
+  openRows.sort((a, b) => b.valueUsd - a.valueUsd);
+
   return {
     pool,
     generatedAt: new Date().toISOString(),
     solPrice,
     totals,
     wallets,
+    positions: openRows,
     warnings,
     rpc: isPublicRpc() ? "public" : "custom",
   };

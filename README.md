@@ -6,6 +6,8 @@ cần API key):
 
 - DLMM: `https://dlmm.datapi.meteora.ag` (portfolio, PnL từng vị thế, lịch sử sự kiện)
 - DAMM v2: `https://damm-v2.datapi.meteora.ag` (vị thế đang mở và đã đóng của ví)
+- Pool discovery: `https://pool-discovery-api.datapi.meteora.ag` (danh sách pool
+  Top / Trending / New / All theo timeframe, tìm kiếm, phân trang bằng `after_key`)
 
 Tầng dữ liệu nằm ở `src/lib/api/meteora-lp.ts` (fetch + chuẩn hóa, cache 2 phút
 theo ví) và `src/lib/api/lp-data.ts` (tổng hợp overview, historical, revenue, logs
@@ -127,6 +129,12 @@ Response gồm:
 - `results`: danh sách wallet đã phân tích
 - `errors`: wallet lỗi (nếu có)
 - `successCount`, `failureCount`
+
+`GET /api/meteora/pools?timeframe=2h&category=top&q=&after_key=&quality=1`
+
+Proxy có cache 45 giây tới pool discovery API. `quality=0` tắt bộ lọc chất
+lượng mặc định của Meteora. Trang `/pool` render lần đầu bằng dữ liệu live và
+tự rơi về `data/met_pools_2h_top.json` nếu API không phản hồi.
 
 `GET /api/pools/[address]/lpers?protocol=dlmm|damm_v2`
 

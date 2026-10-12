@@ -55,6 +55,15 @@ export interface LpPosition {
   pnlPercent: number;
   pnlPercentNative: number;
   inRange: boolean | null;
+  /** Current value of the position (0 once closed). */
+  valueUsd: number;
+  valueNative: number;
+  /** Fees earned but not yet claimed (0 once closed). */
+  unclaimedFeeUsd: number;
+  unclaimedFeeNative: number;
+  /** Price range for concentrated positions, null for full-range pools. */
+  minPrice: number | null;
+  maxPrice: number | null;
   createdAtMs: number | null;
   updatedAtMs: number | null;
   closedAtMs: number | null;
@@ -256,6 +265,12 @@ export function readDlmmPosition(
 
   const isClosed = raw.isClosed === true;
   const isOutOfRange = raw.isOutOfRange;
+  const valueUsd = isClosed ? 0 : toNumber(getNested(unrealized, ["balances"]));
+  const valueNative = isClosed
+    ? 0
+    : toNumber(getNested(unrealized, ["balancesSol"]));
+  const minPrice = toNumber(raw.minPrice);
+  const maxPrice = toNumber(raw.maxPrice);
 
   return {
     owner,
@@ -276,6 +291,12 @@ export function readDlmmPosition(
     pnlPercent: toNumber(raw.pnlPctChange),
     pnlPercentNative: toNumber(raw.pnlSolPctChange),
     inRange: typeof isOutOfRange === "boolean" ? !isOutOfRange : null,
+    valueUsd,
+    valueNative,
+    unclaimedFeeUsd: isClosed ? 0 : unclaimedFeeUsd,
+    unclaimedFeeNative: isClosed ? 0 : unclaimedFeeSol,
+    minPrice: minPrice > 0 ? minPrice : null,
+    maxPrice: maxPrice > 0 ? maxPrice : null,
     createdAtMs: toMs(raw.createdAt),
     updatedAtMs: toMs(raw.updatedAt),
     closedAtMs: toMs(raw.closedAt),
@@ -434,19 +455,22 @@ export function readDammPosition(
     : readAmountPair(getNested(raw, ["current_position", "unclaimed_fees"]));
 
   let inRange: boolean | null = null;
+  let minPrice: number | null = null;
+  let maxPrice: number | null = null;
   const config = raw.pool_config;
   const poolPrice = toNumber(raw.pool_price);
-  if (
-    isRecord(config) &&
-    config.concentrated_liquidity === true &&
-    poolPrice > 0
-  ) {
-    const min = toNumber(config.min_price);
-    const max = toNumber(config.max_price);
-    inRange = poolPrice >= min && poolPrice <= max;
+  if (isRecord(config) && config.concentrated_liquidity === true) {
+    minPrice = toNumber(config.min_price) || null;
+    maxPrice = toNumber(config.max_price) || null;
+    if (poolPrice > 0 && minPrice !== null && maxPrice !== null) {
+      inRange = poolPrice >= minPrice && poolPrice <= maxPrice;
+    }
   } else if (isRecord(config) && config.concentrated_liquidity === false) {
     inRange = true;
   }
+  const currentValue = isClosed
+    ? { usd: 0, sol: 0 }
+    : readAmountPair(getNested(raw, ["current_position", "current_deposits"]));
 
   const pnlUsd = isClosed ? toNumber(raw.pnl) : toNumber(raw.unrealized_pnl);
   const pnlPercent = isClosed
@@ -472,6 +496,12 @@ export function readDammPosition(
     pnlPercent,
     pnlPercentNative: toNumber(raw.pnl_sol_pct_change),
     inRange,
+    valueUsd: currentValue.usd,
+    valueNative: currentValue.sol,
+    unclaimedFeeUsd: unclaimedFees.usd,
+    unclaimedFeeNative: unclaimedFees.sol,
+    minPrice,
+    maxPrice,
     createdAtMs: toMs(raw.created_at),
     updatedAtMs: null,
     closedAtMs: isClosed ? toMs(raw.closed_at) : null,
@@ -543,6 +573,12 @@ export interface PoolMeta {
   tvl: number;
   volume24h: number;
   fees24h: number;
+  /** fees24h / tvl, as a ratio (0.01 = 1%). */
+  feeTvl24h: number;
+  /** Base swap fee in percent, e.g. 2 for 2%. */
+  baseFeePct: number | null;
+  /** DLMM bin step in bps; null for DAMM v2. */
+  binStep: number | null;
   currentPrice: number | null;
   createdAtMs: number | null;
 }
@@ -559,6 +595,10 @@ function readPoolMeta(
   const tokenY = readDammToken(raw.token_y);
   const volume = isRecord(raw.volume) ? raw.volume : {};
   const fees = isRecord(raw.fees) ? raw.fees : {};
+  const feeTvl = isRecord(raw.fee_tvl_ratio) ? raw.fee_tvl_ratio : {};
+  const config = isRecord(raw.pool_config) ? raw.pool_config : {};
+  const baseFee = toNumber(config.base_fee_pct);
+  const binStep = toNumber(config.bin_step);
   return {
     address,
     protocol,
@@ -568,6 +608,9 @@ function readPoolMeta(
     tvl: toNumber(raw.tvl),
     volume24h: toNumber(volume["24h"] ?? volume.h24 ?? volume["1d"]),
     fees24h: toNumber(fees["24h"] ?? fees.h24 ?? fees["1d"]),
+    feeTvl24h: toNumber(feeTvl["24h"]) / 100,
+    baseFeePct: baseFee > 0 ? baseFee : null,
+    binStep: protocol === "meteora_dlmm" && binStep > 0 ? binStep : null,
     currentPrice: toNumber(raw.current_price) || null,
     createdAtMs: toMs(raw.created_at),
   };
