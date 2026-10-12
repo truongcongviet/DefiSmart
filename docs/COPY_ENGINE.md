@@ -55,7 +55,7 @@ SOLANA_MAX_TRANSACTION_VERSION=1
 Then run:
 
 ```bash
-yarn copy:watch
+pnpm copy:watch
 ```
 
 The worker deliberately uses `confirmed` commitment for the safe baseline. A low-latency Yellowstone/Geyser source can later implement the same observation port without changing the engine.

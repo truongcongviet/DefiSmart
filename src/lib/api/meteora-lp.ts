@@ -97,14 +97,91 @@ export interface LpPositionEvent {
   totalUsd: number;
 }
 
-const dlmmClient: AxiosInstance = axios.create({
-  baseURL: DLMM_BASE_URL,
-  timeout: 20_000,
+/**
+ * Meteora rate limits: DLMM 30 RPS, DAMM v2 10 RPS. Each client gets a small
+ * token bucket plus a 429 retry with backoff, so bursts from the leaderboard
+ * scan or many concurrent page views degrade gracefully instead of failing.
+ */
+function createLimitedClient(
+  baseURL: string,
+  options: { perSecond: number; maxConcurrent: number },
+): AxiosInstance {
+  const client = axios.create({ baseURL, timeout: 20_000 });
+  const minGapMs = 1_000 / options.perSecond;
+  let lastStart = 0;
+  let active = 0;
+  let pausedUntil = 0;
+  const waiters: Array<() => void> = [];
+
+  async function acquire() {
+    if (active >= options.maxConcurrent) {
+      await new Promise<void>((resolve) => waiters.push(resolve));
+    }
+    active += 1;
+    const wait = Math.max(
+      lastStart + minGapMs - Date.now(),
+      pausedUntil - Date.now(),
+    );
+    if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+    lastStart = Date.now();
+  }
+
+  function release() {
+    active -= 1;
+    waiters.shift()?.();
+  }
+
+  client.interceptors.request.use(async (config) => {
+    await acquire();
+    return config;
+  });
+
+  // Meteora answers with x-ratelimit-remaining / x-ratelimit-reset (10 s
+  // windows). When the window is nearly spent, pause new requests until it
+  // resets instead of running into 429s.
+  client.interceptors.response.use(
+    (response) => {
+      release();
+      const remaining = Number(response.headers?.["x-ratelimit-remaining"]);
+      const reset = Number(response.headers?.["x-ratelimit-reset"]);
+      if (Number.isFinite(remaining) && remaining <= 8 && reset > 0) {
+        pausedUntil = Math.max(pausedUntil, reset * 1_000 + 150);
+      }
+      return response;
+    },
+    async (error: unknown) => {
+      release();
+      if (!axios.isAxiosError(error) || error.response?.status !== 429) {
+        throw error;
+      }
+      const config = error.config as
+        | (typeof error.config & { __retries?: number })
+        | undefined;
+      if (!config) throw error;
+      const attempt = config.__retries ?? 0;
+      if (attempt >= 4) throw error;
+      config.__retries = attempt + 1;
+      const retryAfter = Number(error.response.headers?.["retry-after"]);
+      const delay =
+        Number.isFinite(retryAfter) && retryAfter > 0
+          ? retryAfter * 1_000
+          : Math.min(10_000, 700 * 2 ** attempt);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return client.request(config);
+    },
+  );
+
+  return client;
+}
+
+const dlmmClient = createLimitedClient(DLMM_BASE_URL, {
+  perSecond: 20,
+  maxConcurrent: 8,
 });
 
-const dammClient: AxiosInstance = axios.create({
-  baseURL: DAMM_V2_BASE_URL,
-  timeout: 20_000,
+const dammClient = createLimitedClient(DAMM_V2_BASE_URL, {
+  perSecond: 8,
+  maxConcurrent: 4,
 });
 
 function toMs(value: unknown): number | null {

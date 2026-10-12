@@ -13,7 +13,14 @@ const TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 
 const DEFAULT_RPC_URL = "https://api.mainnet-beta.solana.com";
 const RPC_TIMEOUT_MS = 45_000;
-const RPC_MAX_RETRIES = 3;
+const RPC_MAX_RETRIES = 5;
+/**
+ * The public endpoint allows only a handful of getProgramAccounts calls per
+ * window, so heavy methods are serialized with a minimum gap between them.
+ * Private RPCs (SOLANA_RPC_URL) skip the gap.
+ */
+const HEAVY_METHODS = new Set(["getProgramAccounts"]);
+const HEAVY_MIN_GAP_MS = 1_100;
 
 export function getRpcUrl(): string {
   const configured = process.env.SOLANA_RPC_URL?.trim();
@@ -43,39 +50,63 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+let heavyChain: Promise<void> = Promise.resolve();
+let lastHeavyAt = 0;
+
+/** Runs `task` after the previous heavy call, keeping HEAVY_MIN_GAP_MS between them. */
+function throttleHeavy<T>(task: () => Promise<T>): Promise<T> {
+  const run = heavyChain.then(async () => {
+    const wait = lastHeavyAt + HEAVY_MIN_GAP_MS - Date.now();
+    if (wait > 0) await sleep(wait);
+    lastHeavyAt = Date.now();
+  });
+  heavyChain = run.catch(() => undefined);
+  return run.then(task);
+}
+
+function backoffMs(attempt: number, retryAfter?: string) {
+  const header = Number(retryAfter);
+  if (Number.isFinite(header) && header > 0) return header * 1_000;
+  return Math.min(15_000, 1_200 * 2 ** attempt);
+}
+
 export async function rpcCall<T>(
   method: string,
   params: unknown[],
 ): Promise<T> {
-  let lastError: unknown;
+  const heavy = HEAVY_METHODS.has(method) && isPublicRpc();
+  const attemptCall = async (): Promise<T> => {
+    const response = await axios.post<RpcResponse<T>>(
+      getRpcUrl(),
+      { jsonrpc: "2.0", id: 1, method, params },
+      { timeout: RPC_TIMEOUT_MS },
+    );
+    const body = response.data;
+    if (body.error) {
+      throw new RpcError(body.error.message, body.error.code);
+    }
+    return body.result as T;
+  };
 
+  let lastError: unknown;
   for (let attempt = 0; attempt <= RPC_MAX_RETRIES; attempt += 1) {
     try {
-      const response = await axios.post<RpcResponse<T>>(
-        getRpcUrl(),
-        { jsonrpc: "2.0", id: 1, method, params },
-        { timeout: RPC_TIMEOUT_MS },
-      );
-      const body = response.data;
-      if (body.error) {
-        const error = new RpcError(body.error.message, body.error.code);
-        if (body.error.code === 429 && attempt < RPC_MAX_RETRIES) {
-          lastError = error;
-          await sleep(600 * (attempt + 1));
-          continue;
-        }
+      return heavy ? await throttleHeavy(attemptCall) : await attemptCall();
+    } catch (error) {
+      lastError = error;
+      const status = axios.isAxiosError(error)
+        ? error.response?.status
+        : error instanceof RpcError
+          ? error.code
+          : undefined;
+      if (status !== 429 || attempt === RPC_MAX_RETRIES) {
         throw error;
       }
-      return body.result as T;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 429) {
-        lastError = error;
-        if (attempt < RPC_MAX_RETRIES) {
-          await sleep(600 * (attempt + 1));
-          continue;
-        }
-      }
-      throw error;
+      const retryAfter = axios.isAxiosError(error)
+        ? (error.response?.headers?.["retry-after"] as string | undefined)
+        : undefined;
+      lastHeavyAt = Date.now();
+      await sleep(backoffMs(attempt, retryAfter));
     }
   }
 

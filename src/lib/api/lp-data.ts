@@ -441,5 +441,9 @@ export async function getWalletLpSourceStatus(
   return snapshot.sources;
 }
 
+/** Test-only exports for the pure helpers. */
+export const periodMapForTest = periodMap;
+export const toLpAgentPositionForTest = toLpAgentPosition;
+
 export type { LpPosition, LpSourceStatus, WalletLpSnapshot };
 export { getWalletLpSnapshot };

@@ -18,7 +18,14 @@ cho tầng phân tích).
 - Header điều hướng: `SmartLP`, `Pool`, `Analysis`, ...
 - Màn hình Smart LP dạng bảng/card theo mẫu dashboard
 - Bộ lọc và sort cho danh sách LP wallets
-- Danh sách Smart LP đọc từ seed snapshot `data/lp_smart_wallets_from_openapi.json`
+- Trang Discover (`/`): leaderboard Smart LP tính từ on-chain. Quét 30 pool Top
+  24h của Meteora, gom mọi ví đang cung cấp thanh khoản, cộng dồn PnL, fee, win
+  rate, số pool rồi chấm điểm. Cache 1 giờ trong bộ nhớ và ghi ra
+  `data/smart-lp-leaderboard.json`; `pnpm leaderboard:build` để precompute,
+  `vercel.json` có cron gọi `/api/leaderboard/smart-lp?refresh=1` mỗi ngày.
+- Watchlist (`/watchlist`): theo dõi ví, xem vị thế mở hoặc đóng trong 7 ngày
+  gần nhất qua `/api/wallets/[owner]/activity`. Danh sách lưu trong trình duyệt.
+- Landing cũ chuyển sang `/welcome`.
 - Phân tích ví theo địa chỉ: score, phân loại, timeline, phân bố giờ giao dịch
 - Chi tiết pool (`/pool/[address]`): danh sách ví đang cung cấp thanh khoản trong
   pool, lấy từ on-chain qua Solana RPC, kèm tiền nạp, fee, PnL của từng ví trong
@@ -104,10 +111,23 @@ atmospheric, theme Midnight, macrostructure Workbench.
   focus ring bằng `outline`, slot thông báo lỗi giữ chỗ sẵn để không nhảy layout.
 - Chuyển động chỉ dùng `opacity` và `transform`, có fallback `prefers-reduced-motion`.
 
-## Chạy local
+## Test
 
 ```bash
-yarn dev
+pnpm test
+```
+
+Test đơn vị cho tầng chuẩn hóa dữ liệu Meteora (`src/lib/api/*.test.ts`) và
+copy engine. Chạy bằng `node --test` qua `tsx`, không cần framework.
+
+## Chạy local
+
+Project dùng **pnpm** (khai báo trong `packageManager`). pnpm dùng content-addressable
+store nên `node_modules` nhẹ hơn nhiều so với yarn classic với cây dependency của Privy.
+
+```bash
+pnpm install
+pnpm dev
 ```
 
 Mở `http://localhost:3000`.

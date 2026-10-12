@@ -11,7 +11,9 @@
     "copy:watch": "node --env-file-if-exists=.env --import tsx scripts/copy-worker.ts",
     "test:copy": "node --import tsx --test src/lib/copy-engine/*.test.ts src/lib/copy-engine/**/*.test.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "leaderboard:build": "node --env-file-if-exists=.env --import tsx scripts/build-leaderboard.ts",
+    "test": "node --import tsx --test src/lib/**/*.test.ts src/lib/*/*.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -46,5 +48,16 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "unrs-resolver",
+      "keccak",
+      "bufferutil",
+      "utf-8-validate"
+    ]
   }
 }

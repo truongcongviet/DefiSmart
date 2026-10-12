@@ -1,5 +1,5 @@
-import { LoginLanding } from "@/components/auth/login-landing";
+import { SmartLpBoard } from "@/components/smart-lp-board";
 
 export default function Home() {
-  return <LoginLanding />;
+  return <SmartLpBoard />;
 }

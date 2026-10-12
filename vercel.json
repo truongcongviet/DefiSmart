@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/leaderboard/smart-lp?refresh=1", "schedule": "0 3 * * *" }
+  ]
+}

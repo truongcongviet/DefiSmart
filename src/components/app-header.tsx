@@ -13,6 +13,7 @@ const navItems = [
   { label: "Discover", href: "/" },
   { label: "Pools", href: "/pool" },
   { label: "Analysis", href: "/analysis" },
+  { label: "Watchlist", href: "/watchlist" },
 ];
 
 const WALLET_REGEX = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
