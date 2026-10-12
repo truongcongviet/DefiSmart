@@ -1,55 +1,131 @@
 @import "tailwindcss";
 
-/* Hallmark · genre: atmospheric · macrostructure: Workbench · theme: Midnight
-   enrichment: Tier 0 (typography + the live product frame) · nav: N5 floating pill
-   footer: Ft2 inline single line · audience: DeFi liquidity providers
-   use: sign in and provision an agent wallet · tone: technical
-   type: Geist (display 300 / body 400) + Geist Mono (labels, data, wordmark)
-   colour: cool charcoal paper, hue 250 · one accent, cyan oklch(74% 0.15 220) */
+/* Design language modelled on a Nimbus-style explorer: flat near-black paper,
+   hairline rules, one blue accent, Inter for text and JetBrains Mono for data.
+   Light and dark variants share the same token names; the theme toggle sets
+   `data-theme` on <html>, otherwise the OS preference applies. */
 
-@theme {
-  /* paper → ink, all tinted toward the anchor hue */
-  --color-paper: oklch(15% 0.022 250);
-  --color-paper-2: oklch(19% 0.024 250);
-  --color-paper-3: oklch(24% 0.026 250);
-  --color-paper-4: oklch(29% 0.026 250);
-  --color-rule: oklch(32% 0.024 245);
-  --color-rule-2: oklch(46% 0.02 240);
-  --color-muted: oklch(62% 0.018 240);
-  --color-neutral: oklch(74% 0.014 235);
-  --color-ink-2: oklch(86% 0.01 230);
-  --color-ink: oklch(95% 0.008 230);
+:root {
+  color-scheme: dark;
+  --nav-height: 4rem;
+  --page-max: 88rem;
+  --page-gutter: clamp(1rem, 3vw, 2.5rem);
+  --measure: 60ch;
 
-  /* the one accent */
-  --color-accent: oklch(74% 0.15 220);
-  --color-accent-ink: oklch(14% 0.03 230);
-  --color-focus: oklch(80% 0.16 220);
+  --paper: #0a0a0b;
+  --paper-2: #111114;
+  --paper-3: #18181c;
+  --paper-4: #222228;
+  --rule: #26262c;
+  --rule-2: #3a3a42;
+  --muted: #8b8f98;
+  --neutral: #a9adb6;
+  --ink-2: #d6d8de;
+  --ink: #f5f6f8;
 
-  /* status, used as text and hairlines only */
-  --color-danger: oklch(74% 0.16 25);
-  --color-warn: oklch(82% 0.13 80);
-  --color-ok: oklch(78% 0.14 160);
+  --accent: #3b82f6;
+  --accent-ink: #ffffff;
+  --focus: #60a5fa;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+
+  --danger: #f43f5e;
+  --warn: #f59e0b;
+  --ok: #22c55e;
+  --ok-soft: rgba(34, 197, 94, 0.14);
+  --danger-soft: rgba(244, 63, 94, 0.14);
+  --warn-soft: rgba(245, 158, 11, 0.14);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --paper: #ffffff;
+    --paper-2: #f8f9fb;
+    --paper-3: #f1f3f6;
+    --paper-4: #e7eaf0;
+    --rule: #e3e6eb;
+    --rule-2: #cfd3da;
+    --muted: #6b7280;
+    --neutral: #4b5563;
+    --ink-2: #374151;
+    --ink: #0f1115;
+    --accent: #2563eb;
+    --focus: #3b82f6;
+    --accent-soft: rgba(37, 99, 235, 0.1);
+    --ok-soft: rgba(22, 163, 74, 0.12);
+    --danger-soft: rgba(225, 29, 72, 0.1);
+    --warn-soft: rgba(217, 119, 6, 0.12);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --paper: #ffffff;
+  --paper-2: #f8f9fb;
+  --paper-3: #f1f3f6;
+  --paper-4: #e7eaf0;
+  --rule: #e3e6eb;
+  --rule-2: #cfd3da;
+  --muted: #6b7280;
+  --neutral: #4b5563;
+  --ink-2: #374151;
+  --ink: #0f1115;
+  --accent: #2563eb;
+  --focus: #3b82f6;
+  --accent-soft: rgba(37, 99, 235, 0.1);
+  --ok-soft: rgba(22, 163, 74, 0.12);
+  --danger-soft: rgba(225, 29, 72, 0.1);
+  --warn-soft: rgba(217, 119, 6, 0.12);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-paper-4: var(--paper-4);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-muted: var(--muted);
+  --color-neutral: var(--neutral);
+  --color-ink-2: var(--ink-2);
+  --color-ink: var(--ink);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-focus: var(--focus);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+
+  /* Legacy palette names used across the analysis screens map onto the
+     theme so they follow light/dark switching too. */
+  --color-zinc-950: var(--paper);
+  --color-zinc-900: var(--paper-2);
+  --color-zinc-800: var(--rule);
+  --color-zinc-700: var(--rule-2);
+  --color-zinc-600: var(--rule-2);
+  --color-zinc-500: var(--muted);
+  --color-zinc-400: var(--muted);
+  --color-zinc-300: var(--neutral);
+  --color-zinc-200: var(--ink-2);
+  --color-zinc-100: var(--ink);
+  --color-zinc-50: var(--ink);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   --radius-card: 12px;
-  --radius-input: 10px;
+  --radius-input: 8px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-@theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:
-    var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
-}
-
-:root {
-  color-scheme: dark;
-  --nav-height: 4.5rem;
-  --page-max: 76rem;
-  --page-gutter: clamp(1.25rem, 4vw, 3rem);
-  --measure: 60ch;
 }
 
 * {
@@ -69,34 +145,14 @@ body {
   font-family: var(--font-sans);
   font-weight: 400;
   font-feature-settings:
-    "ss01" on,
-    "cv11" on;
+    "cv11" on,
+    "ss01" on;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Two fixed blooms in the accent hue. Static, no animation. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      55% 45% at 18% -5%,
-      oklch(74% 0.15 220 / 0.13),
-      transparent 70%
-    ),
-    radial-gradient(
-      40% 38% at 92% 96%,
-      oklch(74% 0.15 220 / 0.06),
-      transparent 70%
-    );
-}
-
 ::selection {
-  background: oklch(74% 0.15 220 / 0.3);
+  background: var(--accent-soft);
   color: var(--color-ink);
 }
 
@@ -116,18 +172,18 @@ summary::-webkit-details-marker {
 
 /* ─── Type utilities ─────────────────────────────────────────── */
 .display {
-  font-size: clamp(2.75rem, 5vw + 1rem, 5.25rem);
-  font-weight: 300;
+  font-size: clamp(2.5rem, 4vw + 1rem, 4.5rem);
+  font-weight: 600;
   letter-spacing: -0.03em;
-  line-height: 1.04;
+  line-height: 1.05;
   text-wrap: balance;
   overflow-wrap: anywhere;
   min-width: 0;
 }
 
 .display-s {
-  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
-  font-weight: 300;
+  font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+  font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.1;
   text-wrap: balance;
@@ -139,20 +195,88 @@ summary::-webkit-details-marker {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
 
 .lede {
-  font-size: clamp(1.0625rem, 0.5vw + 0.9rem, 1.25rem);
+  font-size: clamp(1rem, 0.4vw + 0.9rem, 1.125rem);
   line-height: 1.6;
-  color: var(--color-ink-2);
+  color: var(--color-muted);
   max-width: var(--measure);
 }
 
 .tnum {
   font-variant-numeric: tabular-nums;
+}
+
+/* Data cells: mono + tabular, like an explorer table. */
+.data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+}
+
+/* Status pills (Low risk / Stable yield …). */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 1.625rem;
+  padding: 0 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--color-ink-2);
+  background: var(--color-paper-3);
+}
+.pill-ok {
+  color: #4ade80;
+  background: var(--ok-soft);
+}
+.pill-accent {
+  color: #93c5fd;
+  background: var(--accent-soft);
+}
+.pill-warn {
+  color: #fbbf24;
+  background: var(--warn-soft);
+}
+.pill-danger {
+  color: #fb7185;
+  background: var(--danger-soft);
+}
+:root[data-theme="light"] .pill-ok,
+:root:not([data-theme="dark"]) .pill-ok {
+  color: #15803d;
+}
+:root[data-theme="light"] .pill-accent,
+:root:not([data-theme="dark"]) .pill-accent {
+  color: #1d4ed8;
+}
+:root[data-theme="light"] .pill-warn,
+:root:not([data-theme="dark"]) .pill-warn {
+  color: #b45309;
+}
+:root[data-theme="light"] .pill-danger,
+:root:not([data-theme="dark"]) .pill-danger {
+  color: #be123c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .pill-ok {
+    color: #4ade80;
+  }
+  :root:not([data-theme="light"]) .pill-accent {
+    color: #93c5fd;
+  }
+  :root:not([data-theme="light"]) .pill-warn {
+    color: #fbbf24;
+  }
+  :root:not([data-theme="light"]) .pill-danger {
+    color: #fb7185;
+  }
 }
 
 /* ─── Motion ─────────────────────────────────────────────────── */

@@ -154,7 +154,7 @@ function StatCard({
   tone?: string;
 }) {
   return (
-    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
       <p className="text-xs text-zinc-500">{label}</p>
       <p className={cn("mt-1 text-lg font-semibold text-zinc-100", tone)}>
         {value}
@@ -224,8 +224,8 @@ export function PoolLpersTable({
   const pool = data?.pool;
 
   return (
-    <main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col gap-5 px-4 py-6 sm:px-6 lg:px-8">
-      <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-5">
+    <main className="mx-auto flex w-full max-w-[var(--page-max)] flex-1 flex-col gap-6 px-[var(--page-gutter)] py-8">
+      <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <Link
@@ -324,7 +324,7 @@ export function PoolLpersTable({
         ) : null}
       </section>
 
-      <section className="rounded-2xl border border-zinc-800 bg-[#0d1118]">
+      <section className="rounded-2xl border border-zinc-800 bg-paper-2">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 px-4 py-3">
           <p className="text-sm text-zinc-300">
             Wallets currently in this pool
@@ -343,13 +343,13 @@ export function PoolLpersTable({
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Filter by address"
-                className="h-9 w-56 rounded-lg border border-zinc-800 bg-[#080b12] pr-3 pl-8 text-xs text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-emerald-500"
+                className="h-9 w-56 rounded-lg border border-zinc-800 bg-paper pr-3 pl-8 text-xs text-zinc-100 outline-none placeholder:text-zinc-500 focus:border-emerald-500"
               />
             </label>
             <select
               value={sortKey}
               onChange={(event) => setSortKey(event.target.value as SortKey)}
-              className="h-9 rounded-lg border border-zinc-800 bg-[#080b12] px-2 text-xs text-zinc-200 outline-none focus:border-emerald-500"
+              className="h-9 rounded-lg border border-zinc-800 bg-paper px-2 text-xs text-zinc-200 outline-none focus:border-emerald-500"
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.key} value={option.key}>
@@ -362,7 +362,7 @@ export function PoolLpersTable({
 
         <div className="overflow-x-auto">
           <table className="min-w-[1080px] divide-y divide-zinc-800 text-sm">
-            <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+            <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
               <tr>
                 <th className="px-3 py-3 text-left">#</th>
                 <th className="px-3 py-3 text-left">Wallet</th>

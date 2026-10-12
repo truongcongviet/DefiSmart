@@ -648,7 +648,7 @@ function TokenIcon({ symbol, logoUrl }: { symbol: string; logoUrl?: string }) {
 }
 
 const inputClassName =
-  "h-11 w-full rounded-lg border border-zinc-800 bg-[#080b12] px-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:border-emerald-500";
+  "h-11 w-full rounded-lg border border-zinc-800 bg-paper px-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:border-emerald-500";
 
 export function AddressAnalysis({
   initialOwner = "",
@@ -1258,7 +1258,7 @@ export function AddressAnalysis({
 
   function buildStateCard(title: string, message: string, error?: string) {
     return (
-      <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-5">
+      <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-5">
         <p className="text-xs font-medium tracking-wide text-zinc-500 uppercase">
           {title}
         </p>
@@ -1390,7 +1390,7 @@ export function AddressAnalysis({
               {metrics.map((metric) => (
                 <article
                   key={metric.label}
-                  className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4"
+                  className="rounded-xl border border-zinc-800 bg-paper-2 p-4"
                 >
                   <p className="text-xs text-zinc-500">{metric.label}</p>
                   <p
@@ -1407,7 +1407,7 @@ export function AddressAnalysis({
 
             {result.insights && (
               <section className="grid gap-3 lg:grid-cols-3">
-                <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+                <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                   <p className="text-xs text-zinc-500">LP Style</p>
                   <p className="mt-2 text-lg font-semibold text-zinc-100">
                     {result.insights.strategy.type === "SCALP"
@@ -1434,7 +1434,7 @@ export function AddressAnalysis({
                   </p>
                 </article>
 
-                <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+                <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                   <p className="text-xs text-zinc-500">Token Mix</p>
                   <p className="mt-2 text-lg font-semibold text-zinc-100">
                     {tokenCategoryLabel(
@@ -1475,7 +1475,7 @@ export function AddressAnalysis({
                   </div>
                 </article>
 
-                <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+                <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                   <p className="text-xs text-zinc-500">Smart Signal</p>
                   <p
                     className={cn(
@@ -1528,7 +1528,7 @@ export function AddressAnalysis({
         return (
           <>
             <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">PnL 7D (overview)</p>
                 <p
                   className={cn(
@@ -1541,7 +1541,7 @@ export function AddressAnalysis({
                   {formatSol(regimeTotals.pnl7d)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">PnL 1M (overview)</p>
                 <p
                   className={cn(
@@ -1554,7 +1554,7 @@ export function AddressAnalysis({
                   {formatSol(regimeTotals.pnl1m)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">PnL 3M (overview)</p>
                 <p
                   className={cn(
@@ -1567,7 +1567,7 @@ export function AddressAnalysis({
                   {formatSol(regimeTotals.pnl3m)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Win Rate (ALL)</p>
                 <p className="mt-2 text-base font-semibold text-zinc-100">
                   {formatPercent(result.summary.winRate)}
@@ -1575,9 +1575,9 @@ export function AddressAnalysis({
               </article>
             </section>
 
-            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
+            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-paper-2">
               <table className="min-w-[840px] divide-y divide-zinc-800 text-sm">
-                <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+                <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
                   <tr>
                     <th className="px-3 py-3 text-left">Protocol</th>
                     <th className="px-3 py-3 text-right">Total LP</th>
@@ -1665,7 +1665,7 @@ export function AddressAnalysis({
         return (
           <>
             <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">PnL / trade</p>
                 <p
                   className={cn(
@@ -1678,7 +1678,7 @@ export function AddressAnalysis({
                   {formatSol(copySimulation.pnlPerTrade)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Projected 20 trades</p>
                 <p
                   className={cn(
@@ -1691,7 +1691,7 @@ export function AddressAnalysis({
                   {formatSol(copySimulation.projected20)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Projected 50 trades</p>
                 <p
                   className={cn(
@@ -1704,7 +1704,7 @@ export function AddressAnalysis({
                   {formatSol(copySimulation.projected50)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Projected 100 trades</p>
                 <p
                   className={cn(
@@ -1719,7 +1719,7 @@ export function AddressAnalysis({
               </article>
             </section>
 
-            <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-4">
+            <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-4">
               <p className="text-xs text-zinc-500 uppercase">Simulation Note</p>
               <p className="mt-2 text-sm text-zinc-300">
                 Mô phỏng này lấy trung bình từ{" "}
@@ -1748,7 +1748,7 @@ export function AddressAnalysis({
 
       case "trade_time": {
         return (
-          <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-4">
+          <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-4">
             <p className="text-xs text-zinc-500 uppercase">
               Trade Time Distribution (24h)
             </p>
@@ -1800,7 +1800,7 @@ export function AddressAnalysis({
                   className="relative h-44 w-44 rounded-full border border-zinc-800"
                   style={{ background: tradeTimeStats.gradient }}
                 >
-                  <div className="absolute inset-9 flex flex-col items-center justify-center rounded-full border border-zinc-800 bg-[#0a0f16]">
+                  <div className="absolute inset-9 flex flex-col items-center justify-center rounded-full border border-zinc-800 bg-paper-3">
                     <p className="text-xl font-semibold text-zinc-100">
                       {formatNumber(tradeTimeStats.totalTrades, 0)}
                     </p>
@@ -1819,7 +1819,7 @@ export function AddressAnalysis({
                   return (
                     <article
                       key={bucket.label}
-                      className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3"
+                      className="rounded-xl border border-zinc-800 bg-paper-3 p-3"
                     >
                       <p className="inline-flex items-center gap-2 text-sm font-medium text-zinc-100">
                         <span
@@ -1857,12 +1857,12 @@ export function AddressAnalysis({
         }
 
         return (
-          <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
+          <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-paper-2">
             <div className="border-b border-zinc-800 px-3 py-2 text-xs text-zinc-400">
               Chỉ hiển thị lệnh có |PnL| &gt;= {MIN_VISIBLE_PNL_SOL} SOL.
             </div>
             <table className="min-w-[1040px] divide-y divide-zinc-800 text-sm">
-              <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+              <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
                 <tr>
                   <th className="px-3 py-3 text-left">Time</th>
                   <th className="px-3 py-3 text-left">Event</th>
@@ -1980,9 +1980,9 @@ export function AddressAnalysis({
         }
 
         return (
-          <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
+          <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-paper-2">
             <table className="min-w-[1040px] divide-y divide-zinc-800 text-sm">
-              <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+              <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
                 <tr>
                   <th className="px-3 py-3 text-left">#</th>
                   <th className="px-3 py-3 text-left">Pair</th>
@@ -2075,7 +2075,7 @@ export function AddressAnalysis({
               return (
                 <article
                   key={`${row.pool.pool_address || row.pool.name || "crowd"}-${index}`}
-                  className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4"
+                  className="rounded-xl border border-zinc-800 bg-paper-2 p-4"
                 >
                   <p className="text-sm font-semibold text-zinc-100">
                     {getPoolPairLabel(row.pool)}
@@ -2153,9 +2153,9 @@ export function AddressAnalysis({
                 </section>
               )}
 
-            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
+            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-paper-2">
               <table className="min-w-[940px] divide-y divide-zinc-800 text-sm">
-                <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+                <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
                   <tr>
                     <th className="px-3 py-3 text-left">Pool</th>
                     <th className="px-3 py-3 text-right">Risk Score</th>
@@ -2240,14 +2240,14 @@ export function AddressAnalysis({
         return (
           <>
             <section className="grid gap-3 sm:grid-cols-3">
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Matched Pairs</p>
                 <p className="mt-2 text-xl font-semibold text-zinc-100">
                   {walletPoolFitData.matchedPairs}/
                   {walletPoolFitData.totalPairs}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Fit Ratio</p>
                 <p
                   className={cn(
@@ -2260,7 +2260,7 @@ export function AddressAnalysis({
                   {formatPercent(walletPoolFitData.fitRatio)}
                 </p>
               </article>
-              <article className="rounded-xl border border-zinc-800 bg-[#0d1118] p-4">
+              <article className="rounded-xl border border-zinc-800 bg-paper-2 p-4">
                 <p className="text-xs text-zinc-500">Signal</p>
                 <p
                   className={cn(
@@ -2273,9 +2273,9 @@ export function AddressAnalysis({
               </article>
             </section>
 
-            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#0d1118]">
+            <section className="overflow-x-auto rounded-2xl border border-zinc-800 bg-paper-2">
               <table className="min-w-[840px] divide-y divide-zinc-800 text-sm">
-                <thead className="bg-[#0f1420] text-xs text-zinc-400 uppercase">
+                <thead className="bg-paper-3 text-xs text-zinc-400 uppercase">
                   <tr>
                     <th className="px-3 py-3 text-left">Wallet Pair</th>
                     <th className="px-3 py-3 text-right">Trades</th>
@@ -2337,7 +2337,7 @@ export function AddressAnalysis({
 
   return (
     <main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col gap-5 px-4 py-6 sm:px-6 lg:px-8">
-      <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-5">
+      <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-5">
         <p className="text-xs font-medium tracking-wide text-zinc-400 uppercase">
           Wallet Analysis
         </p>
@@ -2416,24 +2416,24 @@ export function AddressAnalysis({
 
         {analyzedOwner && (
           <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
-            <span className="rounded-md border border-zinc-700 bg-[#080b12] px-2 py-1">
+            <span className="rounded-md border border-zinc-700 bg-paper px-2 py-1">
               Owner: {shorten(ownerBadgeValue, 8, 8)}
             </span>
             <button
               type="button"
               onClick={() => handleCopy(ownerBadgeValue)}
-              className="inline-flex items-center gap-1 rounded-md border border-zinc-700 bg-[#080b12] px-2 py-1 text-zinc-300 hover:bg-zinc-800"
+              className="inline-flex items-center gap-1 rounded-md border border-zinc-700 bg-paper px-2 py-1 text-zinc-300 hover:bg-zinc-800"
             >
               <Copy className="h-3 w-3" />
               Copy
             </button>
-            <span className="rounded-md border border-zinc-700 bg-[#080b12] px-2 py-1">
+            <span className="rounded-md border border-zinc-700 bg-paper px-2 py-1">
               Option: {activeOptionMeta?.label || activeOption}
             </span>
             {(result?.generatedAt ||
               walletScore?.generatedAt ||
               timeDistribution?.generatedAt) && (
-              <span className="rounded-md border border-zinc-700 bg-[#080b12] px-2 py-1">
+              <span className="rounded-md border border-zinc-700 bg-paper px-2 py-1">
                 Updated:{" "}
                 {formatDateTime(
                   result?.generatedAt ||
@@ -2449,7 +2449,7 @@ export function AddressAnalysis({
 
       {analyzedOwner ? (
         <section className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="h-fit rounded-2xl border border-zinc-800 bg-[#0d1118] p-3 lg:sticky lg:top-20">
+          <aside className="h-fit rounded-2xl border border-zinc-800 bg-paper-2 p-3 lg:sticky lg:top-20">
             <p className="px-2 py-1 text-xs font-medium tracking-wide text-zinc-400 uppercase">
               Analysis Options
             </p>
@@ -2467,7 +2467,7 @@ export function AddressAnalysis({
                       "rounded-xl border px-3 py-2 text-left transition",
                       active
                         ? "border-emerald-500/50 bg-emerald-500/10"
-                        : "border-zinc-800 bg-[#0a0f16] hover:border-zinc-700",
+                        : "border-zinc-800 bg-paper-3 hover:border-zinc-700",
                     )}
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -2496,7 +2496,7 @@ export function AddressAnalysis({
           </aside>
 
           <div className="min-w-0 space-y-4">
-            <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-4">
+            <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-xs text-zinc-500 uppercase">
@@ -2551,7 +2551,7 @@ export function AddressAnalysis({
               {walletScore && (
                 <>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Total Score</p>
                       <p
                         className={cn(
@@ -2562,19 +2562,19 @@ export function AddressAnalysis({
                         {walletScore.totalScore.toFixed(2)}
                       </p>
                     </article>
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Profit Score</p>
                       <p className="mt-1 text-base font-semibold text-zinc-100">
                         {walletScore.breakdown.profit.toFixed(2)} / 30
                       </p>
                     </article>
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Stability Score</p>
                       <p className="mt-1 text-base font-semibold text-zinc-100">
                         {walletScore.breakdown.stability.toFixed(2)} / 25
                       </p>
                     </article>
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Risk + Pool Score</p>
                       <p className="mt-1 text-base font-semibold text-zinc-100">
                         {(
@@ -2587,7 +2587,7 @@ export function AddressAnalysis({
                   </div>
 
                   <div className="mt-3 grid gap-3 lg:grid-cols-2">
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Confidence</p>
                       <p className="mt-1 text-sm text-zinc-200">
                         Value: {formatPercent(walletScore.confidence.value)}
@@ -2601,7 +2601,7 @@ export function AddressAnalysis({
                       </div>
                     </article>
 
-                    <article className="rounded-xl border border-zinc-800 bg-[#0a0f16] p-3">
+                    <article className="rounded-xl border border-zinc-800 bg-paper-3 p-3">
                       <p className="text-xs text-zinc-500">Score Reasons</p>
                       <div className="mt-2 space-y-1 text-xs text-zinc-300">
                         {walletScore.reasons
@@ -2633,7 +2633,7 @@ export function AddressAnalysis({
           </div>
         </section>
       ) : (
-        <section className="rounded-2xl border border-zinc-800 bg-[#0d1118] p-5">
+        <section className="rounded-2xl border border-zinc-800 bg-paper-2 p-5">
           <p className="text-sm text-zinc-300">
             Nhập ví Solana và nhấn Analyze. Sau đó chọn option ở sidebar để chạy
             phân tích theo nhu cầu.

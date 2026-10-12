@@ -1,75 +1,143 @@
 "use client";
 
+import { Search, Zap } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { ConnectWalletButton } from "@/components/auth/connect-wallet-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Discover", href: "/" },
-  { label: "Pool", href: "/pool" },
+  { label: "Pools", href: "/pool" },
   { label: "Analysis", href: "/analysis" },
 ];
 
-/** N5 floating pill: wordmark · links · one action. Detached from the page edges. */
+const WALLET_REGEX = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+
+/** Full-width explorer bar: wordmark · nav · wallet search · theme · wallet. */
 export function AppHeader() {
   const pathname = usePathname();
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState("");
+  const [invalid, setInvalid] = useState(false);
 
   function isActive(href: string) {
     return href === "/" ? pathname === "/" : pathname.startsWith(href);
   }
 
+  // "/" focuses the search box from anywhere, like most explorers.
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "/" || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) {
+        return;
+      }
+      event.preventDefault();
+      inputRef.current?.focus();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const owner = query.trim();
+    if (!WALLET_REGEX.test(owner)) {
+      setInvalid(true);
+      return;
+    }
+    setInvalid(false);
+    router.push(`/analysis?owner=${owner}`);
+    setQuery("");
+    inputRef.current?.blur();
+  }
+
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
-      <nav
-        aria-label="Primary"
-        className="border-rule bg-paper/75 pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 pl-4 shadow-[0_12px_32px_-16px_oklch(0%_0_0/0.6)] backdrop-blur-xl"
-      >
+    <header className="border-rule bg-paper/85 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl">
+      <div className="mx-auto flex h-[var(--nav-height)] w-full max-w-[var(--page-max)] items-center gap-4 px-[var(--page-gutter)]">
         <Link
           href="/"
-          className="text-ink mr-2 inline-flex items-center gap-2 rounded-full font-mono text-sm font-semibold tracking-tight"
+          className="text-ink inline-flex shrink-0 items-center gap-2.5 text-[17px] font-semibold tracking-tight"
         >
           <span
             aria-hidden
-            className="bg-accent inline-block h-2 w-2 rounded-full"
-          />
+            className="border-rule-2 bg-paper-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border"
+          >
+            <Zap className="text-ink h-4 w-4" strokeWidth={2.25} />
+          </span>
           CopyPilot
         </Link>
 
-        <ul className="hidden items-center md:flex">
-          {navItems.map((item) => {
-            const active = isActive(item.href);
+        <nav aria-label="Primary" className="hidden md:block">
+          <ul className="flex items-center gap-1">
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "inline-flex h-9 items-center rounded-lg px-3 text-[15px] font-medium transition-colors duration-150",
+                      active
+                        ? "text-accent"
+                        : "text-ink-2 hover:text-ink hover:bg-paper-3",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "inline-flex h-9 items-center rounded-full px-3.5 text-sm transition-colors duration-200",
-                    active
-                      ? "text-ink"
-                      : "text-muted hover:bg-paper-3 hover:text-ink",
-                  )}
-                >
-                  {active && (
-                    <span
-                      aria-hidden
-                      className="bg-accent mr-2 inline-block h-1 w-1 rounded-full"
-                    />
-                  )}
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <form
+          onSubmit={submit}
+          role="search"
+          className="ml-auto hidden w-full max-w-[22rem] lg:block"
+        >
+          <label
+            className={cn(
+              "bg-paper-2 border-rule focus-within:border-rule-2 flex h-10 items-center gap-2 rounded-lg border px-3 transition-colors",
+              invalid && "border-danger",
+            )}
+          >
+            <Search className="text-muted h-4 w-4 shrink-0" />
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                if (invalid) setInvalid(false);
+              }}
+              placeholder="Search by wallet address..."
+              aria-label="Search by wallet address"
+              aria-invalid={invalid || undefined}
+              className="text-ink placeholder:text-muted h-full w-full min-w-0 bg-transparent text-sm outline-none"
+            />
+            <kbd
+              aria-hidden
+              className="border-rule-2 bg-paper-3 text-muted inline-flex h-6 min-w-6 items-center justify-center rounded-md border px-1.5 font-mono text-[11px]"
+            >
+              /
+            </kbd>
+          </label>
+        </form>
 
-        <span aria-hidden className="bg-rule mx-1 hidden h-5 w-px md:block" />
-
-        <ConnectWalletButton />
-      </nav>
+        <div className={cn("flex items-center gap-2", "lg:ml-0 ml-auto")}>
+          <ThemeToggle className="hidden sm:inline-flex" />
+          <ConnectWalletButton />
+        </div>
+      </div>
     </header>
   );
 }
