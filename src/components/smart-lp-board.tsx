@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { Pagination } from "@/components/board-ui";
 import { watchlist } from "@/lib/local-list";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +37,8 @@ interface BoardWallet {
   closedPositions: number;
   winRate: number;
   avgAgeHours: number;
+  avgEntryDelayHours: number | null;
+  earlyEntries: number;
   poolCount: number;
   pools: BoardPool[];
   lastActivity: string | null;
@@ -46,6 +49,20 @@ interface Board {
   poolsRequested: number;
   poolsScanned: number;
   walletsSeen: number;
+  totals: {
+    ranked: number;
+    matching: number;
+    profitable: number;
+    pnlNative: number;
+    feeNative: number;
+    avgAgeHours: number;
+  };
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
   wallets: BoardWallet[];
   warnings: string[];
   message?: string;
@@ -58,6 +75,7 @@ type SortKey =
   | "positions"
   | "winRate"
   | "poolCount"
+  | "earlyEntries"
   | "lastActivity";
 
 function shortAddress(value: string) {
@@ -178,52 +196,53 @@ export function SmartLpBoard() {
   const [minWin, setMinWin] = useState(0);
   const [minPositions, setMinPositions] = useState(3);
   const [profitableOnly, setProfitableOnly] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
   const watched = watchlist.useList();
   const watchedSet = useMemo(() => new Set(watched), [watched]);
 
-  const load = useCallback(async (refresh = false) => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch(
-        `/api/leaderboard/smart-lp${refresh ? "?refresh=1" : ""}`,
-      );
-      const payload = (await response.json()) as Board;
-      if (!response.ok)
-        throw new Error(payload.message || `HTTP ${response.status}`);
-      setBoard(payload);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load leaderboard",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const query = useMemo(() => {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+      sort: sortKey,
+      dir: sortDir,
+      minPositions: String(minPositions),
+      minWin: String(minWin),
+      profitable: profitableOnly ? "1" : "0",
+    });
+    return params.toString();
+  }, [page, pageSize, sortKey, sortDir, minPositions, minWin, profitableOnly]);
+
+  const load = useCallback(
+    async (refresh = false) => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(
+          `/api/leaderboard/smart-lp?${query}${refresh ? "&refresh=1" : ""}`,
+        );
+        const payload = (await response.json()) as Board;
+        if (!response.ok)
+          throw new Error(payload.message || `HTTP ${response.status}`);
+        setBoard(payload);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load leaderboard",
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [query],
+  );
 
   useEffect(() => {
     void load();
   }, [load]);
 
-  const rows = useMemo(() => {
-    if (!board) return [];
-    const filtered = board.wallets.filter((wallet) => {
-      if (wallet.positions < minPositions) return false;
-      if (wallet.winRate < minWin) return false;
-      if (profitableOnly && wallet.pnlNative <= 0) return false;
-      return true;
-    });
-    const sign = sortDir === "asc" ? 1 : -1;
-    return [...filtered].sort((a, b) => {
-      if (sortKey === "lastActivity") {
-        return (
-          sign *
-          (Date.parse(a.lastActivity ?? "") - Date.parse(b.lastActivity ?? ""))
-        );
-      }
-      return sign * (a[sortKey] - b[sortKey]);
-    });
-  }, [board, minPositions, minWin, profitableOnly, sortKey, sortDir]);
+  const rows = board?.wallets ?? [];
+  const totals = board?.totals ?? null;
 
   function onSort(key: SortKey) {
     if (key === sortKey) setSortDir(sortDir === "desc" ? "asc" : "desc");
@@ -231,17 +250,18 @@ export function SmartLpBoard() {
       setSortKey(key);
       setSortDir("desc");
     }
+    setPage(1);
   }
 
-  const totals = useMemo(() => {
-    if (!board) return null;
-    const profitable = board.wallets.filter((w) => w.pnlNative > 0).length;
-    return {
-      profitable,
-      pnl: board.wallets.reduce((sum, w) => sum + w.pnlNative, 0),
-      fees: board.wallets.reduce((sum, w) => sum + w.feeNative, 0),
+  function setFilter<T>(setter: (value: T) => void) {
+    return (value: T) => {
+      setter(value);
+      setPage(1);
     };
-  }, [board]);
+  }
+  const changeMinWin = setFilter(setMinWin);
+  const changeMinPositions = setFilter(setMinPositions);
+  const changeProfitableOnly = setFilter(setProfitableOnly);
 
   return (
     <main className="mx-auto flex w-full max-w-[var(--page-max)] flex-1 flex-col gap-5 px-[var(--page-gutter)] py-8">
@@ -292,20 +312,20 @@ export function SmartLpBoard() {
         />
         <Kpi
           label="Ranked"
-          value={board ? board.wallets.length.toLocaleString() : "–"}
+          value={totals ? totals.ranked.toLocaleString() : "–"}
           hint="≥ 2 positions"
         />
         <Kpi
           label="In profit"
           value={
-            totals && board
-              ? `${Math.round((totals.profitable / Math.max(1, board.wallets.length)) * 100)}%`
+            totals
+              ? `${Math.round((totals.profitable / Math.max(1, totals.ranked)) * 100)}%`
               : "–"
           }
         />
         <Kpi
           label="Net PnL (ranked)"
-          value={totals ? `${formatSol(totals.pnl)} SOL` : "–"}
+          value={totals ? `${formatSol(totals.pnlNative)} SOL` : "–"}
         />
         <Kpi
           label="Updated"
@@ -322,7 +342,7 @@ export function SmartLpBoard() {
             <input
               type="checkbox"
               checked={profitableOnly}
-              onChange={(e) => setProfitableOnly(e.target.checked)}
+              onChange={(e) => changeProfitableOnly(e.target.checked)}
               className="accent-accent h-4 w-4"
             />
             Profitable only
@@ -331,7 +351,7 @@ export function SmartLpBoard() {
             Min win rate
             <select
               value={minWin}
-              onChange={(e) => setMinWin(Number(e.target.value))}
+              onChange={(e) => changeMinWin(Number(e.target.value))}
               className="border-rule bg-paper text-ink h-8 rounded-lg border px-2 text-sm outline-none"
             >
               <option value={0}>any</option>
@@ -345,7 +365,7 @@ export function SmartLpBoard() {
             Min positions
             <select
               value={minPositions}
-              onChange={(e) => setMinPositions(Number(e.target.value))}
+              onChange={(e) => changeMinPositions(Number(e.target.value))}
               className="border-rule bg-paper text-ink h-8 rounded-lg border px-2 text-sm outline-none"
             >
               {[2, 3, 5, 10, 20].map((n) => (
@@ -356,7 +376,8 @@ export function SmartLpBoard() {
             </select>
           </label>
           <span className="text-muted ml-auto text-xs">
-            {rows.length} wallets
+            {totals ? `${totals.matching.toLocaleString()} wallets` : ""}
+            {loading && board && " · updating…"}
           </span>
         </div>
 
@@ -418,6 +439,13 @@ export function SmartLpBoard() {
                   align="left"
                 />
                 <Th
+                  label="Entry"
+                  sortKey="earlyEntries"
+                  active={sortKey}
+                  direction={sortDir}
+                  onSort={onSort}
+                />
+                <Th
                   label="Last Active"
                   sortKey="lastActivity"
                   active={sortKey}
@@ -432,7 +460,7 @@ export function SmartLpBoard() {
                 !board &&
                 Array.from({ length: 10 }).map((_, index) => (
                   <tr key={index}>
-                    <td colSpan={10} className="px-4 py-3.5">
+                    <td colSpan={11} className="px-4 py-3.5">
                       <div
                         className="bg-paper-3 h-4 animate-pulse rounded"
                         style={{ width: `${45 + ((index * 19) % 50)}%` }}
@@ -443,7 +471,7 @@ export function SmartLpBoard() {
               {loading && !board && (
                 <tr>
                   <td
-                    colSpan={10}
+                    colSpan={11}
                     className="text-muted px-4 py-3 text-center text-xs"
                   >
                     First scan reads ~30 pools on-chain and can take up to a
@@ -454,7 +482,7 @@ export function SmartLpBoard() {
               {error && (
                 <tr>
                   <td
-                    colSpan={10}
+                    colSpan={11}
                     className="px-4 py-10 text-center text-sm text-[#fb7185]"
                   >
                     {error}
@@ -464,7 +492,7 @@ export function SmartLpBoard() {
               {!loading && !error && rows.length === 0 && (
                 <tr>
                   <td
-                    colSpan={10}
+                    colSpan={11}
                     className="text-muted px-4 py-10 text-center"
                   >
                     No wallet matches these filters.
@@ -478,7 +506,12 @@ export function SmartLpBoard() {
                     key={wallet.owner}
                     className="hover:bg-paper-3/40 transition-colors"
                   >
-                    <td className="data text-muted px-4 py-3">{index + 1}</td>
+                    <td className="data text-muted px-4 py-3">
+                      {(board!.pagination.page - 1) *
+                        board!.pagination.pageSize +
+                        index +
+                        1}
+                    </td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/analysis?owner=${wallet.owner}`}
@@ -558,6 +591,17 @@ export function SmartLpBoard() {
                         )}
                       </span>
                     </td>
+                    <td
+                      className="data text-ink px-4 py-3 text-right whitespace-nowrap"
+                      title="Pools entered within 24h of creation · average delay after pool creation"
+                    >
+                      {wallet.earlyEntries}
+                      <span className="text-muted">
+                        /{wallet.poolCount}
+                        {wallet.avgEntryDelayHours != null &&
+                          ` · ${humanAge(wallet.avgEntryDelayHours)}`}
+                      </span>
+                    </td>
                     <td className="data text-ink-2 px-4 py-3 text-right whitespace-nowrap">
                       {relative(wallet.lastActivity)}
                     </td>
@@ -592,15 +636,26 @@ export function SmartLpBoard() {
         </div>
 
         {board && (
+          <Pagination
+            page={board.pagination.page}
+            pageSize={board.pagination.pageSize}
+            total={board.pagination.total}
+            totalPages={board.pagination.totalPages}
+            onPage={setPage}
+            onPageSize={(size) => {
+              setPageSize(size);
+              setPage(1);
+            }}
+            disabled={loading}
+          />
+        )}
+
+        {board && (
           <div className="text-muted border-rule flex flex-wrap items-center justify-between gap-3 border-t px-4 py-2.5 text-xs">
             <span>
-              Score = 35% win rate (confidence-weighted) + 35% PnL + 15% fees +
-              15% pool breadth · avg hold{" "}
-              {humanAge(
-                rows.length
-                  ? rows.reduce((s, w) => s + w.avgAgeHours, 0) / rows.length
-                  : 0,
-              )}
+              Score = 35% win rate (confidence-weighted) + 30% PnL + 15% fees +
+              10% pool breadth + 10% early entries · avg hold{" "}
+              {humanAge(totals?.avgAgeHours ?? 0)}
             </span>
             {board.warnings.length > 0 && (
               <span>{board.warnings.length} pool(s) skipped</span>

@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "leaderboard:build": "node --env-file-if-exists=.env --import tsx scripts/build-leaderboard.ts",
-    "test": "node --import tsx --test src/lib/**/*.test.ts src/lib/*/*.test.ts"
+    "test": "node --import tsx --test src/lib/**/*.test.ts src/lib/*/*.test.ts",
+    "traders:build": "node --env-file-if-exists=.env --import tsx scripts/build-traders.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -28,6 +29,7 @@
     "jose": "^4.15.9",
     "lucide-react": "^0.577.0",
     "next": "16.2.1",
+    "pg": "^8.23.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.71.2",
@@ -38,6 +40,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

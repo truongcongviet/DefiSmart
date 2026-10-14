@@ -285,3 +285,220 @@ async function resolveNftOwner(mint: string): Promise<string | null> {
     return null;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Transaction history (swap discovery)
+// ---------------------------------------------------------------------------
+
+/**
+ * The default public endpoint allows only a handful of `getTransaction` calls
+ * per window, which makes swap history unusable. Allnodes' public RPC serves
+ * transaction history freely (~30 req/s per IP measured) but disables
+ * getProgramAccounts, so history uses its own endpoint. Override with
+ * `SOLANA_TX_RPC_URL` (any private RPC works too) and `SOLANA_TX_RPS`.
+ */
+const DEFAULT_TX_RPC_URL = "https://solana-rpc.publicnode.com";
+const TX_CONCURRENCY = 8;
+const TX_DEFAULT_RPS = 25;
+const TX_MAX_RETRIES = 6;
+
+export function getTxRpcUrl(): string {
+  const configured = process.env.SOLANA_TX_RPC_URL?.trim();
+  return configured || DEFAULT_TX_RPC_URL;
+}
+
+function txRps(): number {
+  const raw = Number(process.env.SOLANA_TX_RPS);
+  return Number.isFinite(raw) && raw > 0 ? raw : TX_DEFAULT_RPS;
+}
+
+let txInflight = 0;
+const txQueue: Array<() => void> = [];
+/** Token bucket: refills at `txRps()` per second, burst = 1 s worth. */
+let txTokens = 0;
+let txLastRefill = Date.now();
+/** Set after a 429 so every caller backs off together. */
+let txPausedUntil = 0;
+
+async function takeTxToken() {
+  for (;;) {
+    const now = Date.now();
+    if (txPausedUntil > now) {
+      await sleep(txPausedUntil - now);
+      continue;
+    }
+    const rps = txRps();
+    txTokens = Math.min(rps, txTokens + ((now - txLastRefill) / 1000) * rps);
+    txLastRefill = now;
+    if (txTokens >= 1) {
+      txTokens -= 1;
+      return;
+    }
+    await sleep(Math.ceil(((1 - txTokens) / rps) * 1000));
+  }
+}
+
+function acquireTxSlot(): Promise<void> {
+  if (txInflight < TX_CONCURRENCY) {
+    txInflight += 1;
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    txQueue.push(() => {
+      txInflight += 1;
+      resolve();
+    });
+  });
+}
+
+function releaseTxSlot() {
+  txInflight -= 1;
+  const next = txQueue.shift();
+  if (next) next();
+}
+
+function txBackoffMs(attempt: number, retryAfter?: string) {
+  const header = Number(retryAfter);
+  if (Number.isFinite(header) && header > 0) return header * 1_000;
+  return Math.min(4_000, 400 * 2 ** attempt);
+}
+
+/** JSON-RPC call against the transaction-history endpoint, with retries. */
+export async function rpcCallTx<T>(
+  method: string,
+  params: unknown[],
+): Promise<T> {
+  await acquireTxSlot();
+  try {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= TX_MAX_RETRIES; attempt += 1) {
+      await takeTxToken();
+      try {
+        const response = await axios.post<RpcResponse<T>>(
+          getTxRpcUrl(),
+          { jsonrpc: "2.0", id: 1, method, params },
+          { timeout: RPC_TIMEOUT_MS },
+        );
+        const body = response.data;
+        if (body.error) throw new RpcError(body.error.message, body.error.code);
+        return body.result as T;
+      } catch (error) {
+        lastError = error;
+        const status = axios.isAxiosError(error)
+          ? (error.response?.status ?? 503)
+          : error instanceof RpcError
+            ? error.code
+            : undefined;
+        const rateLimited = status === 429 || status === -32005;
+        const retryable =
+          rateLimited || (typeof status === "number" && status >= 500);
+        if (!retryable || attempt === TX_MAX_RETRIES) throw error;
+        const retryAfter = axios.isAxiosError(error)
+          ? (error.response?.headers?.["retry-after"] as string | undefined)
+          : undefined;
+        const wait = txBackoffMs(attempt, retryAfter);
+        if (rateLimited) {
+          // Everyone waits, and the bucket restarts empty.
+          txPausedUntil = Math.max(txPausedUntil, Date.now() + wait);
+          txTokens = 0;
+        } else {
+          await sleep(wait);
+        }
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error("RPC failed");
+  } finally {
+    releaseTxSlot();
+  }
+}
+
+export interface SignatureInfo {
+  signature: string;
+  slot: number;
+  blockTime: number | null;
+  err: unknown | null;
+}
+
+/** Signatures touching `address`, newest first (≤ 1000 per call). */
+export async function getSignaturesForAddress(
+  address: string,
+  options: { limit?: number; before?: string; until?: string } = {},
+): Promise<SignatureInfo[]> {
+  const config: Record<string, unknown> = {
+    limit: Math.max(1, Math.min(1000, options.limit ?? 1000)),
+    commitment: "confirmed",
+  };
+  if (options.before) config.before = options.before;
+  if (options.until) config.until = options.until;
+  const result = await rpcCallTx<SignatureInfo[]>("getSignaturesForAddress", [
+    address,
+    config,
+  ]);
+  return Array.isArray(result) ? result : [];
+}
+
+export interface TokenBalance {
+  accountIndex: number;
+  mint: string;
+  owner?: string;
+  programId?: string;
+  uiTokenAmount: { amount: string; decimals: number };
+}
+
+export interface JsonTransaction {
+  slot: number;
+  blockTime: number | null;
+  version?: number | "legacy";
+  meta: {
+    err: unknown | null;
+    fee: number;
+    preBalances: number[];
+    postBalances: number[];
+    preTokenBalances?: TokenBalance[];
+    postTokenBalances?: TokenBalance[];
+    loadedAddresses?: { writable: string[]; readonly: string[] };
+    logMessages?: string[];
+  } | null;
+  transaction: {
+    signatures: string[];
+    message: {
+      accountKeys: string[];
+      header: { numRequiredSignatures: number };
+      instructions: Array<{ programIdIndex: number; accounts: number[] }>;
+    };
+  };
+}
+
+/** Fetches a transaction in `json` encoding; null when the node has pruned it. */
+export async function getTransaction(
+  signature: string,
+): Promise<JsonTransaction | null> {
+  return rpcCallTx<JsonTransaction | null>("getTransaction", [
+    signature,
+    {
+      encoding: "json",
+      maxSupportedTransactionVersion: 1,
+      commitment: "confirmed",
+    },
+  ]);
+}
+
+/** Fetches many transactions, keeping TX_CONCURRENCY requests in flight. */
+export async function getTransactions(
+  signatures: string[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<Array<JsonTransaction | null>> {
+  let done = 0;
+  return Promise.all(
+    signatures.map(async (signature) => {
+      try {
+        return await getTransaction(signature);
+      } catch {
+        return null;
+      } finally {
+        done += 1;
+        onProgress?.(done, signatures.length);
+      }
+    }),
+  );
+}

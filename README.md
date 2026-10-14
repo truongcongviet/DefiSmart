@@ -18,11 +18,27 @@ cho tầng phân tích).
 - Header điều hướng: `SmartLP`, `Pool`, `Analysis`, ...
 - Màn hình Smart LP dạng bảng/card theo mẫu dashboard
 - Bộ lọc và sort cho danh sách LP wallets
-- Trang Discover (`/`): leaderboard Smart LP tính từ on-chain. Quét 30 pool Top
-  24h của Meteora, gom mọi ví đang cung cấp thanh khoản, cộng dồn PnL, fee, win
-  rate, số pool rồi chấm điểm. Cache 1 giờ trong bộ nhớ và ghi ra
-  `data/smart-lp-leaderboard.json`; `pnpm leaderboard:build` để precompute,
-  `vercel.json` có cron gọi `/api/leaderboard/smart-lp?refresh=1` mỗi ngày.
+- Smart LP (`/`): leaderboard ví LP tính từ on-chain. Quét 40 pool Top và
+  Trending 24h của Meteora (`LP_LEADERBOARD_POOLS`), gom mọi ví đang cung cấp
+  thanh khoản, cộng dồn PnL, fee, win rate, số pool, số lần vào pool trong 24h
+  đầu rồi chấm điểm. Cache 1 giờ trong bộ nhớ và lưu snapshot (xem "Lưu trữ
+  snapshot"); `pnpm leaderboard:build` để precompute, `vercel.json` có cron gọi
+  `/api/leaderboard/smart-lp?refresh=1` mỗi ngày.
+- Smart Traders (`/traders`): leaderboard ví trade meme token tính từ swap
+  on-chain, không dùng API xếp hạng trả phí. Luồng: chọn token đang sôi động
+  (Meteora discovery Trending/New/Top + DexScreener launch feed) → lấy toàn bộ
+  giao dịch của các pair bận nhất qua RPC → đọc chênh lệch số dư của người ký
+  để biết mua/bán, giá và giá trị USD (giá SOL theo giờ từ OHLCV Meteora) →
+  PnL FIFO từng ví từng token → gộp theo ví, chấm điểm, gắn cờ `sniper`, `bot`.
+  Quét tăng dần: mỗi lần chạy chỉ lấy giao dịch mới hơn lần trước.
+  `pnpm traders:build [tokens] [sigsPerPair]` để quét; cron gọi
+  `/api/leaderboard/smart-traders?refresh=1` mỗi ngày.
+- Trang token (`/token/[mint]`): ví lãi nhất trong token đó, thứ hạng vào sớm,
+  thời gian giữ, trạng thái đã thoát hay đang giữ, và danh sách swap gần nhất.
+  Token chưa có trong snapshot được quét tại chỗ (tối đa 1.600 giao dịch).
+- Phân tích ví (`/analysis`): ngoài phần LP có thêm bảng "Token trading" đọc từ
+  chính giao dịch của ví trong 30 ngày (tối đa 600 giao dịch) và tính PnL theo
+  từng token.
 - Watchlist (`/watchlist`): theo dõi ví, xem vị thế mở hoặc đóng trong 7 ngày
   gần nhất qua `/api/wallets/[owner]/activity`. Danh sách lưu trong trình duyệt.
 - Landing cũ chuyển sang `/welcome`.
@@ -46,9 +62,31 @@ LP_DATA_MAX_POOLS=80
 SOLANA_RPC_URL=
 # Số ví tối đa phân tích cho một pool (mặc định 120)
 POOL_LPERS_MAX_WALLETS=120
-# Tùy chọn cho copy-trade dashboard, xem docs/TRADER_DATA_SOURCES.md
-FOMO_API_KEY=
+# Số pool quét cho leaderboard Smart LP (mặc định 40, gồm 40% trending)
+LP_LEADERBOARD_POOLS=40
+# RPC đọc lịch sử giao dịch (swap). Mặc định https://solana-rpc.publicnode.com,
+# miễn phí và không cần key; RPC công khai mặc định của Solana gần như không
+# cho gọi getTransaction.
+SOLANA_TX_RPC_URL=
+# Ngân sách mỗi lần quét Smart Traders
+TRADER_TOKENS=16
+TRADER_PAIRS_PER_TOKEN=2
+TRADER_SIGS_PER_PAIR=1500
+TRADER_MAX_TX=25000
+# Postgres (Neon/Supabase free tier) để lưu snapshot trên Vercel; bỏ trống thì
+# dùng file data/*.json
+DATABASE_URL=
 ```
+
+### Lưu trữ snapshot
+
+Leaderboard và kho swap được lưu qua `src/lib/store/snapshot-store.ts`:
+
+- Không có `DATABASE_URL`: ghi `data/<kind>.json` và giữ 20 bản gần nhất trong
+  `data/history/<kind>/`. Trên Vercel hệ thống file chỉ đọc nên chỉ còn cache
+  trong bộ nhớ và file đã commit cùng mã nguồn.
+- Có `DATABASE_URL`: bảng `snapshots` tự tạo khi chạy lần đầu, mọi lần quét
+  (local, cron, `?refresh=1`) đều ghi vào đó và được giữ 20 bản mỗi loại.
 
 Giới hạn của nguồn on-chain:
 
@@ -59,6 +97,17 @@ Giới hạn của nguồn on-chain:
 - Trang chi tiết pool chỉ liệt kê được ví **đang còn vị thế mở** (account vị thế
   đã đóng không còn trên chain). PnL của mỗi ví trong pool thì tính cả các vị
   thế đã đóng của ví đó.
+
+Giới hạn của phần Smart Traders:
+
+- Chỉ nhận swap mà **người ký giao dịch** nhận hoặc trả token và trả hoặc nhận
+  SOL/USDC/USDT. Bot MEV, swap qua tài khoản PDA và swap token-sang-token bị
+  bỏ qua (chúng cũng không copy được).
+- Pool trending trên PumpSwap có tới 90% giao dịch là bot không chuyển token,
+  nên số swap thu được trên mỗi 1.000 giao dịch thấp; quét tăng dần qua nhiều
+  ngày sẽ tích lũy đủ dữ liệu.
+- Token bán mà không thấy lệnh mua trong cửa sổ quét được loại khỏi PnL
+  (`untrackedSoldTokens`), nên PnL có xu hướng thấp hơn thực tế chứ không cao hơn.
 
 Trong Privy Dashboard, bật hai phương thức đăng nhập `Wallet` và `Email`, bật
 embedded wallet cho cả Solana và Ethereum, và thêm domain local/production của
@@ -72,7 +121,7 @@ Luồng mô phỏng đúng cách LP Agent onboard người dùng:
    - `Solana wallet`: Phantom, Solflare, Backpack, WalletConnect QR (Privy modal, lọc `solana-only`).
    - `Robinhood Chain wallet`: MetaMask, Rabby, WalletConnect QR (Privy modal, lọc `ethereum-only`).
    - `Continue with email`: nhập email, nhận mã 6 số, nhập mã ngay trong modal (headless OTP).
-   Trình duyệt trong ví mobile được nhận diện tự động như ví extension.
+     Trình duyệt trong ví mobile được nhận diện tự động như ví extension.
 2. Ví ký một message không tốn gas (SIWS/SIWE do Privy xử lý).
 3. **Tài khoản gắn với đúng một mạng.** Ví Solana suy ra Solana, ví 0x suy ra Robinhood Chain,
    còn email thì chọn mạng ở bước tiếp theo.
@@ -160,6 +209,23 @@ tự rơi về `data/met_pools_2h_top.json` nếu API không phản hồi.
 
 Trả về metadata pool, tổng hợp và danh sách ví đang trong pool kèm PnL. Thêm
 `refresh=1` để bỏ qua cache 3 phút.
+
+`GET /api/leaderboard/smart-traders`
+
+Snapshot Smart Traders (không kèm swap thô). `refresh=1` chạy quét tăng dần và
+chờ kết quả; `tokens`, `sigs` giới hạn ngân sách cho lần chạy đó. Trả 503 khi
+chưa có snapshot nào.
+
+`GET /api/tokens/[mint]/traders`
+
+Ví đã trade token đó trong 14 ngày: PnL FIFO, số lệnh, thời gian giữ, thứ hạng
+mua sớm, cùng điểm tổng thể nếu ví có trong leaderboard. Token chưa được theo
+dõi sẽ được quét tại chỗ qua DexScreener + RPC, cache 3 phút.
+
+`GET /api/wallets/[owner]/trades?limit=600`
+
+Lịch sử swap của một ví trong 30 ngày đọc trực tiếp từ RPC, PnL theo từng token,
+điểm và cờ. `limit` là số giao dịch tối đa được đọc (50–1000).
 
 `GET /api/lpagent/smart-lp`
 

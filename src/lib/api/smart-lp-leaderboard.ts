@@ -1,9 +1,7 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
-
 import { fetchDiscoveryPools } from "@/lib/api/meteora-pools";
 import { getPoolLpers, type PoolLperSummary } from "@/lib/api/pool-lpers";
 import type { LpProtocol } from "@/lib/api/meteora-lp";
+import { getSnapshotStore } from "@/lib/store/snapshot-store";
 
 /**
  * "Smart LP" leaderboard built purely from on-chain data: scan the top Meteora
@@ -13,7 +11,10 @@ import type { LpProtocol } from "@/lib/api/meteora-lp";
  * Replaces the paid LP Agent smart-lp feed.
  */
 
-const DEFAULT_POOLS = 30;
+const SNAPSHOT_KIND = "smart-lp-leaderboard";
+/** Top pools by 24h volume, plus trending ones (deduplicated). */
+const DEFAULT_POOLS = readDefaultPools();
+const TRENDING_SHARE = 0.4;
 // Pools are scanned one at a time: the public Solana RPC rate-limits
 // getProgramAccounts hard, and the RPC client already paces those calls.
 const POOL_CONCURRENCY = 1;
@@ -21,11 +22,10 @@ const CACHE_TTL_MS = 60 * 60_000;
 const FILE_MAX_AGE_MS = 3 * 60 * 60_000;
 const MIN_POSITIONS = 2;
 
-const SNAPSHOT_PATH = path.join(
-  process.cwd(),
-  "data",
-  "smart-lp-leaderboard.json",
-);
+function readDefaultPools() {
+  const raw = Number(process.env.LP_LEADERBOARD_POOLS);
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 40;
+}
 
 export interface LeaderboardPool {
   address: string;
@@ -50,6 +50,10 @@ export interface LeaderboardWallet {
   closedPositions: number;
   winRate: number;
   avgAgeHours: number;
+  /** Hours between a pool's creation and this wallet's first position in it, averaged. */
+  avgEntryDelayHours: number | null;
+  /** Pools entered within 24h of creation. */
+  earlyEntries: number;
   poolCount: number;
   pools: LeaderboardPool[];
   lastActivity: string | null;
@@ -79,9 +83,14 @@ interface Accumulator {
   closedPositions: number;
   wins: number;
   ageWeighted: number;
+  entryDelaySum: number;
+  entryDelayCount: number;
+  earlyEntries: number;
   pools: LeaderboardPool[];
   lastActivityMs: number;
 }
+
+const EARLY_ENTRY_MS = 24 * 60 * 60_000;
 
 function clamp01(value: number) {
   return Math.max(0, Math.min(1, value));
@@ -111,7 +120,15 @@ function fold(
   acc: Accumulator,
   wallet: PoolLperSummary,
   pool: LeaderboardPool,
+  poolCreatedAtMs: number | null,
 ) {
+  const first = wallet.firstActivity ? Date.parse(wallet.firstActivity) : NaN;
+  if (poolCreatedAtMs && Number.isFinite(first) && first >= poolCreatedAtMs) {
+    const delay = first - poolCreatedAtMs;
+    acc.entryDelaySum += delay;
+    acc.entryDelayCount += 1;
+    if (delay <= EARLY_ENTRY_MS) acc.earlyEntries += 1;
+  }
   acc.pnlUsd += wallet.pnlUsd;
   acc.pnlNative += wallet.pnlNative;
   acc.feeUsd += wallet.feeUsd;
@@ -139,23 +156,41 @@ function score(
   const pnl = acc.pnlNative > 0 ? clamp01(acc.pnlNative / maxPnlNative) : 0;
   const fee = clamp01(acc.feeNative / maxFeeNative);
   const breadth = clamp01(acc.pools.length / 4);
+  const early = clamp01(acc.earlyEntries / Math.max(1, acc.pools.length));
   const raw =
     0.35 * winRate * (0.5 + 0.5 * confidence) +
-    0.35 * Math.sqrt(pnl) +
+    0.3 * Math.sqrt(pnl) +
     0.15 * Math.sqrt(fee) +
-    0.15 * breadth;
+    0.1 * breadth +
+    0.1 * early;
   return Math.round(raw * 100);
 }
 
 async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
   const warnings: string[] = [];
-  const page = await fetchDiscoveryPools({
-    timeframe: "24h",
-    category: "top",
-    pageSize: poolsRequested,
-  });
+  const trendingCount = Math.round(poolsRequested * TRENDING_SHARE);
+  const [top, trending] = await Promise.all([
+    fetchDiscoveryPools({
+      timeframe: "24h",
+      category: "top",
+      pageSize: poolsRequested,
+    }),
+    trendingCount > 0
+      ? fetchDiscoveryPools({
+          timeframe: "24h",
+          category: "trending",
+          pageSize: trendingCount,
+        }).catch((error: unknown) => {
+          warnings.push(
+            `trending feed: ${error instanceof Error ? error.message : "failed"}`,
+          );
+          return { data: [] as Record<string, unknown>[] };
+        })
+      : Promise.resolve({ data: [] as Record<string, unknown>[] }),
+  ]);
 
-  const pools = page.data
+  const seen = new Set<string>();
+  const pools = [...trending.data, ...top.data]
     .map((item) => ({
       address: typeof item.pool_address === "string" ? item.pool_address : "",
       name: typeof item.name === "string" ? item.name : "",
@@ -163,7 +198,12 @@ async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
         ? "meteora_damm_v2"
         : "meteora_dlmm") as LpProtocol,
     }))
-    .filter((item) => item.address);
+    .filter((item) => {
+      if (!item.address || seen.has(item.address)) return false;
+      seen.add(item.address);
+      return true;
+    })
+    .slice(0, poolsRequested);
 
   const accounts = new Map<string, Accumulator>();
   let poolsFailed = 0;
@@ -195,10 +235,13 @@ async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
           closedPositions: 0,
           wins: 0,
           ageWeighted: 0,
+          entryDelaySum: 0,
+          entryDelayCount: 0,
+          earlyEntries: 0,
           pools: [],
           lastActivityMs: 0,
         };
-        fold(acc, wallet, entry);
+        fold(acc, wallet, entry, result.pool.createdAtMs);
         accounts.set(wallet.owner, acc);
       }
     } catch (error) {
@@ -236,6 +279,11 @@ async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
       closedPositions: acc.closedPositions,
       winRate: acc.closedPositions > 0 ? acc.wins / acc.closedPositions : 0,
       avgAgeHours: acc.positions > 0 ? acc.ageWeighted / acc.positions : 0,
+      avgEntryDelayHours:
+        acc.entryDelayCount > 0
+          ? acc.entryDelaySum / acc.entryDelayCount / 3_600_000
+          : null,
+      earlyEntries: acc.earlyEntries,
       poolCount: acc.pools.length,
       pools: [...acc.pools].sort((a, b) => b.pnlNative - a.pnlNative),
       lastActivity: acc.lastActivityMs
@@ -258,10 +306,10 @@ async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
 
 async function readSnapshotFile(): Promise<Leaderboard | null> {
   try {
-    const raw = await fs.readFile(SNAPSHOT_PATH, "utf8");
-    const parsed = JSON.parse(raw) as Leaderboard;
-    if (!parsed || !Array.isArray(parsed.wallets)) return null;
-    return parsed;
+    const stored = await getSnapshotStore().load<Leaderboard>(SNAPSHOT_KIND);
+    const board = stored?.payload;
+    if (!board || !Array.isArray(board.wallets)) return null;
+    return board;
   } catch {
     return null;
   }
@@ -269,10 +317,9 @@ async function readSnapshotFile(): Promise<Leaderboard | null> {
 
 async function writeSnapshotFile(board: Leaderboard) {
   try {
-    await fs.mkdir(path.dirname(SNAPSHOT_PATH), { recursive: true });
-    await fs.writeFile(SNAPSHOT_PATH, JSON.stringify(board));
+    await getSnapshotStore().save(SNAPSHOT_KIND, board, board.generatedAt);
   } catch {
-    // read-only filesystem (e.g. Vercel); memory cache still applies
+    // storage unavailable; memory cache still applies
   }
 }
 
@@ -296,7 +343,13 @@ export async function getSmartLpLeaderboard(
     }
   }
 
-  if (inflight) return inflight;
+  if (inflight) {
+    // A rebuild is already running: keep serving whatever we have.
+    if (memory) return memory.board;
+    const file = await readSnapshotFile();
+    if (file) return file;
+    return inflight;
+  }
   inflight = buildLeaderboard(options.pools ?? DEFAULT_POOLS)
     .then(async (board) => {
       memory = { board, expiresAt: Date.now() + CACHE_TTL_MS };

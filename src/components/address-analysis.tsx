@@ -3,6 +3,7 @@
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { Copy, Loader2, Search } from "lucide-react";
 
+import { WalletTradesPanel } from "@/components/wallet-trades-panel";
 import { cn } from "@/lib/utils";
 
 const WALLET_REGEX = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
@@ -2446,6 +2447,8 @@ export function AddressAnalysis({
           </div>
         )}
       </section>
+
+      {analyzedOwner && <WalletTradesPanel owner={analyzedOwner} />}
 
       {analyzedOwner ? (
         <section className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">

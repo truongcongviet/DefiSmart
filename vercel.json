@@ -1,5 +1,12 @@
 {
   "crons": [
-    { "path": "/api/leaderboard/smart-lp?refresh=1", "schedule": "0 3 * * *" }
+    {
+      "path": "/api/leaderboard/smart-lp?refresh=1",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/leaderboard/smart-traders?refresh=1",
+      "schedule": "30 3 * * *"
+    }
   ]
 }

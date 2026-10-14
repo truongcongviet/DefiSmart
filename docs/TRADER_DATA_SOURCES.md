@@ -1,88 +1,60 @@
 # Trader data sources
 
-The copy-trading dashboard separates trader discovery from independent
-on-chain verification. A provider leaderboard is useful for finding candidates,
-but it is not trusted as final performance data.
+Smart Traders runs entirely on free, keyless sources. There is no ranking
+provider: every number is derived from the wallets' own transactions.
 
-## Current integration
+## Pipeline
 
-### FOMO API (optional discovery provider)
+1. **Candidate tokens** — Meteora pool discovery (`trending`, `new`, `top`,
+   24h) and DexScreener's launch feed (`/token-profiles/latest/v1`,
+   `/token-boosts/top/v1`). Each mint is resolved with
+   `/tokens/v1/solana/{mints}` and kept when liquidity ≥ $15k, 24h volume ≥
+   $30k and age ≤ 45 days. The busiest `TRADER_PAIRS_PER_TOKEN` SOL/USDC pairs
+   per token are scanned (`src/lib/traders/token-discovery.ts`).
+2. **Transactions** — `getSignaturesForAddress` on each pair, newest first,
+   stopping at the previous run's cursor or at the 14-day window, then
+   `getTransaction` (json encoding, 8 in flight). Default endpoint
+   `https://solana-rpc.publicnode.com`; override with `SOLANA_TX_RPC_URL`.
+   The default Solana public RPC rejects nearly every `getTransaction`.
+3. **Swap extraction** (`src/lib/traders/swaps.ts`) — for each signer, the net
+   change of the target mint from pre/post token balances, and the net change
+   of SOL (lamports + wSOL), USDC and USDT. Token in and quote out is a buy,
+   the reverse a sell. Dust, rent-only moves, transfers, LP operations and bot
+   transactions where the signer never touches the token are dropped.
+4. **Pricing** — SOL/USD at trade time from hourly candles of Meteora's main
+   SOL-USDC DLMM pool (`/pools/{pool}/ohlcv?timeframe=1h`); stables at $1;
+   current token prices from DexScreener for the unrealized part.
+5. **PnL** (`src/lib/traders/pnl.ts`) — FIFO lots per wallet per token.
+   Realized PnL only on lots with a known cost; sells beyond the visible
+   inventory are counted in `untrackedSoldTokens` and excluded. Holding time is
+   token-weighted between buy and sell. `earlyRank` is the wallet's position
+   among sampled buyers; `entryDelaySec` is measured from the pair's creation.
+6. **Scoring** — per wallet: `0.35·winRate·(0.5+0.5·confidence) + 0.30·√pnl +
+0.15·roi + 0.10·breadth + 0.10·early`, ×100, minus 15 for `sniper` (≥ 50 %
+   of tokens bought within 60 s of launch) and 20 for `bot` (≥ 300 trades or
+   median hold < 2 min). Wallets need ≥ 2 tokens to be ranked.
 
-- Provider: `https://fomoapi.io`
-- Endpoint: `GET /v2/leaderboard/{window}`
-- Windows: `24h`, `7d`, `30d`, `all`
-- Authentication: server-side Bearer API key
-- Important: this is an independent, unofficial API. It is not operated or
-  endorsed by fomo.family.
+## Storage and refresh
 
-Add the key to `.env`:
+The snapshot (`smart-traders`) keeps tokens, swaps and per-pair cursors in the
+snapshot store (`data/smart-traders.json` or Postgres via `DATABASE_URL`).
+`pnpm traders:build` and the daily cron run incrementally; a token that drops
+out of discovery keeps its swaps until they age out of the window.
 
-```bash
-FOMO_API_KEY=your_server_side_key
-```
+## Rate limits observed (Oct 2026)
 
-The key must never use a `NEXT_PUBLIC_` prefix. The browser calls the local
-`/api/traders/leaderboard` route, and only the server calls FOMO API.
+- publicnode RPC: 300 `getTransaction` in 9.5 s at concurrency 8, no 429;
+  `getProgramAccounts` disabled (HTTP 410).
+- Solana public RPC: ~5 `getTransaction` per window, then
+  "Too many requests for a specific RPC call".
+- DexScreener: ~300 req/min (pair endpoints), 60 req/min (profiles/boosts).
+- Jupiter `lite-api.jup.ag/price/v3`: 0.5 RPS keyless.
+- Meteora data APIs: 300 req/10 s.
 
-If the key is missing or the provider fails, the dashboard returns an explicit
-preview dataset. Preview values are synthetic and must not be used for trading.
+## Not used, and why
 
-### GMGN
-
-GMGN currently documents a Trading API, but its official Q&A says there is no
-public Data API. Data crawling may be allowlisted for partners who bring trading
-volume or users. Therefore, GMGN ranking endpoints must not be scraped or used
-as a production dependency without a commercial agreement and IP whitelist.
-
-Official references:
-
-- https://docs.gmgn.ai/index/cooperation-api-integrate-gmgn-solana-trading-api
-- https://docs.gmgn.ai/index/q-a
-
-## Required verification layer
-
-Before a trader can receive `onchain-verified` status, the backend should:
-
-1. Resolve and store the trader's wallet address and source identity.
-2. Backfill the complete wallet and token-account history with Helius
-   `getTransactionsForAddress`.
-3. Normalize swaps, transfers, deposits, withdrawals, fees, and failed
-   transactions into an internal ledger.
-4. Price every trade at execution time with a trusted price/liquidity source.
-5. Recalculate realized and unrealized PnL instead of trusting provider PnL.
-6. Compute win rate, profit factor, max drawdown, holding time, liquidity, and
-   expected follower slippage.
-7. Flag transfers, concentrated wins, suspected insider/sniper activity, and
-   wallets whose performance cannot be reproduced by a follower.
-
-Suggested sources:
-
-- Helius historical transactions and streams: https://www.helius.dev/historical-data
-- Helius Solana data APIs: https://www.helius.dev/docs/getting-data
-- Birdeye wallet PnL/net worth API: https://docs.birdeye.so/reference/get-wallet-v2-net-worth-details
-- DEX Screener token and pair API: https://docs.dexscreener.com/api/reference
-
-## Copy score
-
-Do not rank wallets only by absolute PnL. The production score should include:
-
-- realized PnL and ROI over 7/30/90 days;
-- win rate with a minimum sample size;
-- profit factor and return consistency;
-- max drawdown and losing streak;
-- median holding time and signal latency;
-- traded-pair liquidity and follower slippage;
-- position concentration and wallet balance;
-- deposit/withdrawal-adjusted returns;
-- manipulation, insider, sniper, and transfer flags.
-
-The UI intentionally leaves copy score and derived risk metrics blank for live
-FOMO rows until this verification pipeline exists. A source-level verification
-badge is not equivalent to an on-chain-verified badge.
-
-## Execution safety
-
-The current dashboard creates only an in-memory draft. It does not sign or send
-transactions. Enabling execution later should require explicit user consent,
-position sizing, slippage limits, daily loss limits, idempotency, retry policy,
-and a kill switch.
+- **FOMO API / GMGN** rankings: paid or no public data API; replaced by the
+  on-chain pipeline above.
+- **Helius Enhanced Transactions**: would cut the transaction parsing cost
+  (100 parsed swaps per call) but needs an account; the pipeline works
+  without it. Setting `SOLANA_TX_RPC_URL` to a Helius RPC URL also works.

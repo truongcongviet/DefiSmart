@@ -10,7 +10,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { label: "Discover", href: "/" },
+  { label: "Smart LP", href: "/" },
+  { label: "Smart Traders", href: "/traders" },
   { label: "Pools", href: "/pool" },
   { label: "Analysis", href: "/analysis" },
   { label: "Watchlist", href: "/watchlist" },

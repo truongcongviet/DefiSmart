@@ -6,7 +6,6 @@ import { z } from "zod";
  */
 const serverEnvSchema = z.object({
   LP_DATA_MAX_POOLS: z.coerce.number().int().positive().optional(),
-  FOMO_API_KEY: z.string().optional(),
 });
 
 export function getServerEnv() {
