@@ -205,6 +205,7 @@ export async function getTokenTraders(
         };
       },
       1,
+      snapshot.walletScans ?? {},
     );
     for (const w of wallets) {
       context.set(w.owner, {

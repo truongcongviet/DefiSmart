@@ -49,6 +49,7 @@ interface BoardWallet {
   flags: string[];
   tokens: BoardTokenSummary[];
   lastTradeAt: string | null;
+  coverage?: "full" | "pools";
 }
 
 interface BoardToken {
@@ -509,6 +510,14 @@ export function SmartTradersBoard() {
                     >
                       {shortAddress(wallet.owner)}
                     </Link>
+                    {wallet.coverage === "full" && (
+                      <span
+                        className="bg-accent-soft text-accent ml-2 inline-flex h-5 items-center rounded px-1.5 align-middle text-[10px] font-medium uppercase"
+                        title="Built from the wallet's own 30-day history (all tokens)"
+                      >
+                        Full
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <ScoreBadge score={wallet.score} />

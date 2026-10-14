@@ -18,6 +18,7 @@ import {
 import { getSolPriceSeries, type SolPriceSeries } from "./prices";
 import { extractSwaps, WSOL_MINT, type SwapEvent } from "./swaps";
 import { discoverTokens, type TrackedToken } from "./token-discovery";
+import { priceTokens, scanWallet, summarizeSwaps } from "./wallet-trades";
 
 /**
  * Smart Traders leaderboard, built purely from on-chain swaps:
@@ -44,6 +45,10 @@ export interface BuildBudget {
   pairsPerToken: number;
   sigsPerPair: number;
   maxTx: number;
+  /** Wallets whose own history is read in full per run. */
+  wallets: number;
+  /** Transactions read per expanded wallet. */
+  walletTx: number;
 }
 
 export function readBudget(overrides: Partial<BuildBudget> = {}): BuildBudget {
@@ -56,6 +61,8 @@ export function readBudget(overrides: Partial<BuildBudget> = {}): BuildBudget {
     pairsPerToken: overrides.pairsPerToken ?? env("TRADER_PAIRS_PER_TOKEN", 2),
     sigsPerPair: overrides.sigsPerPair ?? env("TRADER_SIGS_PER_PAIR", 1500),
     maxTx: overrides.maxTx ?? env("TRADER_MAX_TX", 25_000),
+    wallets: overrides.wallets ?? env("TRADER_WALLETS", 80),
+    walletTx: overrides.walletTx ?? env("TRADER_WALLET_TX", 400),
   };
 }
 
@@ -71,6 +78,13 @@ export interface TrackedTokenState extends TrackedToken {
   swaps: number;
 }
 
+export interface ExpandedWallet {
+  summary: TraderWallet;
+  scannedAt: string;
+  txScanned: number;
+  truncated: boolean;
+}
+
 /** Full snapshot (stored). */
 export interface TraderSnapshot {
   generatedAt: string;
@@ -78,6 +92,8 @@ export interface TraderSnapshot {
   tokens: TrackedTokenState[];
   swaps: SwapEvent[];
   cursors: Record<string, PairCursor>;
+  /** Wallets expanded from their own history, keyed by owner. */
+  walletScans: Record<string, ExpandedWallet>;
   stats: BuildStats;
   warnings: string[];
 }
@@ -86,6 +102,7 @@ export interface BuildStats {
   tokensRequested: number;
   tokensScanned: number;
   tokensFailed: number;
+  walletsExpanded: number;
   pairsScanned: number;
   txFetched: number;
   swapsTotal: number;
@@ -204,6 +221,55 @@ export async function scanToken(
   return { swaps, cursors: nextCursors, txFetched, pairsScanned };
 }
 
+const WALLET_SCAN_MAX_AGE_MS = 7 * 86_400_000;
+const WALLET_RESCAN_AFTER_MS = 2 * 86_400_000;
+const CANDIDATES_PER_TOKEN = 12;
+
+/**
+ * Wallets worth reading in full: per token, the top realized-PnL wallets that
+ * actually sold something, plus the biggest unrealized winners. Wallets
+ * scanned recently are skipped; stale ones are refreshed first.
+ */
+function pickCandidates(
+  grouped: Map<string, TokenLedgerValued[]>,
+  scans: Record<string, ExpandedWallet>,
+  limit: number,
+): string[] {
+  const byToken = new Map<
+    string,
+    Array<{ owner: string; pnl: number; sold: boolean }>
+  >();
+  for (const [owner, ledgers] of grouped) {
+    for (const ledger of ledgers) {
+      const list = byToken.get(ledger.mint) ?? [];
+      list.push({ owner, pnl: ledger.totalPnlUsd, sold: ledger.sells > 0 });
+      byToken.set(ledger.mint, list);
+    }
+  }
+  const picked = new Map<string, number>();
+  for (const list of byToken.values()) {
+    const sorted = list
+      .filter((l) => l.pnl > 5)
+      .sort((a, b) => Number(b.sold) - Number(a.sold) || b.pnl - a.pnl)
+      .slice(0, CANDIDATES_PER_TOKEN);
+    for (const item of sorted) {
+      picked.set(item.owner, (picked.get(item.owner) ?? 0) + item.pnl);
+    }
+  }
+  const now = Date.now();
+  const fresh = (owner: string) => {
+    const scan = scans[owner];
+    return scan
+      ? now - Date.parse(scan.scannedAt) < WALLET_RESCAN_AFTER_MS
+      : false;
+  };
+  const candidates = Array.from(picked.entries())
+    .filter(([owner]) => !fresh(owner))
+    .sort((a, b) => b[1] - a[1])
+    .map(([owner]) => owner);
+  return candidates.slice(0, limit);
+}
+
 function repriceSwap(swap: SwapEvent, series: SolPriceSeries): SwapEvent {
   if (swap.quoteMint !== WSOL_MINT || swap.tokenAmount <= 0) return swap;
   const quoteUsd = swap.quoteAmount * series.at(swap.blockTime);
@@ -246,17 +312,26 @@ export function rankWallets(
   grouped: Map<string, TokenLedgerValued[]>,
   info: (mint: string) => { symbol: string; name: string; logo: string | null },
   minTokens = MIN_TOKENS,
+  expanded: Record<string, ExpandedWallet> = {},
 ): { wallets: TraderWallet[]; seen: number } {
   const rows: TraderWallet[] = [];
-  for (const [owner, ledgers] of grouped) {
-    const row = summarizeWallet(owner, ledgers, info);
+  const owners = new Set<string>(grouped.keys());
+  for (const owner of Object.keys(expanded)) owners.add(owner);
+  for (const owner of owners) {
+    const full = expanded[owner];
+    const row = full
+      ? { ...full.summary, coverage: "full" as const }
+      : {
+          ...summarizeWallet(owner, grouped.get(owner) ?? [], info),
+          coverage: "pools" as const,
+        };
     if (row.tokensTraded < minTokens) continue;
     rows.push(row);
   }
   const maxPnl = Math.max(1e-9, ...rows.map((r) => r.totalPnlUsd));
   for (const row of rows) row.score = scoreTrader(row, maxPnl);
   rows.sort((a, b) => b.score - a.score || b.totalPnlUsd - a.totalPnlUsd);
-  return { wallets: rows, seen: grouped.size };
+  return { wallets: rows, seen: owners.size };
 }
 
 export function toBoard(snapshot: TraderSnapshot): TraderBoard {
@@ -276,7 +351,12 @@ export function toBoard(snapshot: TraderSnapshot): TraderBoard {
       logo: token?.logo ?? null,
     };
   };
-  const { wallets, seen } = rankWallets(grouped, info);
+  const { wallets, seen } = rankWallets(
+    grouped,
+    info,
+    MIN_TOKENS,
+    snapshot.walletScans ?? {},
+  );
 
   const tradersPerToken = new Map<string, number>();
   for (const ledgers of grouped.values()) {
@@ -417,6 +497,54 @@ export async function buildTraderSnapshot(
     );
   }
 
+  // Wallet expansion: the best wallets of each token get their own history
+  // read in full, so their PnL covers every token they traded, not just the
+  // ones we track.
+  const walletScans: Record<string, ExpandedWallet> = {};
+  for (const [owner, scan] of Object.entries(previous?.walletScans ?? {})) {
+    if (Date.now() - Date.parse(scan.scannedAt) < WALLET_SCAN_MAX_AGE_MS) {
+      walletScans[owner] = scan;
+    }
+  }
+  let walletsExpanded = 0;
+  if (budget.wallets > 0) {
+    const grouped = ledgersByWallet(
+      swaps,
+      new Map(
+        Array.from(tokens.values()).map((t) => [
+          t.mint,
+          { priceUsd: t.priceUsd, createdAt: t.createdAt },
+        ]),
+      ),
+    );
+    const candidates = pickCandidates(grouped, walletScans, budget.wallets);
+    log(`expanding ${candidates.length} wallets (${budget.walletTx} tx each)`);
+    for (const owner of candidates) {
+      try {
+        const scan = await scanWallet(owner, budget.walletTx);
+        txFetched += scan.txScanned;
+        const prices = await priceTokens(scan.swaps.map((s) => s.mint));
+        const summary = summarizeSwaps(owner, scan.swaps, prices);
+        walletScans[owner] = {
+          summary,
+          scannedAt: new Date().toISOString(),
+          txScanned: scan.txScanned,
+          truncated: scan.truncated,
+        };
+        walletsExpanded += 1;
+        if (walletsExpanded % 10 === 0) {
+          log(
+            `  ${walletsExpanded}/${candidates.length} wallets expanded (total tx ${txFetched})`,
+          );
+        }
+      } catch (error) {
+        warnings.push(
+          `${owner.slice(0, 8)}: ${error instanceof Error ? error.message : "wallet scan failed"}`,
+        );
+      }
+    }
+  }
+
   // Recount swaps per token and drop tokens that no longer have any.
   const perToken = new Map<string, number>();
   for (const swap of swaps)
@@ -440,10 +568,12 @@ export async function buildTraderSnapshot(
     tokens: tokenList,
     swaps: swaps.filter((s) => keep.has(s.mint)),
     cursors,
+    walletScans,
     stats: {
       tokensRequested: discovered.length,
       tokensScanned,
       tokensFailed,
+      walletsExpanded,
       pairsScanned,
       txFetched,
       swapsTotal: swaps.length,

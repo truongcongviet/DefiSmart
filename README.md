@@ -30,7 +30,11 @@ cho tầng phân tích).
   giao dịch của các pair bận nhất qua RPC → đọc chênh lệch số dư của người ký
   để biết mua/bán, giá và giá trị USD (giá SOL theo giờ từ OHLCV Meteora) →
   PnL FIFO từng ví từng token → gộp theo ví, chấm điểm, gắn cờ `sniper`, `bot`.
-  Quét tăng dần: mỗi lần chạy chỉ lấy giao dịch mới hơn lần trước.
+  Quét tăng dần: mỗi lần chạy chỉ lấy giao dịch mới hơn lần trước. Bước mở
+  rộng theo ví: các ví lãi nhất ở mỗi token được đọc toàn bộ lịch sử 30 ngày
+  của chính ví (`TRADER_WALLETS` ví, `TRADER_WALLET_TX` giao dịch mỗi ví) nên
+  PnL của chúng phủ mọi token đã trade, không chỉ token đang theo dõi; những ví
+  này đánh dấu coverage `full`, số còn lại là `pools`.
   `pnpm traders:build [tokens] [sigsPerPair]` để quét; cron gọi
   `/api/leaderboard/smart-traders?refresh=1` mỗi ngày.
 - Trang token (`/token/[mint]`): ví lãi nhất trong token đó, thứ hạng vào sớm,
@@ -73,6 +77,9 @@ TRADER_TOKENS=16
 TRADER_PAIRS_PER_TOKEN=2
 TRADER_SIGS_PER_PAIR=1500
 TRADER_MAX_TX=25000
+# Wallets read in full per run (their own 30-day history) and tx per wallet
+TRADER_WALLETS=80
+TRADER_WALLET_TX=400
 # Postgres (Neon/Supabase free tier) để lưu snapshot trên Vercel; bỏ trống thì
 # dùng file data/*.json
 DATABASE_URL=

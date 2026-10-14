@@ -218,6 +218,11 @@ export interface TraderWallet {
   tokens: TraderTokenSummary[];
   firstTradeAt: string | null;
   lastTradeAt: string | null;
+  /**
+   * "full": built from the wallet's own transaction history (all tokens).
+   * "pools": only the swaps seen while scanning tracked pools.
+   */
+  coverage?: "full" | "pools";
 }
 
 export type TraderFlag = "sniper" | "bot" | "single-token" | "holding";

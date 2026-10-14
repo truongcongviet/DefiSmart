@@ -1,38 +1,44 @@
 import { getSignaturesForAddress, getTransactions } from "@/lib/api/solana-rpc";
 
-import { fetchTokenPrices } from "./dexscreener";
+import { fetchTokenPrices, type DexPair } from "./dexscreener";
 import {
   buildLedgers,
   scoreTrader,
   summarizeWallet,
   valueLedger,
+  type TokenInfoLite,
   type TraderWallet,
 } from "./pnl";
 import { getSolPriceSeries } from "./prices";
 import { extractSwaps, type SwapEvent } from "./swaps";
 
 /**
- * On-demand trading history of one wallet: its recent transactions, turned
- * into swaps, into per-token FIFO PnL, marked to market with DexScreener
- * prices. Any Solana wallet, no indexer, no key.
+ * Trading history of one wallet from its own transactions: swaps, per-token
+ * FIFO PnL, marked to market with DexScreener prices. Any Solana wallet, no
+ * indexer, no key. Used by the analysis page and by the leaderboard's
+ * wallet-expansion step.
  */
 
 const CACHE_TTL_MS = 5 * 60_000;
 const CACHE_MAX = 64;
-const WINDOW_DAYS = 30;
+export const WALLET_WINDOW_DAYS = 30;
 const DEFAULT_LIMIT = 600;
 const MAX_LIMIT = 1000;
 const MAX_PRICED_MINTS = 90;
 
-export interface WalletTradesResult {
+export interface WalletScan {
   owner: string;
-  generatedAt: string;
-  windowDays: number;
-  /** Transactions inspected. */
+  swaps: SwapEvent[];
+  /** Transactions inspected (failed ones included). */
   txScanned: number;
-  /** True when the wallet has more history than the limit covered. */
+  /** True when the window holds more transactions than `limit`. */
   truncated: boolean;
   oldestScannedAt: string | null;
+}
+
+export interface WalletTradesResult extends Omit<WalletScan, "swaps"> {
+  generatedAt: string;
+  windowDays: number;
   summary: TraderWallet;
   recent: SwapEvent[];
 }
@@ -43,15 +49,14 @@ const cache = new Map<
 >();
 const inflight = new Map<string, Promise<WalletTradesResult>>();
 
-async function build(
+/** Reads up to `limit` transactions of the wallet and turns them into swaps. */
+export async function scanWallet(
   owner: string,
   limit: number,
-): Promise<WalletTradesResult> {
+): Promise<WalletScan> {
   const now = Math.floor(Date.now() / 1000);
-  const since = now - WINDOW_DAYS * 86_400;
+  const since = now - WALLET_WINDOW_DAYS * 86_400;
 
-  // `limit` counts transactions inspected (failed ones included); the wallet
-  // is "truncated" when the window holds more than that.
   const signatures: string[] = [];
   let before: string | undefined;
   let inspected = 0;
@@ -87,50 +92,79 @@ async function build(
     swaps.push(...events.filter((e) => e.wallet === owner));
   }
 
-  const mints = Array.from(new Set(swaps.map((s) => s.mint)));
-  const priced = await fetchTokenPrices(mints.slice(0, MAX_PRICED_MINTS)).catch(
-    () =>
-      new Map<
-        string,
-        {
-          priceUsd: number;
-          pair: {
-            baseToken: { symbol: string; name: string };
-            info?: { imageUrl?: string };
-            pairCreatedAt?: number;
-          };
-        }
-      >(),
-  );
-  const created: Record<string, number | null> = {};
-  for (const mint of mints) {
-    const pair = priced.get(mint)?.pair;
-    created[mint] = pair?.pairCreatedAt
-      ? Math.floor(pair.pairCreatedAt / 1000)
-      : null;
-  }
-  const ledgers = buildLedgers(swaps, { pairCreatedAt: created }).map(
-    (ledger) => valueLedger(ledger, priced.get(ledger.mint)?.priceUsd ?? null),
-  );
-  const summary = summarizeWallet(owner, ledgers, (mint) => {
-    const pair = priced.get(mint)?.pair;
-    return {
-      symbol: pair?.baseToken.symbol?.trim() || mint.slice(0, 4),
-      name: pair?.baseToken.name?.trim() || mint,
-      logo: pair?.info?.imageUrl ?? null,
-    };
-  });
-  summary.score = scoreTrader(summary, Math.max(1e-9, summary.totalPnlUsd));
-
   return {
     owner,
-    generatedAt: new Date().toISOString(),
-    windowDays: WINDOW_DAYS,
+    swaps,
     txScanned: txs.length,
     truncated,
     oldestScannedAt: oldest ? new Date(oldest * 1000).toISOString() : null,
+  };
+}
+
+export interface PricedTokens {
+  priceUsd: (mint: string) => number | null;
+  createdAt: (mint: string) => number | null;
+  info: (mint: string) => TokenInfoLite;
+}
+
+/** Current prices and metadata for a set of mints (DexScreener). */
+export async function priceTokens(mints: string[]): Promise<PricedTokens> {
+  const unique = Array.from(new Set(mints)).slice(0, MAX_PRICED_MINTS);
+  const priced = await fetchTokenPrices(unique).catch(
+    () => new Map<string, { priceUsd: number; pair: DexPair }>(),
+  );
+  return {
+    priceUsd: (mint) => priced.get(mint)?.priceUsd ?? null,
+    createdAt: (mint) => {
+      const created = priced.get(mint)?.pair.pairCreatedAt;
+      return created ? Math.floor(created / 1000) : null;
+    },
+    info: (mint) => {
+      const pair = priced.get(mint)?.pair;
+      return {
+        symbol: pair?.baseToken.symbol?.trim() || mint.slice(0, 4),
+        name: pair?.baseToken.name?.trim() || mint,
+        logo: pair?.info?.imageUrl ?? null,
+      };
+    },
+  };
+}
+
+/** Per-wallet summary from its swaps, valued at current prices. */
+export function summarizeSwaps(
+  owner: string,
+  swaps: SwapEvent[],
+  prices: PricedTokens,
+): TraderWallet {
+  const mints = Array.from(new Set(swaps.map((s) => s.mint)));
+  const created: Record<string, number | null> = {};
+  for (const mint of mints) created[mint] = prices.createdAt(mint);
+  const ledgers = buildLedgers(swaps, { pairCreatedAt: created }).map(
+    (ledger) => valueLedger(ledger, prices.priceUsd(ledger.mint)),
+  );
+  const summary = summarizeWallet(owner, ledgers, prices.info);
+  summary.score = scoreTrader(summary, Math.max(1e-9, summary.totalPnlUsd));
+  return summary;
+}
+
+async function build(
+  owner: string,
+  limit: number,
+): Promise<WalletTradesResult> {
+  const scan = await scanWallet(owner, limit);
+  const prices = await priceTokens(scan.swaps.map((s) => s.mint));
+  const summary = summarizeSwaps(owner, scan.swaps, prices);
+  return {
+    owner,
+    generatedAt: new Date().toISOString(),
+    windowDays: WALLET_WINDOW_DAYS,
+    txScanned: scan.txScanned,
+    truncated: scan.truncated,
+    oldestScannedAt: scan.oldestScannedAt,
     summary,
-    recent: [...swaps].sort((a, b) => b.blockTime - a.blockTime).slice(0, 60),
+    recent: [...scan.swaps]
+      .sort((a, b) => b.blockTime - a.blockTime)
+      .slice(0, 60),
   };
 }
 

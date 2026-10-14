@@ -34,6 +34,14 @@ provider: every number is derived from the wallets' own transactions.
    of tokens bought within 60 s of launch) and 20 for `bot` (≥ 300 trades or
    median hold < 2 min). Wallets need ≥ 2 tokens to be ranked.
 
+7. **Wallet expansion** — per token, the top realized-PnL wallets that sold
+   (≤ 12 per token) have their own last-30-day history read in full
+   (`scanWallet`, `TRADER_WALLETS` × `TRADER_WALLET_TX` transactions). Their
+   leaderboard row is rebuilt from that history (coverage `full`) and covers
+   every token they traded; other wallets keep the pool-derived row
+   (coverage `pools`). Expanded wallets are refreshed after 2 days and
+   dropped after 7.
+
 ## Storage and refresh
 
 The snapshot (`smart-traders`) keeps tokens, swaps and per-pair cursors in the
