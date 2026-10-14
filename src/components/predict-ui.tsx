@@ -210,11 +210,12 @@ export function Avatar({
 }) {
   const [broken, setBroken] = useState(false);
   const className = `h-${size} w-${size}`;
-  if (src && !broken) {
+  const resolved = imageSrc(src);
+  if (resolved && !broken) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={src}
+        src={resolved}
         alt=""
         onError={() => setBroken(true)}
         className={cn(
@@ -250,6 +251,28 @@ export interface ThemedLogo {
   dark?: string;
 }
 
+/**
+ * Hosts that some ISPs block by DNS (polymarket.com and friends) are loaded
+ * through our own image proxy; everything else is used as is.
+ */
+const PROXIED_HOSTS = [
+  "assets.perpetuals.polymarket.com",
+  "polymarket-upload.s3.us-east-2.amazonaws.com",
+];
+
+export function imageSrc(url: string | null | undefined): string | undefined {
+  if (!url) return undefined;
+  try {
+    const parsed = new URL(url);
+    if (PROXIED_HOSTS.includes(parsed.hostname)) {
+      return `/api/logo?u=${encodeURIComponent(url)}`;
+    }
+  } catch {
+    return url;
+  }
+  return url;
+}
+
 /** Instrument logo with light/dark variants; falls back to the symbol's first letter. */
 export function MarketLogo({
   logo,
@@ -271,8 +294,8 @@ export function MarketLogo({
   }[size];
   const label = symbol.replace(/-USD$/i, "");
   if (logo?.dark || logo?.light) {
-    const dark = logo.dark ?? logo.light;
-    const light = logo.light ?? logo.dark;
+    const dark = imageSrc(logo.dark ?? logo.light);
+    const light = imageSrc(logo.light ?? logo.dark);
     return (
       <span
         className={cn(

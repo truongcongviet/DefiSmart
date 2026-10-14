@@ -21,6 +21,7 @@ import {
   Avatar,
   CATEGORY_LABEL,
   FollowButton,
+  imageSrc,
   PredictFlags,
   priceCents,
 } from "@/components/predict-ui";
@@ -380,7 +381,7 @@ export function PredictTraderView({ address }: { address: string }) {
                           {b.icon && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
-                              src={b.icon}
+                              src={imageSrc(b.icon)}
                               alt=""
                               className="border-rule h-5 w-5 shrink-0 rounded-md border object-cover"
                             />
@@ -539,7 +540,7 @@ export function PredictTraderView({ address }: { address: string }) {
                         {p.icon && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={p.icon}
+                            src={imageSrc(p.icon)}
                             alt=""
                             className="border-rule h-6 w-6 shrink-0 rounded-md border object-cover"
                           />
@@ -649,7 +650,7 @@ export function PredictTraderView({ address }: { address: string }) {
                         {b.icon && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={b.icon}
+                            src={imageSrc(b.icon)}
                             alt=""
                             className="border-rule h-6 w-6 shrink-0 rounded-md border object-cover"
                           />
