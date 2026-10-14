@@ -26,6 +26,7 @@ import {
   type ThemedLogo,
 } from "@/components/predict-ui";
 import { perpWatchlist } from "@/lib/local-list";
+import { PnlChart } from "@/components/pnl-chart";
 import { cn } from "@/lib/utils";
 
 interface Position {
@@ -119,6 +120,7 @@ interface Profile {
   } | null;
   bigWins: Array<{
     symbol: string;
+    logo: ThemedLogo | null;
     side: "long" | "short";
     pnlUsd: number;
     at: string;
@@ -128,28 +130,6 @@ interface Profile {
   fillsTruncated: boolean;
   generatedAt: string;
   message?: string;
-}
-
-function PnlBars({ series }: { series: Array<[number, number]> }) {
-  const max = Math.max(1, ...series.map(([, v]) => Math.abs(v)));
-  return (
-    <div
-      className="flex h-16 items-end gap-[2px]"
-      aria-label="Daily PnL, last 30 days"
-    >
-      {series.map(([ts, v]) => (
-        <span
-          key={ts}
-          title={`${new Date(ts).toLocaleDateString()}: ${formatUsd(v)}`}
-          className={cn(
-            "flex-1 rounded-sm",
-            v >= 0 ? "bg-[#22c55e]/70" : "bg-[#f43f5e]/70",
-          )}
-          style={{ height: `${Math.max(2, (Math.abs(v) / max) * 100)}%` }}
-        />
-      ))}
-    </div>
-  );
 }
 
 export function PerpTraderView({ address }: { address: string }) {
@@ -385,42 +365,91 @@ export function PerpTraderView({ address }: { address: string }) {
       {data && (
         <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
           <div className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
-            <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="text-ink font-medium">Daily PnL · 30 days</span>
+            <div className="mb-2 flex items-center justify-between gap-3 text-xs">
+              <span className="text-ink font-medium">
+                Daily PnL · 30 days
+                <span className="text-muted ml-2 font-normal">
+                  bars = day, line = cumulative
+                </span>
+              </span>
               <PerpFlags flags={m?.flags ?? []} />
             </div>
-            {data.series.length ? (
-              <PnlBars series={data.series} />
-            ) : (
-              <p className="text-muted text-xs">No daily PnL yet.</p>
-            )}
+            <PnlChart
+              points={data.series.map(([at, value]) => ({ at, value }))}
+            />
           </div>
           <div className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
             <span className="text-ink text-xs font-medium">
-              Biggest wins (month)
+              {data.bigWins.length > 0
+                ? "Biggest wins · monthly board"
+                : "Biggest wins · recent fills"}
             </span>
-            {data.bigWins.length === 0 ? (
-              <p className="text-muted mt-2 text-xs">
-                Not on the monthly wins board.
-              </p>
-            ) : (
-              <ul className="mt-2 flex flex-col gap-1.5">
-                {data.bigWins.map((w, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center justify-between gap-2 text-xs"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="text-ink">{w.symbol}</span>
-                      <SideBadge side={w.side} />
-                    </span>
-                    <span className="data text-[#4ade80]">
-                      {formatUsd(w.pnlUsd)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {(() => {
+              const items =
+                data.bigWins.length > 0
+                  ? data.bigWins.map((w) => ({
+                      key: w.at + w.symbol,
+                      symbol: w.symbol,
+                      logo: w.logo,
+                      side: w.side,
+                      pnlUsd: w.pnlUsd,
+                      at: w.at,
+                    }))
+                  : closes
+                      .filter((f) => f.pnlUsd > 0)
+                      .sort((a, b) => b.pnlUsd - a.pnlUsd)
+                      .slice(0, 5)
+                      .map((f) => ({
+                        key: String(f.tradeId),
+                        symbol: f.symbol,
+                        logo: f.logo,
+                        side: f.side,
+                        pnlUsd: f.pnlUsd,
+                        at: f.at,
+                      }));
+              if (items.length === 0) {
+                return (
+                  <p className="text-muted mt-2 text-xs">
+                    No winning fill in the sample yet.
+                  </p>
+                );
+              }
+              const max = Math.max(...items.map((i) => i.pnlUsd), 1e-9);
+              return (
+                <ul className="mt-2 flex flex-col gap-2">
+                  {items.map((w, index) => (
+                    <li key={w.key} className="flex flex-col gap-1">
+                      <span className="flex items-center justify-between gap-2 text-xs">
+                        <span className="flex items-center gap-2">
+                          <MarketLogo
+                            logo={w.logo}
+                            symbol={w.symbol}
+                            size={5}
+                          />
+                          <span className="text-ink">
+                            {w.symbol.replace("-USD", "")}
+                          </span>
+                          <SideBadge side={w.side} />
+                          <span className="text-muted">{relative(w.at)}</span>
+                        </span>
+                        <span className="data font-medium text-[#4ade80]">
+                          {formatUsd(w.pnlUsd)}
+                        </span>
+                      </span>
+                      <span className="bg-paper-3 h-1 overflow-hidden rounded-full">
+                        <span
+                          className="block h-full rounded-full bg-[#22c55e]/70 transition-[width] duration-700 ease-out"
+                          style={{
+                            width: `${Math.max(4, (w.pnlUsd / max) * 100)}%`,
+                            transitionDelay: `${index * 80}ms`,
+                          }}
+                        />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
           </div>
         </section>
       )}
