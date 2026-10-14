@@ -89,7 +89,7 @@ export async function readSessionToken(
 
     return {
       userId: payload.sub,
-      network: network === "solana" || network === "robinhood" ? network : null,
+      network: network === "solana" || network === "polygon" ? network : null,
       issuedAt: payload.iat,
       expiresAt: payload.exp,
     };

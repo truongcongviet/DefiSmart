@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "CopyPilot — Copy the best on-chain LPs",
   description:
-    "Sign in with a wallet or email, get an agent wallet on Solana or Robinhood Chain, and copy liquidity positions from proven LP wallets.",
+    "Sign in with a wallet or email, get an agent wallet on Solana or Polygon, and copy LP positions on Meteora or Polymarket trades from proven wallets.",
 };
 
 /** Applies the saved theme before first paint so there is no flash. */

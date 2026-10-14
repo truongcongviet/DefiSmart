@@ -1,29 +1,17 @@
-import { defineChain } from "viem";
+import { polygon } from "viem/chains";
 
 /**
- * Robinhood Chain mainnet (Arbitrum Nitro L2, gas paid in ETH).
- * Public RPC is rate limited and meant for wallet connectivity only.
+ * Polygon PoS mainnet: where Polymarket settles prediction markets (USDC.e,
+ * CTF outcome tokens, CLOB exchanges) and perps (pUSD). Agent wallets that
+ * copy Polymarket positions live here.
  */
-export const robinhoodChain = defineChain({
-  id: 4663,
-  name: "Robinhood Chain",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://rpc.mainnet.chain.robinhood.com"] },
-  },
-  blockExplorers: {
-    default: {
-      name: "Blockscout",
-      url: "https://robinhoodchain.blockscout.com",
-    },
-  },
-});
+export const polygonChain = polygon;
 
 /**
  * An account is bound to exactly one network. The agent wallet is created on
  * that network and positions can only be opened there.
  */
-export type AccountNetwork = "solana" | "robinhood";
+export type AccountNetwork = "solana" | "polygon";
 
 export type AgentChainType = "solana" | "ethereum";
 
@@ -37,11 +25,8 @@ export interface TokenBrand {
 export const TOKENS = {
   SOL: { symbol: "SOL", name: "Solana", logo: "/logos/tokens/sol.png" },
   ETH: { symbol: "ETH", name: "Ether", logo: "/logos/tokens/eth.png" },
-  USDG: {
-    symbol: "USDG",
-    name: "Global Dollar",
-    logo: "/logos/tokens/usdg.png",
-  },
+  USDC: { symbol: "USDC", name: "USD Coin", logo: "/logos/tokens/usdc.png" },
+  POL: { symbol: "POL", name: "Polygon", logo: "/logos/tokens/pol.png" },
 } as const satisfies Record<string, TokenBrand>;
 
 export interface NetworkInfo {
@@ -51,7 +36,7 @@ export interface NetworkInfo {
   logo: string;
   chainType: AgentChainType;
   nativeToken: string;
-  /** Human sentence fragment, e.g. "ETH or USDG". */
+  /** Human sentence fragment, e.g. "USDC (plus a little POL for gas)". */
   fundingTokens: string;
   /** Same tokens as `fundingTokens`, with logos, for UI chips. */
   fundingTokenList: TokenBrand[];
@@ -75,26 +60,23 @@ export const NETWORKS: Record<AccountNetwork, NetworkInfo> = {
     walletHint: "Phantom · Solflare · WalletConnect",
     explorerAddressUrl: (address) => `https://solscan.io/account/${address}`,
   },
-  robinhood: {
-    id: "robinhood",
-    label: "Robinhood Chain",
-    logo: "/logos/chains/robinhood.svg",
+  polygon: {
+    id: "polygon",
+    label: "Polygon",
+    logo: "/logos/chains/polygon.svg",
     chainType: "ethereum",
-    nativeToken: "ETH",
-    fundingTokens: "ETH or USDG",
-    fundingTokenList: [TOKENS.ETH, TOKENS.USDG],
-    protocols: "Uniswap V3 · V4",
-    recommendedDeposit: "0.08 ETH",
+    nativeToken: "POL",
+    fundingTokens: "USDC (plus a little POL for gas)",
+    fundingTokenList: [TOKENS.USDC, TOKENS.POL],
+    protocols: "Polymarket · prediction markets · perps",
+    recommendedDeposit: "100 USDC",
     walletHint: "MetaMask · Rabby · WalletConnect",
     explorerAddressUrl: (address) =>
-      `${robinhoodChain.blockExplorers.default.url}/address/${address}`,
+      `${polygonChain.blockExplorers.default.url}/address/${address}`,
   },
 };
 
-export const NETWORK_LIST: NetworkInfo[] = [
-  NETWORKS.solana,
-  NETWORKS.robinhood,
-];
+export const NETWORK_LIST: NetworkInfo[] = [NETWORKS.solana, NETWORKS.polygon];
 
 export function networkFromChainType(
   chainType: string | undefined,
@@ -104,7 +86,7 @@ export function networkFromChainType(
   }
 
   if (chainType === "ethereum") {
-    return "robinhood";
+    return "polygon";
   }
 
   return null;

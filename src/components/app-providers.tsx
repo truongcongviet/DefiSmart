@@ -10,7 +10,7 @@ import {
   UnconfiguredAuthFlowProvider,
 } from "@/components/auth/auth-flow-provider";
 import { ConnectModal } from "@/components/auth/connect-modal";
-import { robinhoodChain } from "@/lib/chains";
+import { polygonChain } from "@/lib/chains";
 
 export function AppProviders({ children }: { children: ReactNode }) {
   const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID?.trim();
@@ -64,8 +64,8 @@ export function AppProviders({ children }: { children: ReactNode }) {
         externalWallets: {
           solana: { connectors: solanaConnectors },
         },
-        supportedChains: [robinhoodChain, mainnet],
-        defaultChain: robinhoodChain,
+        supportedChains: [polygonChain, mainnet],
+        defaultChain: polygonChain,
         walletConnectCloudProjectId: walletConnectProjectId || undefined,
       }}
     >

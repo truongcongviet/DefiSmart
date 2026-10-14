@@ -13,7 +13,7 @@ import {
 
 const createSessionSchema = z.object({
   accessToken: z.string().min(1),
-  network: z.enum(["solana", "robinhood"]).nullable().optional(),
+  network: z.enum(["solana", "polygon"]).nullable().optional(),
 });
 
 /** Returns the current server session, if server sessions are configured. */

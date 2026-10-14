@@ -20,7 +20,7 @@ const SPEC_ROWS = [
   },
   {
     name: "Network",
-    value: "Solana or Robinhood Chain",
+    value: "Solana or Polygon",
     note: "Bound once per account",
   },
   {
@@ -44,17 +44,17 @@ const STEPS = [
   {
     stage: "1.0",
     title: "Connect.",
-    body: "Phantom, Solflare or Backpack on Solana. MetaMask or Rabby on Robinhood Chain. WalletConnect QR for mobile, or an email address and a six-digit code.",
+    body: "Phantom, Solflare or Backpack on Solana. MetaMask or Rabby on Polygon. WalletConnect QR for mobile, or an email address and a six-digit code.",
   },
   {
     stage: "2.0",
     title: "Bind a network.",
-    body: "A wallet decides the network for you. Email accounts pick Solana or Robinhood Chain once; the choice is permanent for that account.",
+    body: "A wallet decides the network for you: Solana for Meteora LP, Polygon for Polymarket. Email accounts pick once; the choice is permanent for that account.",
   },
   {
     stage: "3.0",
     title: "Fund the agent wallet.",
-    body: "Send SOL, or ETH and USDG, to the agent address. Keep a reserve for fees and position rent; about 5 SOL or 0.08 ETH is a sensible start.",
+    body: "Send SOL on Solana, or USDC plus a little POL for gas on Polygon, to the agent address. About 5 SOL or 100 USDC is a sensible start.",
   },
   {
     stage: "4.0",
@@ -90,9 +90,9 @@ export function LoginLanding() {
             className="lede reveal mt-6"
             style={{ "--i": 2 } as React.CSSProperties}
           >
-            Connect a Solana or Robinhood Chain wallet, or use an email code. A
-            separate agent wallet is created the moment you sign in, and your
-            positions open from it without a wallet popup each time.
+            Connect a Solana or Polygon wallet, or use an email code. A separate
+            agent wallet is created the moment you sign in, and your positions
+            open from it without a wallet popup each time.
           </p>
 
           <div
@@ -199,7 +199,7 @@ export function LoginLanding() {
       <footer className="border-rule border-t py-8">
         <p className="text-muted font-mono text-xs leading-6">
           © 2026 CopyPilot · Login flow modelled on LP Agent · Not affiliated
-          with Meteora, Uniswap or Robinhood · Nothing here is financial advice
+          with Meteora or Polymarket · Nothing here is financial advice
         </p>
       </footer>
     </main>

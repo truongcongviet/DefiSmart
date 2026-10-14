@@ -149,15 +149,15 @@ Luồng mô phỏng đúng cách LP Agent onboard người dùng:
 
 1. **Connect** trên header mở modal của app với ba lựa chọn:
    - `Solana wallet`: Phantom, Solflare, Backpack, WalletConnect QR (Privy modal, lọc `solana-only`).
-   - `Robinhood Chain wallet`: MetaMask, Rabby, WalletConnect QR (Privy modal, lọc `ethereum-only`).
+   - `Polygon wallet`: MetaMask, Rabby, WalletConnect QR (Privy modal, lọc `ethereum-only`).
    - `Continue with email`: nhập email, nhận mã 6 số, nhập mã ngay trong modal (headless OTP).
      Trình duyệt trong ví mobile được nhận diện tự động như ví extension.
 2. Ví ký một message không tốn gas (SIWS/SIWE do Privy xử lý).
-3. **Tài khoản gắn với đúng một mạng.** Ví Solana suy ra Solana, ví 0x suy ra Robinhood Chain,
+3. **Tài khoản gắn với đúng một mạng.** Ví Solana suy ra Solana, ví 0x suy ra Polygon,
    còn email thì chọn mạng ở bước tiếp theo.
 4. **Agent wallet** (Privy embedded wallet) được tạo ngay trên mạng đó. Tài khoản cũ đã có agent
    wallet thì đăng nhập xong là đóng modal, không hỏi lại.
-5. Modal hiển thị địa chỉ agent wallet, gợi ý nạp `SOL` hoặc `ETH/USDG` và mức tối thiểu.
+5. Modal hiển thị địa chỉ agent wallet, gợi ý nạp `SOL` hoặc `USDC` (kèm chút `POL` trả gas) và mức tối thiểu.
 6. Menu tài khoản trên header: địa chỉ agent và ví login, link explorer, export private key,
    link thêm email hoặc ví, disconnect.
 7. (Tuỳ chọn) Server đổi Privy access token lấy cookie `lps_session` httpOnly hạn **7 ngày**
@@ -169,7 +169,7 @@ File liên quan:
 - `src/components/auth/auth-flow-provider.tsx`: điều phối toàn bộ luồng.
 - `src/components/auth/connect-modal.tsx`: UI các bước.
 - `src/components/auth/connect-wallet-button.tsx`: nút trên header và menu tài khoản.
-- `src/lib/chains.ts`: định nghĩa Robinhood Chain (id 4663) và metadata hai mạng.
+- `src/lib/chains.ts`: Polygon (id 137, nơi Polymarket thanh toán prediction markets bằng USDC.e và perps bằng pUSD) và metadata hai mạng.
 - `src/lib/auth/server-session.ts`, `src/app/api/auth/session/route.ts`: session 7 ngày.
 
 Ở giai đoạn này app chưa delegate ví, chưa cấp session signer và chưa cho agent
