@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { label: "Smart LP", href: "/" },
   { label: "Smart Traders", href: "/traders" },
+  { label: "PredictSmart", href: "/predict" },
   { label: "Pools", href: "/pool" },
   { label: "Analysis", href: "/analysis" },
   { label: "Watchlist", href: "/watchlist" },

@@ -604,10 +604,26 @@ function isSnapshot(value: unknown): value is TraderSnapshot {
   );
 }
 
+const STORE_CHECK_MS = 60_000;
+let storeCheckedAt = 0;
+
+/** Latest snapshot; re-reads the store when another process wrote a newer one. */
 export async function loadTraderSnapshot(): Promise<TraderSnapshot | null> {
-  if (memory) return memory.snapshot;
-  const stored = await getSnapshotStore().load<TraderSnapshot>(SNAPSHOT_KIND);
-  if (!stored || !isSnapshot(stored.payload)) return null;
+  const now = Date.now();
+  if (memory && now - storeCheckedAt < STORE_CHECK_MS) return memory.snapshot;
+  storeCheckedAt = now;
+  const store = getSnapshotStore();
+  if (memory) {
+    const [latest] = await store.history(SNAPSHOT_KIND, 1).catch(() => []);
+    if (
+      !latest ||
+      Date.parse(latest.generatedAt) <= Date.parse(memory.snapshot.generatedAt)
+    ) {
+      return memory.snapshot;
+    }
+  }
+  const stored = await store.load<TraderSnapshot>(SNAPSHOT_KIND);
+  if (!stored || !isSnapshot(stored.payload)) return memory?.snapshot ?? null;
   memory = {
     snapshot: stored.payload,
     board: toBoard(stored.payload),

@@ -14,7 +14,9 @@
     "format:check": "prettier --check .",
     "leaderboard:build": "node --env-file-if-exists=.env --import tsx scripts/build-leaderboard.ts",
     "test": "node --import tsx --test src/lib/**/*.test.ts src/lib/*/*.test.ts",
-    "traders:build": "node --env-file-if-exists=.env --import tsx scripts/build-traders.ts"
+    "traders:build": "node --env-file-if-exists=.env --import tsx scripts/build-traders.ts",
+    "predict:build": "node --env-file-if-exists=.env --import tsx scripts/build-predict.ts",
+    "perp:build": "node --env-file-if-exists=.env --import tsx scripts/build-perp.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -37,6 +37,29 @@ cho tầng phân tích).
   này đánh dấu coverage `full`, số còn lại là `pools`.
   `pnpm traders:build [tokens] [sigsPerPair]` để quét; cron gọi
   `/api/leaderboard/smart-traders?refresh=1` mỗi ngày.
+- PredictSmart (`/predict`): trader thông minh trên **Polymarket**, dữ liệu từ
+  Data API và Gamma API công khai của Polymarket (không cần key), theo đúng
+  cách front-end Polymarket gọi. Ứng viên lấy từ leaderboard PnL/volume theo
+  tuần, tháng, toàn thời gian và theo danh mục; với mỗi ví đọc toàn bộ vị thế
+  đã tất toán (lệnh thắng ở `/closed-positions`, lệnh thua nằm trong
+  `/positions` ở giá 0) rồi gộp theo thị trường để tính win rate, ROI, profit
+  factor, độ tập trung lợi nhuận, danh mục sở trường, mức cược, vị thế đang mở.
+  Điểm ưu tiên ví có thể copy được: nhiều thị trường, lãi đều, không phải cá
+  voi, còn hoạt động. Trang `/predict/[address]` hiển thị vị thế đang mở để
+  copy (link thẳng sang thị trường trên Polymarket), lệnh đã tất toán gần đây
+  và giao dịch mới nhất; nút theo dõi lưu trong trình duyệt.
+  `pnpm predict:build [traders]` để quét; cron gọi
+  `/api/leaderboard/smart-predict?refresh=1` mỗi ngày.
+- Tab Perp trong PredictSmart (`/predict?tab=perp`): tài khoản trade perp trên
+  Polymarket Perps, từ API info công khai `api.perpetuals.polymarket.com`
+  (leaderboard theo tài khoản, bảng lệnh thắng lớn nhất, fills có PnL từng lệnh,
+  portfolio, chuỗi PnL theo ngày). Mỗi tài khoản đọc 300 fill gần nhất để tính
+  win rate và profit factor trên lệnh đã chốt, chuỗi PnL 30 ngày để tính số ngày
+  dương và drawdown, portfolio để biết vị thế đang mở và đòn bẩy. Cờ cảnh báo:
+  đã bị thanh lý, lợi nhuận tập trung một lệnh, cá voi, đòn bẩy trên 10x, không
+  hoạt động. Trang `/predict/perp/[address]` có biểu đồ PnL ngày, vị thế đang
+  mở để copy, lệnh đã chốt, thống kê theo thị trường. `pnpm perp:build`; cron
+  gọi `/api/leaderboard/smart-perp?refresh=1`.
 - Trang token (`/token/[mint]`): ví lãi nhất trong token đó, thứ hạng vào sớm,
   thời gian giữ, trạng thái đã thoát hay đang giữ, và danh sách swap gần nhất.
   Token chưa có trong snapshot được quét tại chỗ (tối đa 1.600 giao dịch).
@@ -233,6 +256,28 @@ dõi sẽ được quét tại chỗ qua DexScreener + RPC, cache 3 phút.
 
 Lịch sử swap của một ví trong 30 ngày đọc trực tiếp từ RPC, PnL theo từng token,
 điểm và cờ. `limit` là số giao dịch tối đa được đọc (50–1000).
+
+`GET /api/leaderboard/smart-predict`
+
+Leaderboard PredictSmart có phân trang: `page`, `pageSize`, `sort`, `dir`,
+`minMarkets`, `minWin`, `maxStake`, `category`, `hideInactive`, `hideWhales`,
+`q`. `refresh=1` quét lại và chờ kết quả.
+
+`GET /api/predict/traders/[address]`
+
+Hồ sơ một ví Polymarket bất kỳ: chỉ số, vị thế đang mở, lệnh đã tất toán,
+giao dịch gần đây. Cache 5 phút.
+
+`GET /api/leaderboard/smart-perp`
+
+Leaderboard Perp có phân trang: `page`, `pageSize`, `sort`, `dir`, `minTrades`,
+`minWin`, `maxFill`, `category` (crypto, equity, index, commodity),
+`hideInactive`, `hideLiquidated`, `hideWhales`, `q`. Kèm 20 lệnh thắng lớn nhất
+tháng. `refresh=1` quét lại.
+
+`GET /api/predict/perps/[address]`
+
+Hồ sơ một tài khoản Perps: chỉ số, chuỗi PnL ngày, vị thế mở, 100 fill gần nhất.
 
 `GET /api/lpagent/smart-lp`
 

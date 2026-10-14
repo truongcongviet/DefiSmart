@@ -7,6 +7,14 @@
     {
       "path": "/api/leaderboard/smart-traders?refresh=1",
       "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/leaderboard/smart-predict?refresh=1",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/leaderboard/smart-perp?refresh=1",
+      "schedule": "30 4 * * *"
     }
   ]
 }

@@ -324,12 +324,32 @@ async function writeSnapshotFile(board: Leaderboard) {
 }
 
 let memory: { board: Leaderboard; expiresAt: number } | null = null;
+const STORE_CHECK_MS = 60_000;
+let storeCheckedAt = 0;
 let inflight: Promise<Leaderboard> | null = null;
 
 export async function getSmartLpLeaderboard(
   options: { force?: boolean; pools?: number } = {},
 ): Promise<Leaderboard> {
   const now = Date.now();
+  if (!options.force && memory && now - storeCheckedAt > STORE_CHECK_MS) {
+    // Another process (pnpm leaderboard:build) may have written a newer one.
+    storeCheckedAt = now;
+    const [latest] = await getSnapshotStore()
+      .history(SNAPSHOT_KIND, 1)
+      .catch(() => []);
+    if (
+      latest &&
+      Date.parse(latest.generatedAt) > Date.parse(memory.board.generatedAt)
+    ) {
+      const file = await readSnapshotFile();
+      if (file)
+        memory = {
+          board: file,
+          expiresAt: Date.parse(file.generatedAt) + CACHE_TTL_MS,
+        };
+    }
+  }
   if (!options.force && memory && memory.expiresAt > now) return memory.board;
 
   if (!options.force && !memory) {

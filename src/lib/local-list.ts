@@ -65,3 +65,7 @@ export function createLocalList(key: string, max = 100) {
 }
 
 export const watchlist = createLocalList("wallet-watchlist", 50);
+/** Polymarket traders followed on PredictSmart (Polygon addresses). */
+export const predictWatchlist = createLocalList("predict-watchlist", 50);
+/** Polymarket Perps accounts followed on the Perp tab. */
+export const perpWatchlist = createLocalList("perp-watchlist", 50);
