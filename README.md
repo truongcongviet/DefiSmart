@@ -291,6 +291,17 @@ Ví dụ query:
 /api/lpagent/smart-lp?page=1&pageSize=12&orderBy=total_pnl_native:desc&lastActivity=1D&minWinRateNative=0.7&minAvgMonthlyPnlNative=6&minTotalLp=1000
 ```
 
+## Copy trade Polymarket
+
+Xem `docs/COPY_POLYMARKET.md`. Tóm tắt: ví agent Polygon tạo và giữ khóa ở
+server (mã hóa bằng `COPY_KEY_SECRET`, lưu Postgres), người dùng nạp USDC.e và
+chút POL, bật copy cho một trader ở trang `/predict/[address]` với tỷ lệ vốn,
+hạn mức mỗi lệnh, hạn mức ngày, chế độ dry-run hoặc live. Worker
+`pnpm copy:polymarket` theo dõi fill của leader qua websocket CLOB cộng poll
+activity mỗi 4 giây, định cỡ lệnh và đặt lệnh FOK qua CLOB từ ví agent. Chạy
+worker ở máy chủ ngoài vùng bị Polymarket chặn. Perps chưa có API đặt lệnh nên
+chỉ theo dõi.
+
 ## Copy Engine Core
 
 Dự án có một copy-engine độc lập với loại chiến lược. Bản đầu theo dõi transaction Solana, xác minh leader là signer thật, chuẩn hóa thay đổi tài sản, chống xử lý trùng, xếp hàng theo follower wallet và lưu audit state. Execution hiện khóa ở observe-only/dry-run cho đến khi có adapter LP, swap hoặc farming.

@@ -78,6 +78,7 @@ export interface OpenPosition {
   outcome: string;
   outcomeIndex: number;
   oppositeOutcome?: string;
+  oppositeAsset?: string;
   endDate?: string;
   negativeRisk?: boolean;
   redeemable?: boolean;

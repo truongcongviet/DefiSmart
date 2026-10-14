@@ -25,6 +25,7 @@ import {
   PredictFlags,
   priceCents,
 } from "@/components/predict-ui";
+import { CopyPanel } from "@/components/copy-panel";
 import { PnlChart } from "@/components/pnl-chart";
 import { cn } from "@/lib/utils";
 
@@ -304,6 +305,8 @@ export function PredictTraderView({ address }: { address: string }) {
           }
         />
       </section>
+
+      <CopyPanel leader={address} />
 
       {data?.pnlSeries && (
         <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
