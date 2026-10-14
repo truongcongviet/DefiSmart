@@ -12,6 +12,9 @@ import {
   fetchPerpPnlSeries,
   fetchPerpPortfolio,
   fetchPerpWins,
+  instrumentLogo,
+  type PerpInstrument,
+  type PerpLogo,
   type PerpWinEntry,
   type PerpWindow,
 } from "./perps-api";
@@ -62,6 +65,7 @@ export interface PerpTrader extends PerpMetrics {
   /** Biggest single wins of this account on the wins board. */
   bigWins: Array<{
     symbol: string;
+    logo: PerpLogo | null;
     side: "long" | "short";
     pnlUsd: number;
     at: string;
@@ -73,7 +77,7 @@ export interface PerpTrader extends PerpMetrics {
 export interface PerpSnapshot {
   generatedAt: string;
   traders: PerpTrader[];
-  wins: Array<PerpWinEntry & { pnlUsd: number }>;
+  wins: Array<PerpWinEntry & { pnlUsd: number; logo: PerpLogo | null }>;
   stats: {
     candidates: number;
     analysed: number;
@@ -105,6 +109,7 @@ const LEADERBOARD_QUERIES: Array<{ window: PerpWindow; pages: number }> = [
 
 async function collectCandidates(
   warnings: string[],
+  instruments: Map<number, PerpInstrument>,
 ): Promise<{ candidates: Candidate[]; wins: PerpSnapshot["wins"] }> {
   const map = new Map<string, Candidate>();
   const get = (address: string) => {
@@ -165,7 +170,11 @@ async function collectCandidates(
     try {
       const entries = await fetchPerpWins(window, 100);
       if (window === "month")
-        wins = entries.map((e) => ({ ...e, pnlUsd: Number(e.pnl) }));
+        wins = entries.map((e) => ({
+          ...e,
+          pnlUsd: Number(e.pnl),
+          logo: instrumentLogo(instruments.get(e.instrument_id)),
+        }));
       for (const entry of entries) {
         const candidate = get(entry.account);
         const label = `wins:${window}`;
@@ -174,6 +183,7 @@ async function collectCandidates(
         if (window === "month" && candidate.bigWins.length < 3) {
           candidate.bigWins.push({
             symbol: entry.symbol,
+            logo: instrumentLogo(instruments.get(entry.instrument_id)),
             side: entry.side,
             pnlUsd: Number(entry.pnl),
             at: new Date(entry.timestamp).toISOString(),
@@ -232,7 +242,13 @@ export async function buildPerpSnapshot(
   const warnings: string[] = [];
   const log = options.onProgress ?? (() => undefined);
 
-  const { candidates: all, wins } = await collectCandidates(warnings);
+  const instruments = await fetchPerpInstruments().catch(
+    () => new Map<number, PerpInstrument>(),
+  );
+  const { candidates: all, wins } = await collectCandidates(
+    warnings,
+    instruments,
+  );
   const candidates = all.slice(0, budget.traders);
   log(`candidates: ${candidates.length} of ${all.length}`);
 

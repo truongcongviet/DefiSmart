@@ -31,6 +31,10 @@ export interface LeaderboardPool {
   address: string;
   name: string;
   protocol: LpProtocol;
+  logo0?: string;
+  logo1?: string;
+  symbol0?: string;
+  symbol1?: string;
   pnlNative: number;
   pnlUsd: number;
   openPositions: number;
@@ -218,6 +222,10 @@ async function buildLeaderboard(poolsRequested: number): Promise<Leaderboard> {
           address: pool.address,
           name: result.pool.name || pool.name,
           protocol: result.pool.protocol,
+          logo0: result.pool.tokenX.logo || undefined,
+          logo1: result.pool.tokenY.logo || undefined,
+          symbol0: result.pool.tokenX.symbol || undefined,
+          symbol1: result.pool.tokenY.symbol || undefined,
           pnlNative: wallet.pnlNative,
           pnlUsd: wallet.pnlUsd,
           openPositions: wallet.openPositions,

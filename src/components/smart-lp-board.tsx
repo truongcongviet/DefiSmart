@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Pagination } from "@/components/board-ui";
+import { TokenMark } from "@/components/token-mark";
 import { watchlist } from "@/lib/local-list";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,10 @@ interface BoardPool {
   address: string;
   name: string;
   protocol: string;
+  logo0?: string;
+  logo1?: string;
+  symbol0?: string;
+  symbol1?: string;
   pnlNative: number;
   openPositions: number;
 }
@@ -581,6 +586,24 @@ export function SmartLpBoard() {
                             )}
                             title={`${pool.name}: ${formatSol(pool.pnlNative)} SOL`}
                           >
+                            {(pool.logo0 || pool.logo1) && (
+                              <span className="inline-flex items-center">
+                                <TokenMark
+                                  token={{
+                                    symbol: pool.symbol0 ?? "?",
+                                    logo: pool.logo0 ?? "",
+                                  }}
+                                  className="h-4 w-4"
+                                />
+                                <TokenMark
+                                  token={{
+                                    symbol: pool.symbol1 ?? "?",
+                                    logo: pool.logo1 ?? "",
+                                  }}
+                                  className="-ml-1 h-4 w-4"
+                                />
+                              </span>
+                            )}
                             {pool.name}
                           </Link>
                         ))}

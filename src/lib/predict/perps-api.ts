@@ -72,12 +72,42 @@ export interface PerpPortfolio {
   timestamp: number;
 }
 
+export interface PerpLogo {
+  light?: string;
+  dark?: string;
+}
+
 export interface PerpInstrument {
   instrument_id: number;
   symbol: string;
   display_symbol?: string;
   category: string;
   base_asset: string;
+  logo?: PerpLogo | null;
+}
+
+/** Fallbacks for the few instruments the API ships without artwork. */
+const LOGO_FALLBACK: Record<string, string> = {
+  BTC: "https://assets.coingecko.com/coins/images/1/small/bitcoin.png",
+  ETH: "https://assets.coingecko.com/coins/images/279/small/ethereum.png",
+  SOL: "https://assets.coingecko.com/coins/images/4128/small/solana.png",
+  XRP: "https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png",
+  DOGE: "https://assets.coingecko.com/coins/images/5/small/dogecoin.png",
+  BNB: "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png",
+};
+
+export function instrumentLogo(
+  instrument: PerpInstrument | undefined,
+): PerpLogo | null {
+  if (!instrument) return null;
+  if (instrument.logo && (instrument.logo.dark || instrument.logo.light)) {
+    return {
+      light: instrument.logo.light ?? instrument.logo.dark,
+      dark: instrument.logo.dark ?? instrument.logo.light,
+    };
+  }
+  const fallback = LOGO_FALLBACK[instrument.base_asset?.toUpperCase() ?? ""];
+  return fallback ? { light: fallback, dark: fallback } : null;
 }
 
 const client = axios.create({

@@ -1,4 +1,10 @@
-import type { PerpFill, PerpInstrument, PerpPortfolio } from "./perps-api";
+import {
+  instrumentLogo,
+  type PerpFill,
+  type PerpInstrument,
+  type PerpLogo,
+  type PerpPortfolio,
+} from "./perps-api";
 
 /**
  * Trader quality on Polymarket Perps from the account's own fills: every
@@ -10,6 +16,7 @@ import type { PerpFill, PerpInstrument, PerpPortfolio } from "./perps-api";
 export interface PerpInstrumentStat {
   instrumentId: number;
   symbol: string;
+  logo: PerpLogo | null;
   category: string;
   trades: number;
   wins: number;
@@ -19,6 +26,7 @@ export interface PerpInstrumentStat {
 export interface PerpOpenPosition {
   instrumentId: number;
   symbol: string;
+  logo: PerpLogo | null;
   side: "long" | "short";
   size: number;
   entryPrice: number;
@@ -89,6 +97,7 @@ export function computePerpMetrics(input: {
     input.instruments.get(id)?.symbol ?? `#${id}`;
   const categoryOf = (id: number) =>
     input.instruments.get(id)?.category ?? "other";
+  const logoOf = (id: number) => instrumentLogo(input.instruments.get(id));
 
   const fills = [...input.fills].sort((a, b) => a.timestamp - b.timestamp);
   const closed = fills.filter((fill) => Math.abs(num(fill.pnl)) > 1e-9);
@@ -112,6 +121,7 @@ export function computePerpMetrics(input: {
     const stat = byInstrument.get(fill.instrument_id) ?? {
       instrumentId: fill.instrument_id,
       symbol: symbolOf(fill.instrument_id),
+      logo: logoOf(fill.instrument_id),
       category: categoryOf(fill.instrument_id),
       trades: 0,
       wins: 0,
@@ -149,6 +159,7 @@ export function computePerpMetrics(input: {
       return {
         instrumentId: p.instrument_id,
         symbol: p.symbol || symbolOf(p.instrument_id),
+        logo: logoOf(p.instrument_id),
         side: size < 0 ? ("short" as const) : ("long" as const),
         size: Math.abs(size),
         entryPrice: entry,

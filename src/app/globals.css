@@ -337,3 +337,25 @@ summary::-webkit-details-marker {
     animation: fade-in 150ms linear forwards;
   }
 }
+
+/* Theme-specific artwork (e.g. Polymarket perp logos ship light + dark SVGs). */
+.theme-dark-only {
+  display: inline-block;
+}
+.theme-light-only {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-dark-only {
+    display: none;
+  }
+  :root:not([data-theme="dark"]) .theme-light-only {
+    display: inline-block;
+  }
+}
+:root[data-theme="light"] .theme-dark-only {
+  display: none;
+}
+:root[data-theme="light"] .theme-light-only {
+  display: inline-block;
+}

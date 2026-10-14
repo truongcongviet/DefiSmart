@@ -8,7 +8,9 @@ import {
   fetchPerpInstruments,
   fetchPerpPnlSeries,
   fetchPerpPortfolio,
+  instrumentLogo,
   type PerpFill,
+  type PerpLogo,
 } from "./perps-api";
 import {
   loadPerpSnapshot,
@@ -26,6 +28,7 @@ export interface PerpFillRow {
   tradeId: number;
   at: string;
   symbol: string;
+  logo: PerpLogo | null;
   side: "long" | "short";
   price: number;
   quantity: number;
@@ -58,7 +61,11 @@ const cache = new Map<
 >();
 const inflight = new Map<string, Promise<PerpTraderProfile>>();
 
-function toRow(fill: PerpFill, symbol: string): PerpFillRow {
+function toRow(
+  fill: PerpFill,
+  symbol: string,
+  logo: PerpLogo | null,
+): PerpFillRow {
   const price = Number(fill.price) || 0;
   const quantity = Number(fill.quantity) || 0;
   const pnl = Number(fill.pnl) || 0;
@@ -66,6 +73,7 @@ function toRow(fill: PerpFill, symbol: string): PerpFillRow {
     tradeId: fill.trade_id,
     at: new Date(fill.timestamp).toISOString(),
     symbol,
+    logo,
     side: fill.side,
     price,
     quantity,
@@ -119,7 +127,13 @@ async function build(address: string): Promise<PerpTraderProfile> {
     fills: [...fills.fills]
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, 100)
-      .map((fill) => toRow(fill, symbolOf(fill.instrument_id))),
+      .map((fill) =>
+        toRow(
+          fill,
+          symbolOf(fill.instrument_id),
+          instrumentLogo(instruments.get(fill.instrument_id)),
+        ),
+      ),
     fillsTruncated: fills.more,
     generatedAt: new Date().toISOString(),
   };

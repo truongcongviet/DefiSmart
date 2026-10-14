@@ -18,13 +18,20 @@ import {
   shortAddress,
   tone,
 } from "@/components/board-ui";
-import { FollowButton, PerpFlags, SideBadge } from "@/components/predict-ui";
+import {
+  FollowButton,
+  MarketLogo,
+  PerpFlags,
+  SideBadge,
+  type ThemedLogo,
+} from "@/components/predict-ui";
 import { perpWatchlist } from "@/lib/local-list";
 import { cn } from "@/lib/utils";
 
 interface Position {
   instrumentId: number;
   symbol: string;
+  logo: ThemedLogo | null;
   side: "long" | "short";
   size: number;
   entryPrice: number;
@@ -37,6 +44,7 @@ interface Fill {
   tradeId: number;
   at: string;
   symbol: string;
+  logo: ThemedLogo | null;
   side: "long" | "short";
   price: number;
   quantity: number;
@@ -71,6 +79,7 @@ interface Profile {
     instruments: Array<{
       instrumentId: number;
       symbol: string;
+      logo: ThemedLogo | null;
       category: string;
       trades: number;
       wins: number;
@@ -450,8 +459,13 @@ export function PerpTraderView({ address }: { address: string }) {
                     key={`${p.instrumentId}-${p.side}`}
                     className="hover:bg-paper-3/40"
                   >
-                    <td className="text-ink px-4 py-2.5 font-medium">
-                      {p.symbol}
+                    <td className="px-4 py-2.5">
+                      <span className="flex items-center gap-2">
+                        <MarketLogo logo={p.logo} symbol={p.symbol} />
+                        <span className="text-ink font-medium">
+                          {p.symbol.replace("-USD", "")}
+                        </span>
+                      </span>
                     </td>
                     <td className="px-4 py-2.5">
                       <SideBadge side={p.side} />
@@ -533,7 +547,14 @@ export function PerpTraderView({ address }: { address: string }) {
                     <td className="data text-ink-2 px-4 py-2.5 whitespace-nowrap">
                       {relative(f.at)}
                     </td>
-                    <td className="text-ink px-4 py-2.5">{f.symbol}</td>
+                    <td className="px-4 py-2.5">
+                      <span className="flex items-center gap-2">
+                        <MarketLogo logo={f.logo} symbol={f.symbol} size={5} />
+                        <span className="text-ink">
+                          {f.symbol.replace("-USD", "")}
+                        </span>
+                      </span>
+                    </td>
                     <td className="px-4 py-2.5">
                       <span className="flex items-center gap-1.5">
                         <SideBadge side={f.side} />
@@ -598,8 +619,13 @@ export function PerpTraderView({ address }: { address: string }) {
               <tbody className="divide-rule divide-y">
                 {m.instruments.map((i) => (
                   <tr key={i.instrumentId} className="hover:bg-paper-3/40">
-                    <td className="text-ink px-4 py-2.5 font-medium">
-                      {i.symbol}
+                    <td className="px-4 py-2.5">
+                      <span className="flex items-center gap-2">
+                        <MarketLogo logo={i.logo} symbol={i.symbol} />
+                        <span className="text-ink font-medium">
+                          {i.symbol.replace("-USD", "")}
+                        </span>
+                      </span>
                     </td>
                     <td className="text-ink-2 px-4 py-2.5 capitalize">
                       {i.category}

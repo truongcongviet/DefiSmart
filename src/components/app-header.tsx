@@ -89,7 +89,7 @@ export function AppHeader() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "inline-flex h-9 items-center rounded-lg px-3 text-[15px] font-medium transition-colors duration-150",
+                      "inline-flex h-9 items-center rounded-lg px-2.5 text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
                       active
                         ? "text-accent"
                         : "text-ink-2 hover:text-ink hover:bg-paper-3",
@@ -106,7 +106,7 @@ export function AppHeader() {
         <form
           onSubmit={submit}
           role="search"
-          className="ml-auto hidden w-full max-w-[22rem] lg:block"
+          className="ml-auto hidden w-full max-w-[18rem] shrink lg:block"
         >
           <label
             className={cn(
@@ -122,7 +122,7 @@ export function AppHeader() {
                 setQuery(event.target.value);
                 if (invalid) setInvalid(false);
               }}
-              placeholder="Search by wallet address..."
+              placeholder="Wallet address"
               aria-label="Search by wallet address"
               aria-invalid={invalid || undefined}
               className="text-ink placeholder:text-muted h-full w-full min-w-0 bg-transparent text-sm outline-none"
