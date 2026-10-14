@@ -305,48 +305,112 @@ export function PredictTraderView({ address }: { address: string }) {
       </section>
 
       {data?.pnlSeries && (
-        <section className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
-          <div className="mb-2 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <span className="text-ink font-medium">
-              PnL
-              <span className="text-muted ml-2 font-normal">
-                line = cumulative, bars = change per{" "}
-                {frame === "1D"
-                  ? "hour"
-                  : frame === "1W"
-                    ? "3 hours"
-                    : frame === "1M"
-                      ? "day"
-                      : "12 hours"}
+        <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+          <div className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <span className="text-ink font-medium">
+                PnL
+                <span className="text-muted ml-2 font-normal">
+                  line = cumulative, bars = change per{" "}
+                  {frame === "1D"
+                    ? "hour"
+                    : frame === "1W"
+                      ? "3 hours"
+                      : frame === "1M"
+                        ? "day"
+                        : "12 hours"}
+                </span>
               </span>
-            </span>
-            <div className="bg-paper-3 inline-flex h-7 items-center rounded-lg p-0.5">
-              {(["1D", "1W", "1M", "ALL"] as const).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setFrame(key)}
-                  className={cn(
-                    "h-6 rounded-md px-2.5 text-xs transition-colors",
-                    frame === key
-                      ? "bg-paper text-ink shadow-sm"
-                      : "text-muted hover:text-ink",
-                  )}
-                >
-                  {key}
-                </button>
-              ))}
+              <div className="bg-paper-3 inline-flex h-7 items-center rounded-lg p-0.5">
+                {(["1D", "1W", "1M", "ALL"] as const).map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setFrame(key)}
+                    className={cn(
+                      "h-6 rounded-md px-2.5 text-xs transition-colors",
+                      frame === key
+                        ? "bg-paper text-ink shadow-sm"
+                        : "text-muted hover:text-ink",
+                    )}
+                  >
+                    {key}
+                  </button>
+                ))}
+              </div>
             </div>
+            <PnlChart
+              key={frame}
+              cumulative
+              periodLabel={frame === "1D" ? "hour" : "day"}
+              points={(data.pnlSeries[frame] ?? []).map(([t, p]) => ({
+                at: t * 1000,
+                value: p,
+              }))}
+            />
           </div>
-          <PnlChart
-            key={frame}
-            cumulative
-            periodLabel={frame === "1D" ? "hour" : "day"}
-            points={(data.pnlSeries[frame] ?? []).map(([t, p]) => ({
-              at: t * 1000,
-              value: p,
-            }))}
-          />
+          <div className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
+            <span className="text-ink text-xs font-medium">
+              Biggest wins · settled markets
+            </span>
+            {(() => {
+              const items = [...data.recentBets]
+                .filter((b) => b.pnlUsd > 0)
+                .sort((a, b) => b.pnlUsd - a.pnlUsd)
+                .slice(0, 5);
+              if (items.length === 0) {
+                return (
+                  <p className="text-muted mt-2 text-xs">
+                    No winning market in the sample yet.
+                  </p>
+                );
+              }
+              const max = Math.max(...items.map((i) => i.pnlUsd), 1e-9);
+              return (
+                <ul className="mt-2 flex flex-col gap-2">
+                  {items.map((b, index) => (
+                    <li key={b.conditionId} className="flex flex-col gap-1">
+                      <a
+                        href={eventUrl(b.eventSlug)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-between gap-2 text-xs"
+                      >
+                        <span className="flex min-w-0 items-center gap-2">
+                          {b.icon && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={b.icon}
+                              alt=""
+                              className="border-rule h-5 w-5 shrink-0 rounded-md border object-cover"
+                            />
+                          )}
+                          <span
+                            className="text-ink hover:text-accent truncate"
+                            title={b.title}
+                          >
+                            {b.title}
+                          </span>
+                        </span>
+                        <span className="data shrink-0 font-medium text-[#4ade80]">
+                          {formatUsd(b.pnlUsd)}
+                        </span>
+                      </a>
+                      <span className="bg-paper-3 h-1 overflow-hidden rounded-full">
+                        <span
+                          className="block h-full rounded-full bg-[#22c55e]/70 transition-[width] duration-700 ease-out"
+                          style={{
+                            width: `${Math.max(4, (b.pnlUsd / max) * 100)}%`,
+                            transitionDelay: `${index * 80}ms`,
+                          }}
+                        />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
+          </div>
         </section>
       )}
 
