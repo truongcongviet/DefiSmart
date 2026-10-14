@@ -4,6 +4,7 @@ import {
   type PerpInstrument,
   type PerpLogo,
   type PerpPortfolio,
+  type PerpWindow,
 } from "./perps-api";
 
 /**
@@ -35,7 +36,33 @@ export interface PerpOpenPosition {
   roe: number;
 }
 
+/** The same figures restricted to one leaderboard window. */
+export interface PerpWindowStats {
+  window: PerpWindow;
+  closedTrades: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  /** Realized PnL of the fills in the window (sample). */
+  realizedPnlUsd: number;
+  profitFactor: number | null;
+  /** PnL from the series: hourly points for "day", daily otherwise. */
+  pnlUsd: number;
+  /** Periods with activity and how many were positive (hours for "day", days otherwise). */
+  periods: number;
+  positivePeriods: number;
+  maxDrawdownUsd: number;
+}
+
+export const PERP_WINDOW_DAYS: Record<PerpWindow, number | null> = {
+  day: 1,
+  week: 7,
+  month: 30,
+  all: null,
+};
+
 export interface PerpMetrics {
+  windows: Record<PerpWindow, PerpWindowStats>;
   /** Fills that realized PnL (position reductions). */
   closedTrades: number;
   wins: number;
@@ -85,14 +112,63 @@ const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
 const DAY_MS = 86_400_000;
 const INACTIVE_DAYS = 7;
 
+function drawdownOf(points: Array<[number, number]>) {
+  let peak = 0;
+  let running = 0;
+  let maxDrawdown = 0;
+  for (const [, pnl] of [...points].sort((a, b) => a[0] - b[0])) {
+    running += pnl;
+    peak = Math.max(peak, running);
+    maxDrawdown = Math.max(maxDrawdown, peak - running);
+  }
+  return maxDrawdown;
+}
+
+export function computeWindowStats(
+  window: PerpWindow,
+  fills: PerpFill[],
+  daily: Array<[number, number]>,
+  hourly: Array<[number, number]>,
+  nowMs: number,
+): PerpWindowStats {
+  const days = PERP_WINDOW_DAYS[window];
+  const since = days == null ? 0 : nowMs - days * DAY_MS;
+  const inWindow = fills.filter((f) => f.timestamp >= since);
+  const closed = inWindow.filter((f) => Math.abs(num(f.pnl)) > 1e-9);
+  const wins = closed.filter((f) => num(f.pnl) > 0);
+  const losses = closed.filter((f) => num(f.pnl) < 0);
+  const grossWin = wins.reduce((s, f) => s + num(f.pnl), 0);
+  const grossLoss = -losses.reduce((s, f) => s + num(f.pnl), 0);
+  const points = (window === "day" ? hourly : daily).filter(
+    ([ts]) => ts >= since,
+  );
+  return {
+    window,
+    closedTrades: closed.length,
+    wins: wins.length,
+    losses: losses.length,
+    winRate: closed.length ? wins.length / closed.length : 0,
+    realizedPnlUsd: closed.reduce((s, f) => s + num(f.pnl), 0),
+    profitFactor: grossLoss > 0 ? grossWin / grossLoss : wins.length ? null : 0,
+    pnlUsd: points.reduce((s, [, v]) => s + v, 0),
+    periods: points.length,
+    positivePeriods: points.filter(([, v]) => v > 0).length,
+    maxDrawdownUsd: drawdownOf(points),
+  };
+}
+
 export function computePerpMetrics(input: {
   fills: PerpFill[];
   portfolio: PerpPortfolio;
+  /** Daily PnL points, as far back as the account goes. */
   series: Array<[number, number]>;
+  /** Hourly PnL points for the last two days (for the "day" window). */
+  hourly?: Array<[number, number]>;
   instruments: Map<number, PerpInstrument>;
   nowMs?: number;
 }): PerpMetrics {
   const now = input.nowMs ?? Date.now();
+  const hourly = input.hourly ?? [];
   const symbolOf = (id: number) =>
     input.instruments.get(id)?.symbol ?? `#${id}`;
   const categoryOf = (id: number) =>
@@ -139,7 +215,8 @@ export function computePerpMetrics(input: {
     .filter((s) => s.trades > 0)
     .sort((a, b) => b.pnlUsd - a.pnlUsd);
 
-  const series = [...input.series].sort((a, b) => a[0] - b[0]);
+  const allDaily = [...input.series].sort((a, b) => a[0] - b[0]);
+  const series = allDaily.filter(([ts]) => ts >= now - 30 * DAY_MS);
   const positiveDays = series.filter(([, pnl]) => pnl > 0).length;
   const pnl30d = series.reduce((s, [, pnl]) => s + pnl, 0);
   let peak = 0;
@@ -190,12 +267,20 @@ export function computePerpMetrics(input: {
   if (lastFill != null && now - lastFill > INACTIVE_DAYS * DAY_MS)
     flags.push("inactive");
   if (equity > 0 && openNotional / equity > 10) flags.push("high-leverage");
-  if (series.length < 5) flags.push("new");
+  if (allDaily.length < 5) flags.push("new");
   // Only judged when the sample spans at least a day; 300 fills in two hours
   // of a busy session say nothing about the usual pace.
   if (spanDays >= 1 && fills.length / spanDays > 400) flags.push("scalper");
 
+  const windows = {
+    day: computeWindowStats("day", fills, allDaily, hourly, now),
+    week: computeWindowStats("week", fills, allDaily, hourly, now),
+    month: computeWindowStats("month", fills, allDaily, hourly, now),
+    all: computeWindowStats("all", fills, allDaily, hourly, now),
+  };
+
   return {
+    windows,
     closedTrades: closed.length,
     wins: wins.length,
     losses: losses.length,

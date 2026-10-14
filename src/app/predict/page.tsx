@@ -9,11 +9,21 @@ export const metadata: Metadata = {
     "Polymarket prediction-market and perp traders with high win rates and consistent profit, ranked from their own trades.",
 };
 
+const WINDOWS = ["day", "week", "month", "all"] as const;
+type Window = (typeof WINDOWS)[number];
+
 export default async function PredictPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tab?: string }>;
+  searchParams: Promise<{ tab?: string; window?: string }>;
 }) {
-  const { tab } = await searchParams;
-  return tab === "perp" ? <SmartPerpBoard /> : <SmartPredictBoard />;
+  const { tab, window } = await searchParams;
+  const initialWindow = WINDOWS.includes(window as Window)
+    ? (window as Window)
+    : "month";
+  return tab === "perp" ? (
+    <SmartPerpBoard initialWindow={initialWindow} />
+  ) : (
+    <SmartPredictBoard />
+  );
 }

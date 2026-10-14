@@ -7,6 +7,7 @@ import {
   readPaging,
   sortRows,
 } from "@/lib/paging";
+import { PERP_WINDOWS, type PerpWindow } from "@/lib/predict/perps-api";
 import {
   getPerpBoard,
   isPerpBuildRunning,
@@ -18,6 +19,7 @@ export const maxDuration = 300;
 const SORT_KEYS = [
   "score",
   "winRate",
+  "pnlUsd",
   "pnl30dUsd",
   "realizedPnlUsd",
   "profitFactor",
@@ -28,7 +30,41 @@ const SORT_KEYS = [
   "openNotionalUsd",
   "avgFillNotionalUsd",
   "lastFillAt",
-] as const satisfies readonly (keyof PerpTrader)[];
+] as const satisfies readonly (keyof WindowedTrader)[];
+
+/** A leaderboard row with the chosen window's figures on the top level. */
+type WindowedTrader = PerpTrader & {
+  window: PerpWindow;
+  pnlUsd: number;
+  periods: number;
+  positivePeriods: number;
+};
+
+function applyWindow(trader: PerpTrader, window: PerpWindow): WindowedTrader {
+  const stats = trader.windows?.[window];
+  if (!stats) {
+    return {
+      ...trader,
+      window,
+      pnlUsd: trader.pnl30dUsd,
+      periods: trader.days,
+      positivePeriods: trader.positiveDays,
+    };
+  }
+  return {
+    ...trader,
+    window,
+    closedTrades: stats.closedTrades,
+    wins: stats.wins,
+    losses: stats.losses,
+    winRate: stats.winRate,
+    profitFactor: stats.profitFactor,
+    pnlUsd: stats.pnlUsd,
+    periods: stats.periods,
+    positivePeriods: stats.positivePeriods,
+    maxDrawdownUsd: stats.maxDrawdownUsd,
+  };
+}
 
 /**
  * Paged, filtered Perp leaderboard.
@@ -40,6 +76,10 @@ export async function GET(request: Request) {
   const force = params.get("refresh") === "1";
   const traders = Number(params.get("traders"));
   const paging = readPaging(params, SORT_KEYS, "score");
+  const windowParam = params.get("window");
+  const window: PerpWindow = PERP_WINDOWS.includes(windowParam as PerpWindow)
+    ? (windowParam as PerpWindow)
+    : "month";
   const minTrades = readNumber(params, "minTrades", 0);
   const minWin = readNumber(params, "minWin", 0);
   const maxFill = readNumber(params, "maxFill", 0);
@@ -71,7 +111,8 @@ export async function GET(request: Request) {
       );
     }
 
-    const filtered = board.traders.filter((trader) => {
+    const windowed = board.traders.map((trader) => applyWindow(trader, window));
+    const filtered = windowed.filter((trader) => {
       if (trader.closedTrades < minTrades) return false;
       if (trader.winRate < minWin) return false;
       if (maxFill > 0 && trader.avgFillNotionalUsd > maxFill) return false;
@@ -94,20 +135,22 @@ export async function GET(request: Request) {
       paging.page,
       paging.pageSize,
     );
+    const active = windowed.filter((t) => t.closedTrades > 0 || t.periods > 0);
     const totals = {
       ranked: board.traders.length,
       matching: filtered.length,
-      profitable30d: board.traders.filter((t) => t.pnl30dUsd > 0).length,
-      avgWinRate: board.traders.length
-        ? board.traders.reduce((s, t) => s + t.winRate, 0) /
-          board.traders.length
+      active: active.length,
+      profitable: active.filter((t) => t.pnlUsd > 0).length,
+      avgWinRate: active.length
+        ? active.reduce((s, t) => s + t.winRate, 0) / active.length
         : 0,
-      closedTrades: board.traders.reduce((s, t) => s + t.closedTrades, 0),
+      closedTrades: windowed.reduce((s, t) => s + t.closedTrades, 0),
     };
 
     return NextResponse.json(
       {
         generatedAt: board.generatedAt,
+        window,
         stats: board.stats,
         totals,
         pagination,
@@ -118,7 +161,7 @@ export async function GET(request: Request) {
           openPositions: t.openPositions.slice(0, 5),
           instruments: t.instruments.slice(0, 6),
         })),
-        wins: board.wins.slice(0, 20),
+        wins: (board.winsByWindow?.[window] ?? board.wins).slice(0, 20),
         warnings: board.warnings,
         store: board.store,
         building: isPerpBuildRunning(),

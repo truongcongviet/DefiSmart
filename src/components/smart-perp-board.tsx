@@ -39,9 +39,21 @@ interface InstrumentStat {
   pnlUsd: number;
 }
 
+type Window = "day" | "week" | "month" | "all";
+const WINDOWS: Array<{ key: Window; label: string }> = [
+  { key: "day", label: "Today" },
+  { key: "week", label: "Week" },
+  { key: "month", label: "Month" },
+  { key: "all", label: "All" },
+];
+
 interface Trader {
   address: string;
   score: number;
+  window: Window;
+  pnlUsd: number;
+  periods: number;
+  positivePeriods: number;
   closedTrades: number;
   wins: number;
   losses: number;
@@ -72,11 +84,13 @@ interface Win {
 
 interface Board {
   generatedAt: string;
+  window: Window;
   stats: { candidates: number; analysed: number; ranked: number };
   totals: {
     ranked: number;
     matching: number;
-    profitable30d: number;
+    active: number;
+    profitable: number;
     avgWinRate: number;
     closedTrades: number;
   };
@@ -95,7 +109,7 @@ interface Board {
 type SortKey =
   | "score"
   | "winRate"
-  | "pnl30dUsd"
+  | "pnlUsd"
   | "profitFactor"
   | "closedTrades"
   | "positiveDays"
@@ -107,7 +121,11 @@ type SortKey =
 const CATEGORIES = ["", "crypto", "equity", "index", "commodity"];
 const WIN_PRESETS = [0, 0.5, 0.6, 0.7];
 
-export function SmartPerpBoard() {
+export function SmartPerpBoard({
+  initialWindow = "month",
+}: {
+  initialWindow?: Window;
+}) {
   const [board, setBoard] = useState<Board | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -122,6 +140,7 @@ export function SmartPerpBoard() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
   const [tab, setTab] = useState<"all" | "following">("all");
+  const [window, setWindow] = useState<Window>(initialWindow);
   const following = perpWatchlist.useList();
 
   const query = useMemo(() => {
@@ -130,6 +149,7 @@ export function SmartPerpBoard() {
       pageSize: String(pageSize),
       sort: sortKey,
       dir: sortDir,
+      window,
       minTrades: String(minTrades),
       minWin: String(minWin),
       hideInactive: hideInactive ? "1" : "0",
@@ -149,6 +169,7 @@ export function SmartPerpBoard() {
     hideLiquidated,
     category,
     q,
+    window,
   ]);
 
   const load = useCallback(async () => {
@@ -201,6 +222,9 @@ export function SmartPerpBoard() {
   const changeHideInactive = setFilter(setHideInactive);
   const changeHideLiquidated = setFilter(setHideLiquidated);
   const changeQ = setFilter(setQ);
+  const changeWindow = setFilter(setWindow);
+  const windowLabel = WINDOWS.find((w) => w.key === window)?.label ?? "Month";
+  const periodLabel = window === "day" ? "Hours +" : "Days +";
 
   const select =
     "border-rule bg-paper text-ink h-8 rounded-lg border px-2 text-sm outline-none";
@@ -252,12 +276,20 @@ export function SmartPerpBoard() {
           value={totals ? `${Math.round(totals.avgWinRate * 100)}%` : "–"}
         />
         <Kpi
-          label="Up over 30 days"
+          label={
+            {
+              day: "Up today",
+              week: "Up this week",
+              month: "Up this month",
+              all: "Up all time",
+            }[window]
+          }
           value={
             totals
-              ? `${Math.round((totals.profitable30d / Math.max(1, totals.ranked)) * 100)}%`
+              ? `${Math.round((totals.profitable / Math.max(1, totals.active)) * 100)}%`
               : "–"
           }
+          hint={totals ? `${totals.active} active accounts` : undefined}
         />
         <Kpi
           label="Updated"
@@ -273,7 +305,7 @@ export function SmartPerpBoard() {
               key={`${win.account}-${win.rank}`}
               href={`/predict/perp/${win.account.toLowerCase()}`}
               className="border-rule bg-paper-2 hover:border-rule-2 flex min-w-[12rem] shrink-0 items-center gap-3 rounded-xl border px-3 py-2.5 transition-colors"
-              title={`Biggest win #${win.rank} this month · ${shortAddress(win.account)}`}
+              title={`Biggest win #${win.rank} (${windowLabel.toLowerCase()}) · ${shortAddress(win.account)}`}
             >
               <MarketLogo logo={win.logo} symbol={win.symbol} size={8} />
               <span className="flex min-w-0 flex-col leading-tight">
@@ -312,6 +344,27 @@ export function SmartPerpBoard() {
                 )}
               >
                 {item === "all" ? "All" : `Following ${following.length}`}
+              </button>
+            ))}
+          </div>
+          <div
+            className="bg-paper-3 inline-flex h-8 items-center rounded-lg p-0.5"
+            role="group"
+            aria-label="Window"
+          >
+            {WINDOWS.map((w) => (
+              <button
+                key={w.key}
+                type="button"
+                onClick={() => changeWindow(w.key)}
+                className={cn(
+                  "h-7 rounded-md px-2.5 text-xs transition-colors",
+                  window === w.key
+                    ? "bg-paper text-ink shadow-sm"
+                    : "text-muted hover:text-ink",
+                )}
+              >
+                {w.label}
               </button>
             ))}
           </div>
@@ -407,22 +460,26 @@ export function SmartPerpBoard() {
                   active={sortKey}
                   direction={sortDir}
                   onSort={onSort}
-                  title="Realized fills in profit / realized fills (latest 300)"
+                  title={`Realized fills in profit / realized fills (${windowLabel.toLowerCase()}, latest 300 fills)`}
                 />
                 <Th
-                  label="PnL 30d"
-                  sortKey="pnl30dUsd"
+                  label={`PnL ${windowLabel.toLowerCase()}`}
+                  sortKey="pnlUsd"
                   active={sortKey}
                   direction={sortDir}
                   onSort={onSort}
                 />
                 <Th
-                  label="Days +"
+                  label={periodLabel}
                   sortKey="positiveDays"
                   active={sortKey}
                   direction={sortDir}
                   onSort={onSort}
-                  title="Positive days / active days in the last 30"
+                  title={
+                    window === "day"
+                      ? "Positive hours / active hours today"
+                      : `Positive days / active days (${windowLabel.toLowerCase()})`
+                  }
                 />
                 <Th
                   label="Drawdown"
@@ -430,7 +487,7 @@ export function SmartPerpBoard() {
                   active={sortKey}
                   direction={sortDir}
                   onSort={onSort}
-                  title="Largest peak-to-trough on the 30-day PnL curve"
+                  title={`Largest peak-to-trough on the PnL curve (${windowLabel.toLowerCase()})`}
                 />
                 <Th
                   label="Equity"
@@ -529,13 +586,13 @@ export function SmartPerpBoard() {
                   <td
                     className={cn(
                       "data px-3 py-2.5 text-right font-medium",
-                      tone(t.pnl30dUsd),
+                      tone(t.pnlUsd),
                     )}
                   >
-                    {formatUsd(t.pnl30dUsd)}
+                    {formatUsd(t.pnlUsd)}
                   </td>
                   <td className="px-3 py-2.5 text-right">
-                    <DaysStrip positive={t.positiveDays} total={t.days} />
+                    <DaysStrip positive={t.positivePeriods} total={t.periods} />
                   </td>
                   <td className="data px-3 py-2.5 text-right text-[#fb7185]">
                     {t.maxDrawdownUsd > 0

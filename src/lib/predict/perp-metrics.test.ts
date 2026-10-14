@@ -120,3 +120,44 @@ test("scorePerpTrader prefers consistent traders without liquidations", () => {
   );
   assert.ok(scorePerpTrader(strong, strong.pnl30dUsd) >= 60);
 });
+
+test("computeWindowStats restricts fills and series to the window", () => {
+  const now = 1_800_000_000_000;
+  const day = 86_400_000;
+  const fills = [
+    fill({ pnl: "10", timestamp: now - 2 * 3_600_000 }), // today
+    fill({ pnl: "-5", timestamp: now - 3 * day }), // this week
+    fill({ pnl: "20", timestamp: now - 20 * day }), // this month
+    fill({ pnl: "-8", timestamp: now - 60 * day }), // older
+  ];
+  const daily: Array<[number, number]> = [
+    [now - 1 * day, 5],
+    [now - 3 * day, -2],
+    [now - 20 * day, 7],
+    [now - 60 * day, -4],
+  ];
+  const hourly: Array<[number, number]> = [
+    [now - 1 * 3_600_000, 3],
+    [now - 2 * 3_600_000, -1],
+    [now - 30 * 3_600_000, 9], // yesterday, outside "day"
+  ];
+  const m = computePerpMetrics({
+    fills,
+    portfolio: { equity: "0", timestamp: now, positions: [] },
+    series: daily,
+    hourly,
+    instruments,
+    nowMs: now,
+  });
+  assert.equal(m.windows.day.closedTrades, 1);
+  assert.equal(m.windows.day.pnlUsd, 2);
+  assert.equal(m.windows.day.periods, 2);
+  assert.equal(m.windows.week.closedTrades, 2);
+  assert.equal(m.windows.week.winRate, 0.5);
+  assert.equal(m.windows.week.pnlUsd, 3);
+  assert.equal(m.windows.month.closedTrades, 3);
+  assert.equal(m.windows.month.pnlUsd, 10);
+  assert.equal(m.windows.all.closedTrades, 4);
+  assert.equal(m.windows.all.pnlUsd, 6);
+  assert.equal(m.pnl30dUsd, 10);
+});

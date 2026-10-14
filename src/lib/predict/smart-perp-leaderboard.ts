@@ -29,7 +29,9 @@ import {
 export const SNAPSHOT_KIND = "smart-perp";
 const CACHE_TTL_MS = 60 * 60_000;
 const MIN_CLOSED_TRADES = 5;
-const SERIES_DAYS = 30;
+/** Daily series as far back as the API keeps it; hourly for the day window. */
+const SERIES_DAYS = 400;
+const HOURLY_DAYS = 2;
 
 export interface PerpBudget {
   traders: number;
@@ -61,6 +63,13 @@ export interface PerpTrader extends PerpMetrics {
     rankMonth: number | null;
     pnlWeek: number | null;
     rankWeek: number | null;
+    /** Polymarket's own figures per window, when the account is in that top 200. */
+    byWindow: Partial<
+      Record<
+        PerpWindow,
+        { pnl: number; roi: number; notional: number; rank: number }
+      >
+    >;
   };
   /** Biggest single wins of this account on the wins board. */
   bigWins: Array<{
@@ -78,6 +87,13 @@ export interface PerpSnapshot {
   generatedAt: string;
   traders: PerpTrader[];
   wins: Array<PerpWinEntry & { pnlUsd: number; logo: PerpLogo | null }>;
+  /** Biggest single wins per window (the `leaderboard/wins` board). */
+  winsByWindow: Partial<
+    Record<
+      PerpWindow,
+      Array<PerpWinEntry & { pnlUsd: number; logo: PerpLogo | null }>
+    >
+  >;
   stats: {
     candidates: number;
     analysed: number;
@@ -110,7 +126,11 @@ const LEADERBOARD_QUERIES: Array<{ window: PerpWindow; pages: number }> = [
 async function collectCandidates(
   warnings: string[],
   instruments: Map<number, PerpInstrument>,
-): Promise<{ candidates: Candidate[]; wins: PerpSnapshot["wins"] }> {
+): Promise<{
+  candidates: Candidate[];
+  wins: PerpSnapshot["wins"];
+  winsByWindow: PerpSnapshot["winsByWindow"];
+}> {
   const map = new Map<string, Candidate>();
   const get = (address: string) => {
     const key = address.toLowerCase();
@@ -125,6 +145,7 @@ async function collectCandidates(
         rankMonth: null,
         pnlWeek: null,
         rankWeek: null,
+        byWindow: {},
       },
       bigWins: [],
     };
@@ -146,6 +167,12 @@ async function collectCandidates(
           const label = `leaderboard:${query.window}`;
           if (!candidate.sources.includes(label)) candidate.sources.push(label);
           candidate.bestRank = Math.min(candidate.bestRank, entry.rank);
+          candidate.leaderboard.byWindow[query.window] = {
+            pnl: Number(entry.pnl),
+            roi: Number(entry.roi),
+            notional: Number(entry.notional),
+            rank: entry.rank,
+          };
           if (query.window === "month") {
             candidate.leaderboard.pnlMonth = Number(entry.pnl);
             candidate.leaderboard.roiMonth = Number(entry.roi);
@@ -166,15 +193,17 @@ async function collectCandidates(
   }
 
   let wins: PerpSnapshot["wins"] = [];
-  for (const window of ["month", "week"] as PerpWindow[]) {
+  const winsByWindow: PerpSnapshot["winsByWindow"] = {};
+  for (const window of ["month", "week", "day", "all"] as PerpWindow[]) {
     try {
       const entries = await fetchPerpWins(window, 100);
-      if (window === "month")
-        wins = entries.map((e) => ({
-          ...e,
-          pnlUsd: Number(e.pnl),
-          logo: instrumentLogo(instruments.get(e.instrument_id)),
-        }));
+      const decorated = entries.map((e) => ({
+        ...e,
+        pnlUsd: Number(e.pnl),
+        logo: instrumentLogo(instruments.get(e.instrument_id)),
+      }));
+      winsByWindow[window] = decorated;
+      if (window === "month") wins = decorated;
       for (const entry of entries) {
         const candidate = get(entry.account);
         const label = `wins:${window}`;
@@ -200,23 +229,26 @@ async function collectCandidates(
   const candidates = Array.from(map.values()).sort(
     (a, b) => b.sources.length - a.sources.length || a.bestRank - b.bestRank,
   );
-  return { candidates, wins };
+  return { candidates, wins, winsByWindow };
 }
 
 export async function analysePerpTrader(
   address: string,
   options: { fillPages?: number } = {},
 ): Promise<{ metrics: PerpMetrics; truncated: boolean }> {
-  const sinceMs = Date.now() - SERIES_DAYS * 86_400_000;
-  const [instruments, fills, portfolio, series] = await Promise.all([
+  const now = Date.now();
+  const [instruments, fills, portfolio, series, hourly] = await Promise.all([
     fetchPerpInstruments(),
     fetchPerpFills(address, options.fillPages ?? readPerpBudget().fillPages),
     fetchPerpPortfolio(address).catch(() => ({
       positions: [],
       equity: "0",
-      timestamp: Date.now(),
+      timestamp: now,
     })),
-    fetchPerpPnlSeries(address, sinceMs).catch(
+    fetchPerpPnlSeries(address, now - SERIES_DAYS * 86_400_000).catch(
+      () => [] as Array<[number, number]>,
+    ),
+    fetchPerpPnlSeries(address, now - HOURLY_DAYS * 86_400_000, "1h").catch(
       () => [] as Array<[number, number]>,
     ),
   ]);
@@ -225,6 +257,7 @@ export async function analysePerpTrader(
       fills: fills.fills,
       portfolio,
       series,
+      hourly,
       instruments,
     }),
     truncated: fills.more,
@@ -245,10 +278,11 @@ export async function buildPerpSnapshot(
   const instruments = await fetchPerpInstruments().catch(
     () => new Map<number, PerpInstrument>(),
   );
-  const { candidates: all, wins } = await collectCandidates(
-    warnings,
-    instruments,
-  );
+  const {
+    candidates: all,
+    wins,
+    winsByWindow,
+  } = await collectCandidates(warnings, instruments);
   const candidates = all.slice(0, budget.traders);
   log(`candidates: ${candidates.length} of ${all.length}`);
 
@@ -296,6 +330,7 @@ export async function buildPerpSnapshot(
     generatedAt: new Date().toISOString(),
     traders: ranked,
     wins,
+    winsByWindow,
     stats: {
       candidates: candidates.length,
       analysed: traders.length,

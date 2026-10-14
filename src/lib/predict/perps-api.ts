@@ -239,14 +239,15 @@ export async function fetchPerpPortfolio(
   };
 }
 
-/** Daily realized PnL points `[ms, pnl]` since `sinceMs`. */
+/** Realized PnL points `[ms, pnl]` since `sinceMs` (daily by default). */
 export async function fetchPerpPnlSeries(
   address: string,
   sinceMs: number,
+  interval: "1h" | "4h" | "1d" | "1w" = "1d",
 ): Promise<Array<[number, number]>> {
   const payload = await get<{ data?: Array<[number, string]> }>("/pnl", {
     address,
-    interval: "1d",
+    interval,
     start_timestamp: sinceMs,
     end_timestamp: Date.now(),
   });

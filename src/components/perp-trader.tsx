@@ -56,12 +56,25 @@ interface Fill {
   action: "open" | "close";
 }
 
+interface WindowStats {
+  window: "day" | "week" | "month" | "all";
+  closedTrades: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  pnlUsd: number;
+  periods: number;
+  positivePeriods: number;
+  maxDrawdownUsd: number;
+}
+
 interface Profile {
   address: string;
   ranked: boolean;
   rank: number | null;
   score: number;
   metrics: {
+    windows?: Record<"day" | "week" | "month" | "all", WindowStats>;
     closedTrades: number;
     wins: number;
     losses: number;
@@ -327,6 +340,47 @@ export function PerpTraderView({ address }: { address: string }) {
           }
         />
       </section>
+
+      {m?.windows && (
+        <section className="border-rule bg-paper-2 divide-rule grid grid-cols-2 divide-x divide-y rounded-xl border sm:grid-cols-4 sm:divide-y-0">
+          {(["day", "week", "month", "all"] as const).map((key) => {
+            const w = m.windows![key];
+            const label = {
+              day: "Today",
+              week: "This week",
+              month: "This month",
+              all: "All time",
+            }[key];
+            return (
+              <div key={key} className="flex flex-col gap-1 px-4 py-3">
+                <span className="text-muted text-xs">{label}</span>
+                <span className="flex items-baseline gap-2">
+                  <span
+                    className={cn(
+                      "data text-[15px] font-medium",
+                      tone(w.pnlUsd),
+                    )}
+                  >
+                    {formatUsd(w.pnlUsd)}
+                  </span>
+                  <span className="data text-muted text-xs">
+                    {w.closedTrades > 0
+                      ? `${Math.round(w.winRate * 100)}% · ${w.wins}/${w.closedTrades}`
+                      : "no trades"}
+                  </span>
+                </span>
+                <span className="text-muted text-[11px]">
+                  {w.periods > 0
+                    ? `${w.positivePeriods}/${w.periods} ${key === "day" ? "hours" : "days"} up`
+                    : "–"}
+                  {w.maxDrawdownUsd > 0 &&
+                    ` · dd -${formatUsd(w.maxDrawdownUsd)}`}
+                </span>
+              </div>
+            );
+          })}
+        </section>
+      )}
 
       {data && (
         <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">

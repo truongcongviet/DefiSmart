@@ -22,7 +22,7 @@ import {
 
 const CACHE_TTL_MS = 3 * 60_000;
 const CACHE_MAX = 64;
-const SERIES_DAYS = 30;
+const SERIES_DAYS = 400;
 
 export interface PerpFillRow {
   tradeId: number;
@@ -88,23 +88,28 @@ function toRow(
 
 async function build(address: string): Promise<PerpTraderProfile> {
   const sinceMs = Date.now() - SERIES_DAYS * 86_400_000;
-  const [instruments, fills, portfolio, series, snapshot] = await Promise.all([
-    fetchPerpInstruments(),
-    fetchPerpFills(address, readPerpBudget().fillPages),
-    fetchPerpPortfolio(address).catch(() => ({
-      positions: [],
-      equity: "0",
-      timestamp: Date.now(),
-    })),
-    fetchPerpPnlSeries(address, sinceMs).catch(
-      () => [] as Array<[number, number]>,
-    ),
-    loadPerpSnapshot(),
-  ]);
+  const [instruments, fills, portfolio, series, hourly, snapshot] =
+    await Promise.all([
+      fetchPerpInstruments(),
+      fetchPerpFills(address, readPerpBudget().fillPages),
+      fetchPerpPortfolio(address).catch(() => ({
+        positions: [],
+        equity: "0",
+        timestamp: Date.now(),
+      })),
+      fetchPerpPnlSeries(address, sinceMs).catch(
+        () => [] as Array<[number, number]>,
+      ),
+      fetchPerpPnlSeries(address, Date.now() - 2 * 86_400_000, "1h").catch(
+        () => [] as Array<[number, number]>,
+      ),
+      loadPerpSnapshot(),
+    ]);
   const metrics = computePerpMetrics({
     fills: fills.fills,
     portfolio,
     series,
+    hourly,
     instruments,
   });
   const index = snapshot?.traders.findIndex((t) => t.address === address) ?? -1;
@@ -123,7 +128,9 @@ async function build(address: string): Promise<PerpTraderProfile> {
     metrics,
     leaderboard: ranked?.leaderboard ?? null,
     bigWins: ranked?.bigWins ?? [],
-    series: [...series].sort((a, b) => a[0] - b[0]),
+    series: [...series]
+      .sort((a, b) => a[0] - b[0])
+      .filter(([ts]) => ts >= Date.now() - 30 * 86_400_000),
     fills: [...fills.fills]
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, 100)
