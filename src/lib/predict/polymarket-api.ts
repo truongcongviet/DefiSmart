@@ -277,3 +277,36 @@ export function polymarketProfileUrl(address: string) {
 export function polymarketEventUrl(eventSlug: string) {
   return `https://polymarket.com/event/${eventSlug}`;
 }
+
+// ---------------------------------------------------------------------------
+// PnL history (user-pnl-api, as used by polymarket.com's portfolio chart)
+// ---------------------------------------------------------------------------
+
+const USER_PNL_API = "https://user-pnl-api.polymarket.com/user-pnl";
+
+export type PnlTimeframe = "1D" | "1W" | "1M" | "ALL";
+export const PNL_TIMEFRAMES: PnlTimeframe[] = ["1D", "1W", "1M", "ALL"];
+const PNL_REQUESTS: Record<
+  PnlTimeframe,
+  { interval: string; fidelity: string }
+> = {
+  "1D": { interval: "1d", fidelity: "1h" },
+  "1W": { interval: "1w", fidelity: "3h" },
+  "1M": { interval: "1m", fidelity: "1d" },
+  ALL: { interval: "all", fidelity: "12h" },
+};
+
+/** Cumulative PnL points `[unixSeconds, pnlUsd]` for the timeframe. */
+export async function fetchUserPnl(
+  address: string,
+  timeframe: PnlTimeframe,
+): Promise<Array<[number, number]>> {
+  const payload = await get<Array<{ t?: number; p?: number }>>(USER_PNL_API, {
+    user_address: address,
+    ...PNL_REQUESTS[timeframe],
+  });
+  return (Array.isArray(payload) ? payload : [])
+    .map((row) => [Number(row.t), Number(row.p)] as [number, number])
+    .filter(([t, p]) => Number.isFinite(t) && Number.isFinite(p))
+    .sort((a, b) => a[0] - b[0]);
+}

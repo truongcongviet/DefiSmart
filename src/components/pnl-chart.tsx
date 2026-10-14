@@ -18,7 +18,7 @@ export interface PnlPoint {
 
 const W = 720;
 const H = 200;
-const PAD = { top: 14, right: 12, bottom: 26, left: 48 };
+const PAD = { top: 14, right: 12, bottom: 26, left: 62 };
 
 function niceTicks(min: number, max: number, count = 4): number[] {
   if (max === min) return [min];
@@ -35,6 +35,16 @@ function niceTicks(min: number, max: number, count = 4): number[] {
   return ticks.sort((a, b) => a - b);
 }
 
+function tickLabel(value: number) {
+  const abs = Math.abs(value);
+  const sign = value < 0 ? "-" : "";
+  if (abs >= 1_000_000)
+    return `${sign}$${(abs / 1_000_000).toFixed(abs % 1_000_000 === 0 ? 0 : 1)}M`;
+  if (abs >= 1_000)
+    return `${sign}$${(abs / 1_000).toFixed(abs % 1_000 === 0 ? 0 : 1)}k`;
+  return `${sign}$${abs.toFixed(0)}`;
+}
+
 function shortDate(ms: number) {
   return new Date(ms).toLocaleDateString("en-US", {
     month: "short",
@@ -46,10 +56,13 @@ export function PnlChart({
   points,
   className,
   periodLabel = "day",
+  cumulative = false,
 }: {
   points: PnlPoint[];
   className?: string;
   periodLabel?: string;
+  /** When true, `value` is already the running total; bars show the change. */
+  cumulative?: boolean;
 }) {
   const id = useId().replace(/:/g, "");
   const [hover, setHover] = useState<number | null>(null);
@@ -57,9 +70,19 @@ export function PnlChart({
   const model = useMemo(() => {
     const sorted = [...points].sort((a, b) => a.at - b.at);
     const rows = sorted.reduce<Array<PnlPoint & { cumulative: number }>>(
-      (acc, p) => {
-        const previous = acc.length ? acc[acc.length - 1].cumulative : 0;
-        acc.push({ ...p, cumulative: previous + p.value });
+      (acc, p, index) => {
+        if (cumulative) {
+          const previous =
+            index === 0 ? p.value : acc[acc.length - 1].cumulative;
+          acc.push({
+            at: p.at,
+            value: p.value - previous,
+            cumulative: p.value,
+          });
+        } else {
+          const previous = acc.length ? acc[acc.length - 1].cumulative : 0;
+          acc.push({ ...p, cumulative: previous + p.value });
+        }
         return acc;
       },
       [],
@@ -103,7 +126,7 @@ export function PnlChart({
       length,
       innerW,
     };
-  }, [points]);
+  }, [points, cumulative]);
 
   if (model.rows.length === 0) {
     return (
@@ -172,7 +195,7 @@ export function PnlChart({
               fontFamily="var(--font-mono)"
               fill="var(--muted)"
             >
-              {formatUsd(t)}
+              {tickLabel(t)}
             </text>
           </g>
         ))}

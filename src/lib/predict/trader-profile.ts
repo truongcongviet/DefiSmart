@@ -9,8 +9,11 @@ import {
   fetchClosedPositions,
   fetchOpenPositions,
   fetchPublicProfile,
+  fetchUserPnl,
+  PNL_TIMEFRAMES,
   type ActivityItem,
   type OpenPosition,
+  type PnlTimeframe,
 } from "./polymarket-api";
 import {
   loadPredictSnapshot,
@@ -41,6 +44,8 @@ export interface PredictTraderProfile {
   score: number;
   metrics: PredictMetrics;
   live: OpenPosition[];
+  /** Cumulative PnL curves per timeframe (Polymarket's own series). */
+  pnlSeries: Record<PnlTimeframe, Array<[number, number]>>;
   recentBets: SettledBet[];
   activity: ActivityItem[];
   truncated: boolean;
@@ -55,13 +60,22 @@ const inflight = new Map<string, Promise<PredictTraderProfile>>();
 
 async function build(address: string): Promise<PredictTraderProfile> {
   const now = Math.floor(Date.now() / 1000);
-  const [closed, open, activity, profile, snapshot] = await Promise.all([
-    fetchClosedPositions(address, readPredictBudget().closedRows),
-    fetchOpenPositions(address),
-    fetchActivity(address, 60),
-    fetchPublicProfile(address),
-    loadPredictSnapshot(),
-  ]);
+  const [closed, open, activity, profile, snapshot, ...series] =
+    await Promise.all([
+      fetchClosedPositions(address, readPredictBudget().closedRows),
+      fetchOpenPositions(address),
+      fetchActivity(address, 60),
+      fetchPublicProfile(address),
+      loadPredictSnapshot(),
+      ...PNL_TIMEFRAMES.map((timeframe) =>
+        fetchUserPnl(address, timeframe).catch(
+          () => [] as Array<[number, number]>,
+        ),
+      ),
+    ]);
+  const pnlSeries = Object.fromEntries(
+    PNL_TIMEFRAMES.map((timeframe, index) => [timeframe, series[index] ?? []]),
+  ) as Record<PnlTimeframe, Array<[number, number]>>;
   const metrics = computeMetrics({
     closed: closed.rows,
     open: open.rows,
@@ -93,6 +107,7 @@ async function build(address: string): Promise<PredictTraderProfile> {
     rank: rankIndex >= 0 ? rankIndex + 1 : null,
     score: scorePredictTrader(metrics, maxPnl),
     metrics,
+    pnlSeries,
     live: [...live].sort(
       (a, b) => (b.currentValue || 0) - (a.currentValue || 0),
     ),

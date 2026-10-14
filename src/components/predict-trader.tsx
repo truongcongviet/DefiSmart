@@ -24,6 +24,7 @@ import {
   PredictFlags,
   priceCents,
 } from "@/components/predict-ui";
+import { PnlChart } from "@/components/pnl-chart";
 import { cn } from "@/lib/utils";
 
 interface Live {
@@ -107,6 +108,7 @@ interface Profile {
     flags: string[];
   };
   live: Live[];
+  pnlSeries?: Record<"1D" | "1W" | "1M" | "ALL", Array<[number, number]>>;
   recentBets: Bet[];
   activity: Trade[];
   truncated: boolean;
@@ -123,6 +125,7 @@ export function PredictTraderView({ address }: { address: string }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [tab, setTab] = useState<"live" | "settled" | "trades">("live");
+  const [frame, setFrame] = useState<"1D" | "1W" | "1M" | "ALL">("1M");
   const [copied, setCopied] = useState(false);
 
   const load = useCallback(
@@ -300,6 +303,52 @@ export function PredictTraderView({ address }: { address: string }) {
           }
         />
       </section>
+
+      {data?.pnlSeries && (
+        <section className="border-rule bg-paper-2 rounded-xl border px-4 py-3">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span className="text-ink font-medium">
+              PnL
+              <span className="text-muted ml-2 font-normal">
+                line = cumulative, bars = change per{" "}
+                {frame === "1D"
+                  ? "hour"
+                  : frame === "1W"
+                    ? "3 hours"
+                    : frame === "1M"
+                      ? "day"
+                      : "12 hours"}
+              </span>
+            </span>
+            <div className="bg-paper-3 inline-flex h-7 items-center rounded-lg p-0.5">
+              {(["1D", "1W", "1M", "ALL"] as const).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setFrame(key)}
+                  className={cn(
+                    "h-6 rounded-md px-2.5 text-xs transition-colors",
+                    frame === key
+                      ? "bg-paper text-ink shadow-sm"
+                      : "text-muted hover:text-ink",
+                  )}
+                >
+                  {key}
+                </button>
+              ))}
+            </div>
+          </div>
+          <PnlChart
+            key={frame}
+            cumulative
+            periodLabel={frame === "1D" ? "hour" : "day"}
+            points={(data.pnlSeries[frame] ?? []).map(([t, p]) => ({
+              at: t * 1000,
+              value: p,
+            }))}
+          />
+        </section>
+      )}
 
       {m && (
         <section className="flex flex-wrap items-center gap-2 text-xs">
